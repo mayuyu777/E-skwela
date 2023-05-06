@@ -11,7 +11,7 @@ model accounts {
   account_id    Int             @id @default(autoincrement())
   username      String          @db.VarChar(255)
   password      String          @db.VarChar(255)
-  type          accounts_type   @default(student)
+  role          accounts_role   @default(student)
   status        accounts_status @default(active)
   created_at    DateTime        @default(now()) @db.DateTime(0)
   deleted_at    DateTime?       @db.DateTime(0)
@@ -352,12 +352,6 @@ enum applications_year_level_to_enroll {
   ten   @map("10")
 }
 
-enum accounts_type {
-  student
-  teacher
-  admin
-}
-
 enum announcements_type {
   all
   teachers
@@ -427,4 +421,10 @@ enum teachers_marital_status {
   separated
   divorced
   widowed
+}
+
+enum accounts_role {
+  student
+  teacher
+  admin
 }
