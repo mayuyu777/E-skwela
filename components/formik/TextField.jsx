@@ -9,7 +9,7 @@ import {
 export const TextField = ({ ...props }) => {
     const [field, meta] = useField(props);
     return (
-        <FormControl isInvalid={meta.error!==null && meta.touched}>
+      <FormControl isInvalid={meta.error!==null && meta.touched}>
         <Field as={Input} {...field} {...props}/>
         <FormErrorMessage>{meta.error}</FormErrorMessage>
       </FormControl>

@@ -2,15 +2,15 @@
 const routes = [
     {
         role: 'admin',
-        access: ['/admin/home']
+        access: ['/admin/Home']
     },
     {
         role: 'teacher',
-        access: ['/teacher/home','/teacher/about','/teacher/advisory','/teacher/subjects','/teacher/schedule','/teacher/home']
+        access: ['/teacher/Home','/teacher/About','/teacher/Advisory','/teacher/Subjects','/teacher/Schedule']
     },
     {
         role: 'student',
-        access: ['/student/home','/student/about','/student/grades','/student/schedule','/student/enrollment']
+        access: ['/student/Home','/student/About','/student/Grades','/student/Schedule','/student/Enrollment']
     }
 ]
 

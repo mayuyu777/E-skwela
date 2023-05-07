@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {   
   const url = request.nextUrl.clone()   
   if (url.pathname === '/') {
-    url.pathname = '/auth/signin'
+    url.pathname = '/auth/SignIn'
     return NextResponse.redirect(url)   
   } 
 }
