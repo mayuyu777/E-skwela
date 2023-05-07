@@ -39,7 +39,7 @@ const SignIn: NextPage = (props): JSX.Element => {
       pt={['3pc','3pc','4pc','4pc']}
       pb={'10pc'}
     >
-      <ShoolHeader/>
+      <ShoolHeader color={'white'}/>
       <Grid 
         w={['20pc','20pc','45pc','50pc']} 
         templateColumns={['repeat(1, 1fr)','repeat(1, 1fr)','repeat(2, 1fr)','repeat(2, 1fr)']} 

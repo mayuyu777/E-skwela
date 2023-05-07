@@ -8,7 +8,7 @@ import {
     Text
   } from '@chakra-ui/react';
   
-export default function ShoolHeader(){
+export default function ShoolHeader({color}){
     return(
         <Flex
             alignItems="center"
@@ -29,7 +29,7 @@ export default function ShoolHeader(){
                 fontSize={['20px','27px','33px','33px']} 
                 letterSpacing='2px' 
                 fontWeight='bold'
-                color={['white']}
+                color={color}
                 >
                 Buyong National High School
                 </Text>
@@ -37,7 +37,7 @@ export default function ShoolHeader(){
                 fontSize={['17px','21px','22px','22px']} 
                 letterSpacing='1px' 
                 fontWeight='light'
-                color={['white']}
+                color={color}
                 >
                 Buyong, Lapu-lapu City, Cebu
                 </Text>

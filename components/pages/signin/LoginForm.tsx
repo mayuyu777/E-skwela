@@ -52,8 +52,8 @@ export default function LoginForm() {
                             ):( 
                             <></>
                             )}
-                            <TextField name='username' type='text' placeholder='Username' bg={'white'} size={'sm'}/>
-                            <TextField name='password' type='password' placeholder='Password' bg={'white'} size={'sm'}/>
+                            <TextField label={''} withError={true} name='username' type='text' placeholder='Username' bg={'white'} size={'sm'}/>
+                            <TextField label={''} withError={true} name='password' type='password' placeholder='Password' bg={'white'} size={'sm'}/>
                             <Button colorScheme='teal' type="submit" width={['full']} p={'1.5pc'}>Login</Button>
                         </Flex>
                     </CardBody>

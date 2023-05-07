@@ -6,12 +6,18 @@ import {
     Input,
   } from '@chakra-ui/react'
 
-export const TextField = ({ ...props }) => {
+export const TextField = ({ label,withError,...props }) => {
     const [field, meta] = useField(props);
+    
     return (
       <FormControl isInvalid={meta.error!==null && meta.touched}>
+        {
+          label !== '' ? <FormLabel fontSize={'13px'} color={'blue.800'} fontWeight={'regular'}>{label}</FormLabel> : <></>
+        }
         <Field as={Input} {...field} {...props}/>
-        <FormErrorMessage>{meta.error}</FormErrorMessage>
+        {
+          withError? <FormErrorMessage>{meta.error}</FormErrorMessage> : <></>
+        }
       </FormControl>
     )
 }
