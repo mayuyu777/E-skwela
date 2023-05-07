@@ -1,8 +1,7 @@
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '../prisma/client';
 import  bcrypt  from 'bcrypt';
 
 const saltRounds = 10;
-const prisma = new PrismaClient()
 
 export async function login(username:string,password:string) {
     const user = await prisma.accounts.findFirst({
