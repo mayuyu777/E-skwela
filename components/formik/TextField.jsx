@@ -10,7 +10,7 @@ export const TextField = ({ label,withError,...props }) => {
     const [field, meta] = useField(props);
     
     return (
-      <FormControl isInvalid={meta.error!==null && meta.touched}>
+      <FormControl isInvalid={meta.error && meta.touched}>
         {
           label !== '' ? <FormLabel fontSize={'13px'} color={'blue.800'} fontWeight={'regular'}>{label}</FormLabel> : <></>
         }

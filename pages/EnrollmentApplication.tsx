@@ -22,23 +22,96 @@ export default function EnrollmentApplication() {
       <ShoolHeader color={'whiteAlpha.900'}/>
       <Card w={['95%','95%','80%','70%']} minH={'100vh'} bg={'gray.50'} m={'auto'}>
         <Formik
-          initialValues={{ username: '', password: '' }}
+          initialValues={{ 
+            school_year: '', 
+            year_level: '',
+            lastname: '', 
+            firstname: '',
+            middlename: '', 
+            suffix: '',
+            birthdate: '', 
+            age: '',
+            sex: '', 
+            birthplace: '',
+            psa: '', 
+            lrn: '',
+            mother_tongue: '', 
+            ip: '',
+            four_ps: '',
+            house_no: '',
+            street: '',
+            barangay: '',
+            municipality: '',
+            province: '',
+            country: '',
+            zip: '',
+            house_no_2: '',
+            street_2: '',
+            barangay_2: '',
+            municipality_2: '',
+            province_2: '',
+            country_2: '',
+            zip_2: '',
+            first_mother: '',
+            middle_mother: '',
+            last_mother: '',
+            first_father: '',
+            middle_father: '',
+            last_father: '',
+            first_guardian: '',
+            middle_guardian: '',
+            last_guardian: '',
+            last_grade: '',
+            last_school_year: '',
+            last_school: '',
+            school_id: ''
+          }}
           validationSchema={Yup.object({
-              username: Yup.string().required('Username required'),
-              password: Yup.string().required('Password required'),
+            school_year: Yup.string().required(' '), 
+            year_level: Yup.string().required(' '),
+            lastname: Yup.string().required(' '), 
+            firstname: Yup.string().required(' '),
+            middlename: Yup.string().required(' '), 
+            suffix: Yup.string().required(' '),
+            birthdate: Yup.string().required(' '), 
+            age: Yup.string().required(' '),
+            sex: Yup.string().required(' '), 
+            birthplace: Yup.string().required(' '),
+            psa: Yup.string().required(' '), 
+            lrn: Yup.string().required(' '),
+            mother_tongue: Yup.string().required(' '), 
+            ip: Yup.string().required(' '),
+            four_ps: Yup.string().required(' '),
+            house_no: Yup.string().required(' '),
+            street: Yup.string().required(' '),
+            barangay: Yup.string().required(' '),
+            municipality: Yup.string().required(' '),
+            province: Yup.string().required(' '),
+            country: Yup.string().required(' '),
+            zip: Yup.string().required(' '),
+            house_no_2: Yup.string().required(' '),
+            street_2: Yup.string().required(' '),
+            barangay_2: Yup.string().required(' '),
+            municipality_2: Yup.string().required(' '),
+            province_2: Yup.string().required(' '),
+            country_2: Yup.string().required(' '),
+            zip_2: Yup.string().required(' '),
+            first_mother: Yup.string().required(' '),
+            middle_mother: Yup.string().required(' '),
+            last_mother: Yup.string().required(' '),
+            first_father: Yup.string().required(' '),
+            middle_father: Yup.string().required(' '),
+            last_father: Yup.string().required(' '),
+            first_guardian: Yup.string().required(' '),
+            middle_guardian: Yup.string().required(' '),
+            last_guardian: Yup.string().required(''),
+            last_grade: Yup.string().required(' '),
+            last_school_year: Yup.string().required(' '),
+            last_school: Yup.string().required(' '),
+            school_id: Yup.string().required(' ')
           })}
-          onSubmit={ async (values, actions) => {
-              // const res = await signIn("credentials", {
-              // username: values.username,
-              //     password: values.password,
-              //     redirect: false,
-              // });
-
-              // if(res?.error){
-              //     setError(res.error);
-              // }
-
-              // console.log(res)
+          onSubmit={ async (values, actions ) => {
+              console.log(values);
               actions.resetForm();
           }}
           >

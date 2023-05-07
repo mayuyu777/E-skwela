@@ -48,7 +48,7 @@ export default function LoginForm() {
                         <Flex gap={['0.5pc','0.5pc','1pc','1pc']} flexDirection={'column'}>
                             <Text align={"left"} fontWeight={'medium'} mb={'0.2pc'}>Login to you Account</Text>
                             { error? (
-                            <Text align={"center"} color={"red"} fontSize={'13px'} mb={'0.2pc'}>{error}</Text>
+                            <Text align={"center"} color={"red"} fontSize={'14px'} mb={'0.2pc'}>{error}</Text>
                             ):( 
                             <></>
                             )}
