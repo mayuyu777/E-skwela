@@ -22,10 +22,10 @@ export default function CardLink(){
             pb={'4pc'}
             p={['0.5pc','0.5pc','0pc','0pc']}
         >
-            <FormLinkCard icon={FaUserAlt} href={'/EnrollmentApplication'} title={'Applicants for Admission'} content={'Click here to apply as a new student.'}/>
-            <FormLinkCard icon={FaUserAlt} href={'/EnrollmentApplication'} title={'Applicants for Admission'} content={'Click here to apply as a new student.'}/>
-            <FormLinkCard icon={FaUserAlt} href={'/EnrollmentApplication'} title={'Applicants for Admission'} content={'Click here to apply as a new student.'}/>
-            <FormLinkCard icon={FaUserAlt} href={'/EnrollmentApplication'} title={'Applicants for Admission'} content={'Click here to apply as a new student.'}/>
+            <FormLinkCard icon={FaUserAlt} href={'/StudentApplication'} title={'Applicants for Admission'} content={'Click here to apply as a new student.'}/>
+            <FormLinkCard icon={FaUserAlt} href={'/StudentApplication'} title={'Applicants for Admission'} content={'Click here to apply as a new student.'}/>
+            <FormLinkCard icon={FaUserAlt} href={'/StudentApplication'} title={'Applicants for Admission'} content={'Click here to apply as a new student.'}/>
+            <FormLinkCard icon={FaUserAlt} href={'/StudentApplication'} title={'Applicants for Admission'} content={'Click here to apply as a new student.'}/>
         </Card>
     );
 }

@@ -15,5 +15,5 @@ export async function login(username:string,password:string) {
             return { auth:true, user:user }
         }
     }
-    return { auth:false, err:'Invalid Credentials' }
+    return { auth:false, err:'Invalid Username and/or Password Credentials' }
 }
