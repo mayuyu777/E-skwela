@@ -13,6 +13,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { TextField } from '../../formik/TextField';
+import doToast from "@/components/chakra/toast";
 
 
 export default function LoginForm() {
@@ -28,7 +29,7 @@ export default function LoginForm() {
         validateOnChange={false}
         onSubmit={ async (values, actions) => {
             const res = await signIn("credentials", {
-            username: values.username,
+                username: values.username,
                 password: values.password,
                 redirect: false,
             });
@@ -63,8 +64,8 @@ export default function LoginForm() {
                     <CardBody p={'1pc'}>
                         <Flex gap={['0.5pc','0.5pc','1pc','1pc']} flexDirection={'column'}>
                             <Text align={"left"} fontWeight={'medium'} mb={'0.2pc'}>Login to you Account</Text>
-                            <TextField values={[]} asType={Input} label={''} withError={true} name='username' type='text' placeholder='Username' bg={'white'} size={'sm'}/>
-                            <TextField values={[]} asType={Input} label={''} withError={true} name='password' type='password' placeholder='Password' bg={'white'} size={'sm'}/>
+                            <TextField label={''} withError={true} name='username' type='text' placeholder='Username' bg={'white'} size={'sm'}/>
+                            <TextField label={''} withError={true} name='password' type='password' placeholder='Password' bg={'white'} size={'sm'}/>
                             <Button colorScheme='teal' type="submit" width={['full']} p={'1.5pc'}>Login</Button>
                         </Flex>
                     </CardBody>

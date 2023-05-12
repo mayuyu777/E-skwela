@@ -4,10 +4,10 @@ import { Flex, Text, Select, Box, Grid, Card, CardBody, Button, useToast, FormCo
 import React from 'react';
 import ShoolHeader from '@/components/pages/shoolheader';
 import { TextField } from '../components/formik/TextField';
-import { getAllSchoolYear } from "@/lib/school_year";
+import { prisma } from '../prisma/client';
 import SchoolYearInterface from "@/interfaces/SchoolYearInterface";
 import { yearlevels } from "@/constants/yearLevels";
-import { initValuesWithPermanentAddress, yupWithPermanentAddress, initValuesWithoutPermanentAddress, yupWithoutPermanentAddress } from "@/constants/application";
+import { initValuesWithPermanentAddress, yupWithPermanentAddress, initValuesWithoutPermanentAddress, yupWithoutPermanentAddress } from "@/components/formik/application";
 import { useRouter } from "next/router";
 
 
@@ -16,9 +16,37 @@ export default function StudentApplication({schoolYears}:SchoolYearInterface) {
   const toast = useToast();
   const router = useRouter();
 
-  useEffect(()=>{
-    console.log(isSameWithCurAddress)
-  },[isSameWithCurAddress])
+  async function submitApplication(values:object) {
+   
+      const res = await fetch('/api/createStudentApplication', {
+        body: JSON.stringify(values),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'POST'
+      }).then((res) => {
+        return res.json();
+      })
+      console.log(res)
+      if(res?.ok){
+        toast({
+          title: 'Success',
+          description: res.message,
+          status: 'success',
+          duration: 25000,
+          position: 'top',
+        });
+      }else{
+        toast({
+          title: 'Error',
+          description: res.message,
+          status: 'error',
+          duration: 5000,
+          position: 'top',
+        });
+      }
+   
+  }
 
   return (
     <Grid 
@@ -35,9 +63,10 @@ export default function StudentApplication({schoolYears}:SchoolYearInterface) {
           initialValues={!isSameWithCurAddress? initValuesWithPermanentAddress: initValuesWithoutPermanentAddress}
           validationSchema={!isSameWithCurAddress? yupWithPermanentAddress : yupWithoutPermanentAddress}
           validateOnChange={false}
-          onSubmit={ async (values, actions ) => {
-              console.log(values);
+          onSubmit={ (values, actions ) => {
+              submitApplication(values);
               actions.resetForm();
+              router.push('/SignIn');
           }}
           >
           {formik => (
@@ -49,6 +78,9 @@ export default function StudentApplication({schoolYears}:SchoolYearInterface) {
                   <Flex minH={['3pc','3pc','3.5pc','3.5pc']} bg={['gray.200']} alignItems={'center'} w={'full'} p={'1pc'}>
                       <Text m={'auto'} color={'red.500'} fontSize={['12px','13px','14px','14px']} fontWeight={'medium'}>NOTE: Please fill-out the form carefully and honestly.</Text>
                   </Flex>
+                  <Grid templateColumns={['repeat(1, 1fr)','repeat(1, 1fr)','repeat(2, 1fr)','repeat(2, 1fr)']} gap={'3'} pt={'2pc'} pr={'2pc'} pl={'2pc'}>
+                    <TextField label={'Please provide an email to where we can contact you.'} withError={false} name='email' type='email' bg={'white'} size={'sm'}/>
+                  </Grid>
                   <Grid templateColumns={['repeat(1, 1fr)','repeat(2, 1fr)','repeat(3, 1fr)','repeat(4, 1fr)']} gap={'3'} p={'2pc'}>
                     <FormControl isInvalid={formik.errors.school_year && formik.touched.school_year}>
                       <FormLabel fontSize={'13px'} color={'blue.800'} fontWeight={'regular'}>1. School Year to enroll</FormLabel>
@@ -137,22 +169,25 @@ export default function StudentApplication({schoolYears}:SchoolYearInterface) {
                     <TextField label={'30. First name of mother'} withError={false} name='first_mother' type='text' bg={'white'} size={'sm'}/>
                     <TextField label={'31. Middle name of mother'} withError={false} name='middle_mother' type='text' bg={'white'} size={'sm'}/>
                     <TextField label={'32. Last name of mother'} withError={false} name='last_mother' type='text' bg={'white'} size={'sm'}/>
-                    <TextField label={'33. First name of father'} withError={false} name='first_father' type='text' bg={'white'} size={'sm'}/>
-                    <TextField label={'34. Middle name of father'} withError={false} name='middle_father' type='text' bg={'white'} size={'sm'}/>
-                    <TextField label={'35. Last name of father'} withError={false} name='last_father' type='text' bg={'white'} size={'sm'}/>
-                    <TextField label={'36. First name of guardian'} withError={false} name='first_guardian' type='text' bg={'white'} size={'sm'}/>
-                    <TextField label={'37. Middle name of guardian'} withError={false} name='middle_guardian' type='text' bg={'white'} size={'sm'}/>
-                    <TextField label={'38. Last name of guardian'} withError={false} name='last_guardian' type='text' bg={'white'} size={'sm'}/>
+                    <TextField label={'33. Mother Contact No.'} withError={false} name='contact_mother' type='number' bg={'white'} size={'sm'}/>
+                    <TextField label={'34. First name of father'} withError={false} name='first_father' type='text' bg={'white'} size={'sm'}/>
+                    <TextField label={'35. Middle name of father'} withError={false} name='middle_father' type='text' bg={'white'} size={'sm'}/>
+                    <TextField label={'36. Last name of father'} withError={false} name='last_father' type='text' bg={'white'} size={'sm'}/>
+                    <TextField label={'37. Father Contact No.'} withError={false} name='contact_father' type='number' bg={'white'} size={'sm'}/>
+                    <TextField label={'38. First name of guardian'} withError={false} name='first_guardian' type='text' bg={'white'} size={'sm'}/>
+                    <TextField label={'39. Middle name of guardian'} withError={false} name='middle_guardian' type='text' bg={'white'} size={'sm'}/>
+                    <TextField label={'40. Last name of guardian'} withError={false} name='last_guardian' type='text' bg={'white'} size={'sm'}/>
+                    <TextField label={'41. Guardian Contact No.'} withError={false} name='contact_guardian' type='number' bg={'white'} size={'sm'}/>
                   </Grid>
                   <Flex w={'full'} pl={'2pc'} pr={'2pc'} flexDirection={'column'}>
                     <Text fontWeight={'bold'} fontSize={'14px'} color={'blue.900'}>V. For Returning Learner and those who will transfer/move In</Text>
                     <Box w={'full'} borderBottomColor={'gray.200'} borderBottomWidth={'1px'}></Box>
                   </Flex>
                   <Grid templateColumns={['repeat(1, 1fr)','repeat(2, 1fr)','repeat(3, 1fr)','repeat(4, 1fr)']} gap={'3'} pt={'1pc'} pr={'2pc'} pl={'2pc'} pb={'2pc'}>
-                    <TextField label={'39. Last Grade Level Completed'} withError={false} name='last_grade' type='text' bg={'white'} size={'sm'}/>
-                    <TextField label={'40. Last School Year Completed'} withError={false} name='last_school_year' type='text' bg={'white'} size={'sm'}/>
-                    <TextField label={'41. Last School Attented'} withError={false} name='last_school' type='text' bg={'white'} size={'sm'}/>
-                    <TextField label={'42. School ID'} withError={false} name='school_id' type='text' bg={'white'} size={'sm'}/>
+                    <TextField label={'42. Last Grade Level Completed (numeric)'} withError={false} name='last_grade' type='number' bg={'white'} size={'sm'}/>
+                    <TextField label={'43. School Year Completed e.g 2017-2018'} withError={false} name='last_school_year' type='text' bg={'white'} size={'sm'}/>
+                    <TextField label={'44. Last School Attented'} withError={false} name='last_school' type='text' bg={'white'} size={'sm'}/>
+                    <TextField label={'45. School ID'} withError={false} name='school_id' type='number' bg={'white'} size={'sm'}/>
                   </Grid>
                   <Grid templateColumns={['repeat(1, 1fr)','repeat(1, 1fr)','repeat(2, 1fr)','repeat(2, 1fr)']} p={'2pc'} gap={'4'}>
                     <Button type="submit" backgroundColor={'blue.600'} color={'white'}>Submit</Button>
@@ -168,6 +203,6 @@ export default function StudentApplication({schoolYears}:SchoolYearInterface) {
 }
 
 export const getServerSideProps = async () => {
-  const result = await getAllSchoolYear();
-  return { props: { schoolYears: result } }
+  const result = await prisma.school_year.findMany();
+  return { props: { schoolYears: JSON.parse(JSON.stringify(result)) } }
 }

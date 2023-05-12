@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 
-export const initValuesWithPermanentAddress = { 
+export const initValuesWithPermanentAddress = {
+    email: '', 
     school_year: '', 
     year_level: '',
     lastname: '', 
@@ -43,9 +44,13 @@ export const initValuesWithPermanentAddress = {
     last_school_year: '',
     last_school: '',
     school_id: '',
+    contact_mother: '',
+    contact_father: '',
+    contact_guardian: '',
   }
 
   export const yupWithPermanentAddress = Yup.object({
+    email: Yup.string().required(' '),
     school_year: Yup.string().required(' '), 
     year_level: Yup.string().required(' '),
     lastname: Yup.string().required(' '), 
@@ -87,10 +92,14 @@ export const initValuesWithPermanentAddress = {
     last_grade: Yup.string().required(' '),
     last_school_year: Yup.string().required(' '),
     last_school: Yup.string().required(' '),
-    school_id: Yup.string().required(' ')
+    school_id: Yup.string().required(' '),
+    contact_mother: Yup.string().required(' '),
+    contact_father: Yup.string().required(' '),
+    contact_guardian: Yup.string().required(' '),
   })
 
   export const initValuesWithoutPermanentAddress = { 
+    email: '',
     school_year: '', 
     year_level: '',
     lastname: '', 
@@ -126,9 +135,13 @@ export const initValuesWithPermanentAddress = {
     last_school_year: '',
     last_school: '',
     school_id: '',
+    contact_mother: '',
+    contact_father: '',
+    contact_guardian: '',
   }
 
   export const yupWithoutPermanentAddress = Yup.object({
+    email: Yup.string().required(' '),
     school_year: Yup.string().required(' '), 
     year_level: Yup.string().required(' '),
     lastname: Yup.string().required(' '), 
@@ -163,5 +176,8 @@ export const initValuesWithPermanentAddress = {
     last_grade: Yup.string().required(' '),
     last_school_year: Yup.string().required(' '),
     last_school: Yup.string().required(' '),
-    school_id: Yup.string().required(' ')
+    school_id: Yup.string().required(' '),
+    contact_mother: Yup.string().required(' '),
+    contact_father: Yup.string().required(' '),
+    contact_guardian: Yup.string().required(' '),
   })

@@ -1,4 +1,5 @@
 export default interface LearnerInfoInterface {
+    email:string,
     learner_id: number,
     LRN: string,
     first_name: string,
@@ -8,8 +9,6 @@ export default interface LearnerInfoInterface {
     gender: string,
     birthdate: string,
     age: number,
-    contact_no: string,
-    marital_status: string,
     psa_birth_cert: string,
     place_of_birth: string,
     mother_tongue: string,
