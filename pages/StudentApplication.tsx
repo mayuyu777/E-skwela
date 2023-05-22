@@ -66,7 +66,6 @@ export default function StudentApplication({schoolYears}:SchoolYearInterface) {
           onSubmit={ (values, actions ) => {
               submitApplication(values);
               actions.resetForm();
-              router.push('/SignIn');
           }}
           >
           {formik => (
@@ -79,7 +78,7 @@ export default function StudentApplication({schoolYears}:SchoolYearInterface) {
                       <Text m={'auto'} color={'red.500'} fontSize={['12px','13px','14px','14px']} fontWeight={'medium'}>NOTE: Please fill-out the form carefully and honestly.</Text>
                   </Flex>
                   <Grid templateColumns={['repeat(1, 1fr)','repeat(1, 1fr)','repeat(2, 1fr)','repeat(2, 1fr)']} gap={'3'} pt={'2pc'} pr={'2pc'} pl={'2pc'}>
-                    <TextField label={'Please provide an email to where we can contact you.'} withError={false} name='email' type='email' bg={'white'} size={'sm'}/>
+                    <TextField label={'Please provide an email to where we can contact you.'} withError={true} name='email' type='email' bg={'white'} size={'sm'} required/>
                   </Grid>
                   <Grid templateColumns={['repeat(1, 1fr)','repeat(2, 1fr)','repeat(3, 1fr)','repeat(4, 1fr)']} gap={'3'} p={'2pc'}>
                     <FormControl isInvalid={formik.errors.school_year && formik.touched.school_year}>
@@ -113,7 +112,7 @@ export default function StudentApplication({schoolYears}:SchoolYearInterface) {
                     <TextField label={'5. Middle Name'} withError={false} name='middlename' type='text' bg={'white'} size={'sm'}/>
                     <TextField label={'6. Suffix e.g. Jr., III'} withError={false} name='suffix' type='text' bg={'white'} size={'sm'}/>
                     <TextField label={'7. Birthdate'} withError={false} name='birthdate' type='date' bg={'white'} size={'sm'}/>
-                    <TextField label={'8. Age'} withError={false} name='age' type='number' bg={'white'} size={'sm'}/>
+                    <TextField label={'8. Age'} withError={false} name='age' type='number' min='11' max='100' bg={'white'} size={'sm'}/>
                     <FormControl isInvalid={formik.errors.sex && formik.touched.sex}>
                       <FormLabel fontSize={'13px'} color={'blue.800'} fontWeight={'regular'}>9. Sex</FormLabel>
                       <FastField as={Select} size={'sm'} name='sex' backgroundColor={'white'} placeholder=' '>
@@ -139,7 +138,7 @@ export default function StudentApplication({schoolYears}:SchoolYearInterface) {
                     <TextField label={'19. Municipality/City'} withError={false} name='municipality' type='text' bg={'white'} size={'sm'}/>
                     <TextField label={'20. Province'} withError={false} name='province' type='text' bg={'white'} size={'sm'}/>
                     <TextField label={'21. Country'} withError={false} name='country' type='text' bg={'white'} size={'sm'}/>
-                    <TextField label={'22. Zip Code'} withError={false} name='zip' type='number' bg={'white'} size={'sm'}/>
+                    <TextField label={'22. Zip Code'} withError={false} name='zip' type='number' max='9999' bg={'white'} size={'sm'}/>
                   </Grid>
                   <Flex w={'full'} pl={'2pc'} pr={'2pc'} pb={'1pc'} flexDirection={'column'}>
                     <Flex gap={'5'}>
@@ -157,7 +156,7 @@ export default function StudentApplication({schoolYears}:SchoolYearInterface) {
                         <TextField label={'26. Municipality/City'} withError={false} name='municipality_2' type='text' bg={'white'} size={'sm'}/>
                         <TextField label={'27. Province'} withError={false} name='province_2' type='text' bg={'white'} size={'sm'}/>
                         <TextField label={'28. Country'} withError={false} name='country_2' type='text' bg={'white'} size={'sm'}/>
-                        <TextField label={'29. Zip Code'} withError={false} name='zip_2' type='number' bg={'white'} size={'sm'}/>
+                        <TextField label={'29. Zip Code'} withError={false} name='zip_2' type='number' max='9999' bg={'white'} size={'sm'}/>
                       </Grid>
                     ):( <></> )
                   }
@@ -169,22 +168,22 @@ export default function StudentApplication({schoolYears}:SchoolYearInterface) {
                     <TextField label={'30. First name of mother'} withError={false} name='first_mother' type='text' bg={'white'} size={'sm'}/>
                     <TextField label={'31. Middle name of mother'} withError={false} name='middle_mother' type='text' bg={'white'} size={'sm'}/>
                     <TextField label={'32. Last name of mother'} withError={false} name='last_mother' type='text' bg={'white'} size={'sm'}/>
-                    <TextField label={'33. Mother Contact No.'} withError={false} name='contact_mother' type='number' bg={'white'} size={'sm'}/>
+                    <TextField label={'33. Mother Contact No.'} withError={true} name='contact_mother' type='number' bg={'white'} size={'sm'} required/>
                     <TextField label={'34. First name of father'} withError={false} name='first_father' type='text' bg={'white'} size={'sm'}/>
                     <TextField label={'35. Middle name of father'} withError={false} name='middle_father' type='text' bg={'white'} size={'sm'}/>
                     <TextField label={'36. Last name of father'} withError={false} name='last_father' type='text' bg={'white'} size={'sm'}/>
-                    <TextField label={'37. Father Contact No.'} withError={false} name='contact_father' type='number' bg={'white'} size={'sm'}/>
+                    <TextField label={'37. Father Contact No.'} withError={true} name='contact_father' type='number' bg={'white'} size={'sm'} required/>
                     <TextField label={'38. First name of guardian'} withError={false} name='first_guardian' type='text' bg={'white'} size={'sm'}/>
                     <TextField label={'39. Middle name of guardian'} withError={false} name='middle_guardian' type='text' bg={'white'} size={'sm'}/>
                     <TextField label={'40. Last name of guardian'} withError={false} name='last_guardian' type='text' bg={'white'} size={'sm'}/>
-                    <TextField label={'41. Guardian Contact No.'} withError={false} name='contact_guardian' type='number' bg={'white'} size={'sm'}/>
+                    <TextField label={'41. Guardian Contact No.'} withError={true} name='contact_guardian' type='number' bg={'white'} size={'sm'} required/>
                   </Grid>
                   <Flex w={'full'} pl={'2pc'} pr={'2pc'} flexDirection={'column'}>
                     <Text fontWeight={'bold'} fontSize={'14px'} color={'blue.900'}>V. For Returning Learner and those who will transfer/move In</Text>
                     <Box w={'full'} borderBottomColor={'gray.200'} borderBottomWidth={'1px'}></Box>
                   </Flex>
                   <Grid templateColumns={['repeat(1, 1fr)','repeat(2, 1fr)','repeat(3, 1fr)','repeat(4, 1fr)']} gap={'3'} pt={'1pc'} pr={'2pc'} pl={'2pc'} pb={'2pc'}>
-                    <TextField label={'42. Last Grade Level Completed (numeric)'} withError={false} name='last_grade' type='number' bg={'white'} size={'sm'}/>
+                    <TextField label={'42. Last Grade Level Completed (numeric)'} withError={false} name='last_grade' type='number' min='6' max='9' bg={'white'} size={'sm'}/>
                     <TextField label={'43. School Year Completed e.g 2017-2018'} withError={false} name='last_school_year' type='text' bg={'white'} size={'sm'}/>
                     <TextField label={'44. Last School Attented'} withError={false} name='last_school' type='text' bg={'white'} size={'sm'}/>
                     <TextField label={'45. School ID'} withError={false} name='school_id' type='number' bg={'white'} size={'sm'}/>

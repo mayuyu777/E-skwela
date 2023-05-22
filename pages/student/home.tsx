@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from 'next/router';
 import { hasAccess } from "@/lib/routes";
+import Layout from "@/components/pages/Layout";
 
 export default function Home(){
     const { data: session, status } = useSession();
@@ -18,7 +19,9 @@ export default function Home(){
     },[session])
 
     return(
-        <>Home Student</>
+        <Layout>
+            <>Home Student</>
+        </Layout>
     );
 }
 

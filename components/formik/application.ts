@@ -1,5 +1,8 @@
 import * as Yup from 'yup';
 
+
+const phoneRegExp = /^[6-9]\d{9}$/;
+
 export const initValuesWithPermanentAddress = {
     email: '', 
     school_year: '', 
@@ -50,7 +53,7 @@ export const initValuesWithPermanentAddress = {
   }
 
   export const yupWithPermanentAddress = Yup.object({
-    email: Yup.string().required(' '),
+    email: Yup.string().email('Please enter a valid email'),
     school_year: Yup.string().required(' '), 
     year_level: Yup.string().required(' '),
     lastname: Yup.string().required(' '), 
@@ -93,9 +96,9 @@ export const initValuesWithPermanentAddress = {
     last_school_year: Yup.string().required(' '),
     last_school: Yup.string().required(' '),
     school_id: Yup.string().required(' '),
-    contact_mother: Yup.string().required(' '),
-    contact_father: Yup.string().required(' '),
-    contact_guardian: Yup.string().required(' '),
+    contact_mother: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
+    contact_father: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
+    contact_guardian: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
   })
 
   export const initValuesWithoutPermanentAddress = { 
@@ -141,7 +144,7 @@ export const initValuesWithPermanentAddress = {
   }
 
   export const yupWithoutPermanentAddress = Yup.object({
-    email: Yup.string().required(' '),
+    email: Yup.string().email('Please enter a valid email'),
     school_year: Yup.string().required(' '), 
     year_level: Yup.string().required(' '),
     lastname: Yup.string().required(' '), 
@@ -177,7 +180,7 @@ export const initValuesWithPermanentAddress = {
     last_school_year: Yup.string().required(' '),
     last_school: Yup.string().required(' '),
     school_id: Yup.string().required(' '),
-    contact_mother: Yup.string().required(' '),
-    contact_father: Yup.string().required(' '),
-    contact_guardian: Yup.string().required(' '),
+    contact_mother: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
+    contact_father: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
+    contact_guardian: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
   })

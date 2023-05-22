@@ -16,7 +16,7 @@ export const TextField = ({ label,withError,...props }) => {
         }
        <FastField as={Input} {...field} {...props}/>
         {
-          withError? <FormErrorMessage>{meta.error}</FormErrorMessage> : <></>
+          withError? <FormErrorMessage fontSize={'12px'}>{meta.error}</FormErrorMessage> : <></>
         }
       </FormControl>
     )

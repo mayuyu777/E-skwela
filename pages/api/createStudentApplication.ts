@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma, applications_year_level_to_enroll } from '../../prisma/client';
 import { message } from 'antd';
+import { address_type } from '@/constants/address_type';
 
 
 export default async function handler(req:NextRequest, res:NextResponse) {
@@ -70,7 +71,7 @@ export default async function handler(req:NextRequest, res:NextResponse) {
                         province: values.province,
                         country: values.country,
                         zip_code: String(values.zip),
-                        type: 3,
+                        type: address_type.current,
                     },
                     {
                         learner_id: result.learner_info[0].learner_id,
@@ -81,7 +82,7 @@ export default async function handler(req:NextRequest, res:NextResponse) {
                         province: values.province_2,
                         country: values.country_2,
                         zip_code: String(values.zip_2),
-                        type: 2,
+                        type: address_type.permanent,
                     }
                 ]
             })
@@ -96,7 +97,7 @@ export default async function handler(req:NextRequest, res:NextResponse) {
                     province: values.province,
                     country: values.country,
                     zip_code: String(values.zip),
-                    type: 1,
+                    type: address_type.both,
                 }
             })
         }
