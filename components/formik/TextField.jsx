@@ -1,4 +1,4 @@
-import { useField, Field } from "formik"
+import { useField, FastField } from "formik"
 import {
     FormControl,
     FormLabel,
@@ -14,9 +14,9 @@ export const TextField = ({ label,withError,...props }) => {
         {
           label !== '' ? <FormLabel fontSize={'13px'} color={'blue.800'} fontWeight={'regular'}>{label}</FormLabel> : <></>
         }
-        <Field as={Input} {...field} {...props}/>
+       <FastField as={Input} {...field} {...props}/>
         {
-          withError? <FormErrorMessage>{meta.error}</FormErrorMessage> : <></>
+          withError? <FormErrorMessage fontSize={'12px'}>{meta.error}</FormErrorMessage> : <></>
         }
       </FormControl>
     )
