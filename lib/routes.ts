@@ -1,4 +1,5 @@
 import { role } from "@/constants/role";
+
 const routes = [
     {
         role: role.admin,
@@ -15,7 +16,7 @@ const routes = [
 ]
 
 
-export function hasAccess(path:string, role:string){
+export function hasAccess(path:string, role:number){
     let firstpath = '';
     let authorized = false;
     routes.forEach(element => {
