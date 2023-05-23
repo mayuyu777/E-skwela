@@ -40,6 +40,7 @@ export default function StudentApplication({
   async function submitApplication(values: object) {
     console.log(values);
     const res = await fetch("/api/createStudentApplication", {
+      // @ts-ignore
       body: { dataFields: JSON.stringify(values) },
       headers: {
         "Content-Type": "application/json",
