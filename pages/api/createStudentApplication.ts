@@ -1,9 +1,10 @@
+// @ts-nocheck
 import { NextRequest, NextResponse } from "next/server";
 import { prisma, applications_year_level_to_enroll } from "../../prisma/client";
 import { message } from "antd";
 import { address_type } from "@/constants/address_type";
 
-// @ts-ignore
+
 /* eslint-disable */
 export default async function handler(req: NextRequest, res: NextResponse) {
   const values = req.body;

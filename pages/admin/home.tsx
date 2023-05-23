@@ -13,7 +13,6 @@ export default function Home() {
     if (status === 'unauthenticated') {
       router.push('/SignIn');
     }
-    console.log(session);
     const res = hasAccess(router.pathname, sessionUser?.role);
 
     if (!res.authorized) {

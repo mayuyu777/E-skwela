@@ -1,15 +1,15 @@
-import NextAuth, { NextAuthOptions } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { login } from './auth';
+import NextAuth, { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { login } from "./auth";
 
 const authOptions: NextAuthOptions = {
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60,
   },
   providers: [
     CredentialsProvider({
-      type: 'credentials',
+      type: "credentials",
       credentials: {},
       /* eslint-disable */
       // @ts-ignore
@@ -35,8 +35,24 @@ const authOptions: NextAuthOptions = {
     }),
   ],
   pages: {
-    signIn: '/Signin',
+    signIn: "/Signin",
     // signOut: '/signout'
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      /* Step 1: update the token based on the user object */
+      if (user) {
+        token.role = user.role;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      /* Step 2: update the session.user based on the token object */
+      if (token && session.user) {
+        session.user.role = token.role;
+      }
+      return session;
+    },
   },
 };
 

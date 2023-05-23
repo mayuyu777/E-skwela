@@ -8,7 +8,7 @@ import {
     Text
   } from '@chakra-ui/react';
   
-export default function ShoolHeader({color}){
+export default function ShoolHeader({color}:{color:string}){
     return(
         <Flex
             alignItems="center"

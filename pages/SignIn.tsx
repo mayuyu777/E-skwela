@@ -25,7 +25,7 @@ const SignIn: NextPage = (props): JSX.Element => {
 
   useEffect(() => {
     if(status === 'authenticated'){
-      const res = hasAccess(router.pathname, session.user?.name.role);
+      const res = hasAccess(router.pathname, session.user?.role as number);
       router.push(res.path);
     }
   },[session])

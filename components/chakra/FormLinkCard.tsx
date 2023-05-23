@@ -9,6 +9,7 @@ import {
   Image,
   Icon,
 } from '@chakra-ui/react';
+import { IconType } from 'react-icons/lib';
 
 export default function FormLinkCard({
   href,
@@ -19,7 +20,7 @@ export default function FormLinkCard({
   href: string;
   title: string;
   content: string;
-  icon: string;
+  icon:  IconType;
 }) {
   return (
     <Link

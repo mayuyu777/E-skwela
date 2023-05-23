@@ -30,7 +30,7 @@ import {
   
   export default function AdminNavbar() {
     const { data: session, status } = useSession();
-    const userRole = session?.user.name.role;
+    const userRole = session?.user?.role;
     const toast = useToast();
     const [isLargerThan800] = useMediaQuery('(min-width: 800px)');
     const { isOpen, onOpen, onClose } = useDisclosure();
