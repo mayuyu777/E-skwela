@@ -1,18 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
-import {
-  prisma,
-  applications_year_level_to_enroll,
-} from '../../prisma/client';
-import { message } from 'antd';
-import { address_type } from '@/constants/address_type';
+import { NextRequest, NextResponse } from "next/server";
+import { prisma, applications_year_level_to_enroll } from "../../prisma/client";
+import { message } from "antd";
+import { address_type } from "@/constants/address_type";
 
-/// @ts-ignore
-
-/* @eslint-disable */
-export default async function handler(
-  req: NextRequest,
-  res: NextResponse
-) {
+// @ts-ignore
+/* eslint-disable */
+export default async function handler(req: NextRequest, res: NextResponse) {
   const values = req.body;
   try {
     const result = await prisma.applications.create({
@@ -67,7 +60,7 @@ export default async function handler(
       },
     });
 
-    if (values.house_no_2 != '') {
+    if (values.house_no_2 != "") {
       const address = await prisma.address.createMany({
         data: [
           {
@@ -110,13 +103,11 @@ export default async function handler(
       });
     }
 
-    res
-      .status(200)
-      .send({
-        message:
-          'Your application has been successfully submitted. Please check your email for updates regarding your application. Thank you.',
-        ok: true,
-      });
+    res.status(200).send({
+      message:
+        "Your application has been successfully submitted. Please check your email for updates regarding your application. Thank you.",
+      ok: true,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: error.message, ok: false });
