@@ -2,10 +2,11 @@ import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { hasAccess } from "@/lib/routes";
+import Layout from "@/components/pages/Layout";
 import SessionInterface from "@/interfaces/SessionInterface";
-import AdminLayout from "@/components/pages/AdminLayout";
+import StudentAnnouncementPage from "@/screens/Student/Announcement";
 
-export default function Home() {
+export default function Announcements() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -21,5 +22,9 @@ export default function Home() {
     }
   }, [session]);
 
-  return <AdminLayout>Text</AdminLayout>;
+  return (
+    <Layout>
+      <StudentAnnouncementPage />
+    </Layout>
+  );
 }

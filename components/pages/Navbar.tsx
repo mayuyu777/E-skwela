@@ -23,9 +23,9 @@ import {
 import { MdAccountCircle, MdCircleNotifications } from "react-icons/md";
 import Link from "next/link";
 import React, { useContext, useEffect } from "react";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { HamburgerIcon } from "@chakra-ui/icons";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { role } from "@/constants/role";
 
 export default function AdminNavbar() {
@@ -34,6 +34,13 @@ export default function AdminNavbar() {
   const toast = useToast();
   const [isLargerThan800] = useMediaQuery("(min-width: 800px)");
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
+  
+  const logout = async () => {
+    signOut().then(() => {
+      router.push("/SignIn");
+    });
+  };
 
   return (
     <Flex px="12" w="full" h="4pc" boxShadow="lg" alignItems="center" bg="white">
@@ -174,7 +181,10 @@ export default function AdminNavbar() {
               <Link href={userRole == role.student ? "/student/Home" : "/teacher/Home"}>Home</Link>
             </Text>
             <Text mx="1vw" color={"gray.700"}>
-              <Link href="/About">About</Link>
+              <Link href="/student/About">About</Link>
+            </Text>
+            <Text mx="1vw" color={"gray.700"}>
+              <Link href="/student/Announcements">Announcements</Link>
             </Text>
             <Menu>
               <MenuButton
@@ -246,9 +256,7 @@ export default function AdminNavbar() {
                   <Text ml="12px" color="black">
                     Hello
                   </Text>
-                  <Link href="/Login">
-                    <MenuItem>Logout</MenuItem>
-                  </Link>
+                  <MenuItem onClick={logout}>Logout</MenuItem>
                 </MenuList>
               </Menu>
             </Flex>

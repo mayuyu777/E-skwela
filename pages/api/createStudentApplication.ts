@@ -1,12 +1,9 @@
-// @ts-nocheck
-import { NextRequest, NextResponse } from "next/server";
-import { prisma, applications_year_level_to_enroll } from "../../prisma/client";
+import { NextApiRequest, NextApiResponse } from "next";
+import { prisma } from "../../prisma/client";
 import { message } from "antd";
 import { address_type } from "@/constants/address_type";
 
-
-/* eslint-disable */
-export default async function handler(req: NextRequest, res: NextResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const values = req.body;
   try {
     const result = await prisma.applications.create({
@@ -111,6 +108,6 @@ export default async function handler(req: NextRequest, res: NextResponse) {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).send({ message: error.message, ok: false });
+    res.status(500).send({ message: error, ok: false });
   }
 }
