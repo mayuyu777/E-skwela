@@ -3,7 +3,18 @@ import { role } from "@/constants/role";
 const routes = [
   {
     role: role.admin,
-    access: ["/admin/Home"],
+    access: [
+      "/admin/Home",
+      "/admin/Home",
+      "/admin/Dashboard",
+      "/admin/Students",
+      "/admin/Teachers",
+      "/admin/Sections",
+      "/admin/Subjects",
+      "/admin/Announcements",
+      "/admin/Accounts",
+      "/admin/Enrollment",
+    ],
   },
   {
     role: role.teacher,
