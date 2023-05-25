@@ -11,23 +11,21 @@ import {
   TableContainer,
   Button,
   Spacer,
-  IconButton,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import AddSubjectModal from "./components/AddSubjectModal";
 import axios from "axios";
 import SubjectInterface from "@/interfaces/SubjectInterface";
-import { EditIcon } from "@chakra-ui/icons";
-import { FaTrash } from "react-icons/fa";
+import AddSectionModal from "./components/AddSectionModal";
+import SectionInterface from "@/interfaces/SectionInterface";
 import { FiEdit, FiTrash } from "react-icons/fi";
 
-export default function SubjectPage() {
+export default function SectionPage() {
   const [refreshList, setRefreshList] = useState<boolean>(false);
-  const [subjects, setSubjects] = useState<SubjectInterface[]>([]);
+  const [sections, setSections] = useState<SectionInterface[]>([]);
 
   useEffect(() => {
-    axios.get("/api/admin/subject/getSubjects").then((res) => {
-      setSubjects(res.data);
+    axios.get("/api/admin/section/getSections").then((res) => {
+      setSections(res.data);
     });
   }, [refreshList]);
 
@@ -35,22 +33,22 @@ export default function SubjectPage() {
     <Flex flexDirection="column" bg="white" p={"2rem"}>
       <Flex p={5}>
         <Spacer />
-        <AddSubjectModal refreshList={refreshList} setRefreshList={setRefreshList} />
+        <AddSectionModal refreshList={refreshList} setRefreshList={setRefreshList} />
       </Flex>
       <TableContainer w="full">
         <Table variant="simple">
           <Thead>
             <Tr>
               <Th>GRADE</Th>
-              <Th>NAME OF SUBJECT</Th>
-              <Th>ACTION</Th>
+              <Th>NAME OF SECTION</Th>
+              <Th>ACTIONS</Th>
             </Tr>
           </Thead>
           <Tbody>
-            {subjects.map((data) => (
-              <Tr key={data.subject_id}>
+            {sections.map((data) => (
+              <Tr key={data.section_id}>
                 <Td>Grade {data.year_level}</Td>
-                <Td>{data.name}</Td>
+                <Td>{data.section_name}</Td>
                 <Td>
                   <Flex gap="1rem">
                     <Button leftIcon={<FiEdit />} variant="solid">

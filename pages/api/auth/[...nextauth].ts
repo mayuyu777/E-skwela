@@ -23,10 +23,11 @@ const authOptions: NextAuthOptions = {
 
         if (res.auth) {
           const user = res.user;
+          console.log(user);
           return {
             name: user?.username,
             role: user?.role,
-            id: user?.account_id,
+            school_id: user?.account_id,
           };
         } else {
           throw new Error(res.err);
@@ -43,6 +44,7 @@ const authOptions: NextAuthOptions = {
       /* Step 1: update the token based on the user object */
       if (user) {
         token.role = user.role;
+        token.school_id = user.school_id;
       }
       return token;
     },
@@ -50,6 +52,7 @@ const authOptions: NextAuthOptions = {
       /* Step 2: update the session.user based on the token object */
       if (token && session.user) {
         session.user.role = token.role;
+        session.user.school_id = token.school_id;
       }
       return session;
     },

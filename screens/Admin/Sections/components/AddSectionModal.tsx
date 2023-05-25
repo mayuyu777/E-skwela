@@ -1,6 +1,7 @@
 import { AdminInput } from "@/components/input/FormInput";
 import { yearlevelString } from "@/constants/yearLevelString";
 import { yearlevels } from "@/constants/yearLevels";
+import SectionInterface from "@/interfaces/SectionInterface";
 import SubjectInterface from "@/interfaces/SubjectInterface";
 import {
   useDisclosure,
@@ -21,11 +22,11 @@ import { Form } from "antd";
 import axios from "axios";
 import moment from "moment";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { FiPlus, FiPlusCircle } from "react-icons/fi";
+import { FiPlus } from "react-icons/fi";
 
 // const { Option } = Select;
 
-export default function AddSubjectModal({
+export default function AddSectionModal({
   setRefreshList,
   refreshList,
 }: {
@@ -33,27 +34,26 @@ export default function AddSubjectModal({
   refreshList: boolean;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [subject, setSubject] = useState<SubjectInterface>({} as SubjectInterface);
+  const [section, setSection] = useState<SectionInterface>({} as SectionInterface);
   const [form] = Form.useForm();
   const toast = useToast();
 
   const onSubmit = () => {
-    console.log(subject);
     axios
-      .post("/api/admin/subject/createSubject", {
-        subject: { ...subject, created_at: moment().format() },
-      } as Partial<SubjectInterface>)
+      .post("/api/admin/section/createSection", {
+        section: { ...section, created_at: moment().format() },
+      } as Partial<SectionInterface>)
       .then((res) => {
         if (res.status === 200) {
           toast({
             title: "Success",
-            description: "Subject Successfully created.",
+            description: "Section Successfully created.",
             status: "success",
             duration: 5000,
             position: "top",
           });
           setRefreshList(!refreshList);
-          setSubject({} as SubjectInterface);
+          setSection({} as SectionInterface);
           form.resetFields();
           onClose();
         }
@@ -69,7 +69,7 @@ export default function AddSubjectModal({
   return (
     <>
       <Button rightIcon={<FiPlus />} onClick={onOpen}>
-        Add Subject
+        Add Section
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -97,7 +97,7 @@ export default function AddSubjectModal({
                         <Select
                           placeholder="Select Year Level"
                           onChange={(e) => {
-                            setSubject((prevState) => ({
+                            setSection((prevState) => ({
                               ...prevState,
                               year_level: e.target.value,
                             }));
@@ -128,9 +128,9 @@ export default function AddSubjectModal({
                   }}
                   inputProps={{
                     onChange: (e) => {
-                      setSubject((prevState) => ({
+                      setSection((prevState) => ({
                         ...prevState,
-                        name: e.target.value,
+                        section_name: e.target.value,
                       }));
                     },
                     style: { height: "2rem" },
