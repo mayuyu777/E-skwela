@@ -4,10 +4,10 @@ import { useRouter } from "next/router";
 import { hasAccess } from "@/lib/routes";
 import SessionInterface from "@/interfaces/SessionInterface";
 import AdminLayout from "@/components/pages/AdminLayout";
+import TeacherPage from "@/screens/Admin/Teachers";
 
 export default function Home() {
   const { data: session, status } = useSession();
-  const sessionData = getSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -22,5 +22,9 @@ export default function Home() {
     }
   }, [session]);
 
-  return <AdminLayout>Text</AdminLayout>;
+  return (
+    <AdminLayout>
+      <TeacherPage />
+    </AdminLayout>
+  );
 }

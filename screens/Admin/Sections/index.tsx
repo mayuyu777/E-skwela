@@ -18,16 +18,26 @@ import SubjectInterface from "@/interfaces/SubjectInterface";
 import AddSectionModal from "./components/AddSectionModal";
 import SectionInterface from "@/interfaces/SectionInterface";
 import { FiEdit, FiTrash } from "react-icons/fi";
+import { Loader } from "@/components/loader/Loader";
 
 export default function SectionPage() {
   const [refreshList, setRefreshList] = useState<boolean>(false);
   const [sections, setSections] = useState<SectionInterface[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    axios.get("/api/admin/section/getSections").then((res) => {
-      setSections(res.data);
-    });
+    setLoading(true);
+    axios
+      .get("/api/admin/section/getSections")
+      .then((res) => {
+        setSections(res.data);
+      })
+      .finally(() => setLoading(false));
   }, [refreshList]);
+
+  if (loading) {
+    return <Loader description="" />;
+  }
 
   return (
     <Flex flexDirection="column" bg="white" p={"2rem"}>
