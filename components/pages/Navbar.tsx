@@ -35,7 +35,7 @@ export default function AdminNavbar() {
   const [isLargerThan800] = useMediaQuery("(min-width: 800px)");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
-  
+
   const logout = async () => {
     signOut().then(() => {
       router.push("/SignIn");
@@ -71,7 +71,7 @@ export default function AdminNavbar() {
                   Hello You!
                 </Text>
                 <Link href="/Login">
-                  <MenuItem>Logout</MenuItem>
+                  <MenuItem onClick={logout}>Logout</MenuItem>
                 </Link>
               </MenuList>
             </Menu>
