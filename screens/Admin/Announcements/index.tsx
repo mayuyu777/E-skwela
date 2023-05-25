@@ -11,23 +11,22 @@ import {
   TableContainer,
   Button,
   Spacer,
-  IconButton,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import AddSubjectModal from "./components/AddSubjectModal";
 import axios from "axios";
 import SubjectInterface from "@/interfaces/SubjectInterface";
-import { EditIcon } from "@chakra-ui/icons";
-import { FaTrash } from "react-icons/fa";
+import SectionInterface from "@/interfaces/SectionInterface";
 import { FiEdit, FiTrash } from "react-icons/fi";
+import AddAnnouncementModal from "./components/AddAnnouncementsModal";
+import AnnouncementInterface from "@/interfaces/AnnouncementsInterface";
 
-export default function SubjectPage() {
+export default function AnnouncementPage() {
   const [refreshList, setRefreshList] = useState<boolean>(false);
-  const [subjects, setSubjects] = useState<SubjectInterface[]>([]);
+  const [announcements, setAnnouncements] = useState<AnnouncementInterface[]>([]);
 
   useEffect(() => {
-    axios.get("/api/admin/subject/getSubjects").then((res) => {
-      setSubjects(res.data);
+    axios.get("/api/admin/announcement/getAnnouncements").then((res) => {
+      setAnnouncements(res.data);
     });
   }, [refreshList]);
 
@@ -35,22 +34,24 @@ export default function SubjectPage() {
     <Flex flexDirection="column" bg="white" p={"2rem"}>
       <Flex p={5}>
         <Spacer />
-        <AddSubjectModal refreshList={refreshList} setRefreshList={setRefreshList} />
+        <AddAnnouncementModal refreshList={refreshList} setRefreshList={setRefreshList} />
       </Flex>
       <TableContainer w="full">
         <Table variant="simple">
           <Thead>
             <Tr>
-              <Th>GRADE</Th>
-              <Th>NAME OF SUBJECT</Th>
-              <Th>ACTION</Th>
+              <Th>TITLE</Th>
+              <Th>CONTENT</Th>
+              <Th>TYPE</Th>
+              <Th>ACTIONS</Th>
             </Tr>
           </Thead>
           <Tbody>
-            {subjects.map((data) => (
-              <Tr key={data.subject_id}>
-                <Td>Grade {data.year_level}</Td>
-                <Td>{data.name}</Td>
+            {announcements.map((data) => (
+              <Tr key={data.announcement_id}>
+                <Td>{data.title}</Td>
+                <Td>{data.content}</Td>
+                <Td>{data.type}</Td>
                 <Td>
                   <Flex gap="1rem">
                     <Button leftIcon={<FiEdit />} variant="solid">

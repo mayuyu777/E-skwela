@@ -2,10 +2,10 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/prisma/client";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { subject } = req.body;
+  const { section } = req.body;
   try {
-    const result = await prisma.subjects.create({
-      data: subject,
+    const result = await prisma.sections.create({
+      data: section,
     });
 
     return res.status(200).end();
