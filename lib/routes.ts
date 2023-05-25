@@ -21,7 +21,8 @@ const routes = [
     access: [
       "/teacher/Home",
       "/teacher/About",
-      "/teacher/Advisory",
+      "/teacher/ClassAdvisory",
+      "/teacher/ClassAdvisory/*",
       "/teacher/Subjects",
       "/teacher/Schedule",
     ],
@@ -46,6 +47,10 @@ export function hasAccess(path: string, role: number) {
     if (element.role === role) {
       firstpath = element.access[0];
       element.access.forEach((element) => {
+        if (element.includes("/ClassAdvisory/")) {
+          authorized = true;
+          return;
+        }
         if (element === path) {
           authorized = true;
         }

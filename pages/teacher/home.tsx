@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
-import { hasAccess } from '@/lib/routes';
-import SessionInterface from '@/interfaces/SessionInterface';
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { hasAccess } from "@/lib/routes";
+import SessionInterface from "@/interfaces/SessionInterface";
+import Layout from "@/components/pages/Layout";
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -10,8 +11,8 @@ export default function Home() {
 
   useEffect(() => {
     let sessionUser = session?.user as SessionInterface;
-    if (status === 'unauthenticated') {
-      router.push('/SignIn');
+    if (status === "unauthenticated") {
+      router.push("/SignIn");
     }
     const res = hasAccess(router.pathname, sessionUser?.role);
 
@@ -20,5 +21,5 @@ export default function Home() {
     }
   }, [session]);
 
-  return <>Home Teacher</>;
+  return <Layout>Home Teacher</Layout>;
 }
