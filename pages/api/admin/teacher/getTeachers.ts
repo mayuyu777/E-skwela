@@ -2,15 +2,12 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/prisma/client";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { teacher } = req.body;
   try {
-    const result = await prisma.teachers.create({
-      data: teacher,
-    });
+    const result = await prisma.teachers.findMany({});
 
-    return res.status(200).end();
+    return res.status(200).json(result);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: error, ok: false });
+    return res.status(500).send({ message: error, ok: false });
   }
 }

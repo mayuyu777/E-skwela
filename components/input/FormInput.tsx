@@ -45,7 +45,10 @@ InputComponent.Admin = ({ formItemProps, inputProps, label }: AdminInputProps) =
   return (
     <FormControl>
       <FormLabel>{label}</FormLabel>
-      <Form.Item {...rest} children={children || <AntInput {...inputProps} />} />
+      <Form.Item
+        {...rest}
+        children={children || <AntInput {...inputProps} style={{ height: "2.5rem" }} />}
+      />
     </FormControl>
   );
 };

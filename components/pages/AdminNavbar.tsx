@@ -29,6 +29,7 @@ import {
   AccordionPanel,
   Image,
   AccordionIcon,
+  Spacer,
 } from "@chakra-ui/react";
 import {
   FiHome,
