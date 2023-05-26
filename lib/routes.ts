@@ -23,6 +23,7 @@ const routes = [
       "/teacher/About",
       "/teacher/ClassAdvisory",
       "/teacher/ClassAdvisory/*",
+      "/teacher/Subjects/*",
       "/teacher/Subjects",
       "/teacher/Schedule",
     ],
@@ -53,13 +54,17 @@ export function hasAccess(path: string, role: number) {
           authorized = true;
         }
 
-        if (element.includes("/ClassAdvisory/") && path.includes("/ClassAdvisory/")) {
+        if (element.includes("teacher/Subjects/") && path.includes("teacher/Subjects/")) {
+          authorized = true;
+          console.log('success')
+        }
+
+        if (element.includes("teacher/ClassAdvisory/") && path.includes("teacher/ClassAdvisory/")) {
           authorized = true;
         }
       });
     }
 
-    return false;
   });
 
   return {
