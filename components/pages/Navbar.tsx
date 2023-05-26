@@ -70,7 +70,7 @@ export default function AdminNavbar() {
                 <Text ml="12px" color="black">
                   Hello You!
                 </Text>
-                <Link href="/Login">
+                <Link href="/SignIn">
                   <MenuItem onClick={logout}>Logout</MenuItem>
                 </Link>
               </MenuList>

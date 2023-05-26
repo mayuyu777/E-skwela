@@ -18,9 +18,10 @@ const authOptions: NextAuthOptions = {
           username: string;
           password: string;
         };
-
+        
         const res = await login(username, password);
-
+        console.log(res,username,password)
+        
         if (res.auth) {
           const user = res.user;
           console.log(user);

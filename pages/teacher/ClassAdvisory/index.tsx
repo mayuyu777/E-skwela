@@ -50,12 +50,14 @@ export default function ClassAdvisory() {
   }, [session]);
 
   useEffect(() => {
-    axios
-      .get("/api/teacher/getClassAdvisory", { params: { teacher_id: session?.user?.school_id } })
-      .then((res) => {
-        console.log(res.data);
-        setSA(res.data);
-      });
+    if (session) {
+      axios
+        .get("/api/teacher/getClassAdvisory", { params: { teacher_id: session?.user?.school_id } })
+        .then((res) => {
+          console.log(res.data);
+          setSA(res.data);
+        });
+    }
   }, [session]);
 
   return (

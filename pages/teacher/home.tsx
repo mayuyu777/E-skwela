@@ -15,7 +15,7 @@ export default function Home() {
       router.push("/SignIn");
     }
     const res = hasAccess(router.pathname, sessionUser?.role);
-
+    console.log(sessionUser);
     if (!res.authorized) {
       router.push(res.path);
     }
