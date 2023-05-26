@@ -43,19 +43,23 @@ const routes = [
 export function hasAccess(path: string, role: number) {
   let firstpath = "";
   let authorized = false;
+
   routes.forEach((element) => {
     if (element.role === role) {
       firstpath = element.access[0];
+
       element.access.forEach((element) => {
-        if (element.includes("/ClassAdvisory/")) {
-          authorized = true;
-          return;
-        }
         if (element === path) {
+          authorized = true;
+        }
+
+        if (element.includes("/ClassAdvisory/") && path.includes("/ClassAdvisory/")) {
           authorized = true;
         }
       });
     }
+
+    return false;
   });
 
   return {

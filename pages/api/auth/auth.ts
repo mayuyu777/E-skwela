@@ -11,6 +11,8 @@ export async function login(username: string, password: string) {
     },
   });
 
+  console.log(user)
+
   if (user && bcrypt.compareSync(password, user.password)) {
     return { auth: true, user: user };
 
