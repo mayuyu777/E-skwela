@@ -68,7 +68,7 @@ export default function AdminNavbar() {
               </MenuButton>
               <MenuList>
                 <Text ml="12px" color="black">
-                  Hello You!
+                  Hello {session?.user?.name}
                 </Text>
                 <Link href="/SignIn">
                   <MenuItem onClick={logout}>Logout</MenuItem>
@@ -254,7 +254,7 @@ export default function AdminNavbar() {
                 </MenuButton>
                 <MenuList>
                   <Text ml="12px" color="black">
-                    Hello
+                    Hello {session?.user?.name}
                   </Text>
                   <MenuItem onClick={logout}>Logout</MenuItem>
                 </MenuList>
