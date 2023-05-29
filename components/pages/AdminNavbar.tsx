@@ -61,7 +61,7 @@ interface LinkItemProps {
   link: string;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Home", icon: FiHome, link: "admin/Home" },
+  { name: "Home", icon: FiHome, link: "/admin/Home" },
   { name: "Dashboard", icon: FiArchive, link: "/admin/Dashboard" },
   { name: "Accounts", icon: FiUsers, link: "/admin/Accounts" },
   { name: "Enrollment", icon: FiPackage, link: "/admin/Enrollment" },
@@ -80,6 +80,7 @@ export default function SidebarWithHeader({ children }: { children: ReactNode })
   const [isLargerThan800] = useMediaQuery("(min-width: 480px)");
   const { data: session } = useSession();
   const router = useRouter();
+  const routerPath = router.pathname;
 
   const logout = async () => {
     signOut().then(() => {
@@ -95,7 +96,11 @@ export default function SidebarWithHeader({ children }: { children: ReactNode })
 
   return (
     <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
-      <SidebarContent onClose={() => onClose} display={{ base: "none", sm: "block" }} />
+      <SidebarContent
+        onClose={() => onClose}
+        display={{ base: "none", sm: "block" }}
+        routerPath={routerPath}
+      />
       <Drawer
         autoFocus={false}
         isOpen={isOpen}
@@ -106,7 +111,7 @@ export default function SidebarWithHeader({ children }: { children: ReactNode })
         size="full"
       >
         <DrawerContent>
-          <SidebarContent onClose={onClose} />
+          <SidebarContent onClose={onClose} routerPath={routerPath} />
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
@@ -120,9 +125,10 @@ export default function SidebarWithHeader({ children }: { children: ReactNode })
 
 interface SidebarProps extends BoxProps {
   onClose: () => void;
+  routerPath: string;
 }
 
-const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+const SidebarContent = ({ onClose, routerPath, ...rest }: SidebarProps) => {
   const [isLargerThan800] = useMediaQuery("(min-width: 480px)");
   return (
     <Box
@@ -151,16 +157,27 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       {LinkItems.map((link) => {
         if (link.name === "Dashboard") {
           return (
-            <Accordion key={link.name} allowMultiple>
+            <Accordion key={link.name} allowMultiple borderTopWidth="0px">
               <AccordionItem>
-                <AccordionButton p={-1}>
-                  <NavItem icon={link.icon}>{link.name}</NavItem>
+                <AccordionButton p={0} borderTopWidth="0px">
+                  <NavItem icon={link.icon} borderTopWidth="0px">
+                    {link.name}
+                  </NavItem>
                   <AccordionIcon />
                 </AccordionButton>
-                <AccordionPanel>
+                <AccordionPanel borderTopWidth="1px" m={0} p={0}>
                   {AccordionItems.map((data) => (
                     <Link href={data.link} key={data.name}>
-                      <NavItem icon={data.icon}>{data.name}</NavItem>
+                      <NavItem
+                        bg={routerPath === data.link ? "green.300" : ""}
+                        w="100%"
+                        m={0}
+                        paddingLeft={10}
+                        borderRadius={0}
+                        icon={data.icon}
+                      >
+                        {data.name}
+                      </NavItem>
                     </Link>
                   ))}
                 </AccordionPanel>
@@ -170,7 +187,15 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         } else {
           return (
             <Link key={link.name} href={link.link}>
-              <NavItem key={link.name} icon={link.icon}>
+              <NavItem
+                key={link.name}
+                icon={link.icon}
+                borderRadius={0}
+                borderBottomWidth="1px"
+                m={0}
+                pl={8}
+                bg={routerPath === link.link ? "green.300" : ""}
+              >
                 {link.name}
               </NavItem>
             </Link>
