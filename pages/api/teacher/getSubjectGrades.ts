@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/prisma/client";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { section_name } = req.query;
+  const { section_name, subject } = req.query;
   try {
     // const section = await prisma.sections.findFirst({
     //   where: {
@@ -22,9 +22,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     //   },
     // });
 
-    // const result = await prisma.grades.findMany({
+    // const result2 = await prisma.grades.findMany({
     //   include: {
     //     students: true,
+    //     subject_assignment: {
+    //       include: {
+    //         subjects: true,
+    //       },
+    //     },
     //   },
     //   where: {
     //     subject_assignment_id: subjectAssigned?.subject_assignment_id,
@@ -34,11 +39,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const result2 = await prisma.grades.findMany({
       include: {
         students: true,
-        subject_assignment:{
-          include:{
-            subjects:true
-          }
-        }
+        subject_assignment: {
+          include: {
+            subjects: true,
+          },
+        },
       },
       where: {
         subject_assignment: {
@@ -46,6 +51,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             sections: {
               section_name: section_name?.toString(),
             },
+          },
+          subjects: {
+            name: subject?.toString(),
           },
         },
       },

@@ -33,6 +33,7 @@ import Link from "next/link";
 import GradesInterface from "@/interfaces/GradesInterface";
 import SubjectAssignmentInterface from "@/interfaces/SubjectAssignmentInterface";
 import SubjectInterface from "@/interfaces/SubjectInterface";
+import EditGradesModal from "@/screens/Teacher/Subjects/components/EditGradesModal";
 
 interface SubjectAssignmentWithSubject extends SubjectAssignmentInterface {
   subjects: SubjectInterface;
@@ -49,7 +50,8 @@ export default function ClassAdvisory() {
   const router = useRouter();
   const [grades, setGrades] = useState<GradesWithStudent[]>([]);
   const sectionName = router.query.section_name;
-
+  const subjectName = router.query.subject;
+  const [refreshList, setRefreshList] = useState(false);
   useEffect(() => {
     let sessionUser = session?.user as SessionInterface;
     if (status === "unauthenticated") {
@@ -63,9 +65,10 @@ export default function ClassAdvisory() {
 
   useEffect(() => {
     axios
-      .get("/api/teacher/getSubjectGrades", { params: { section_name: sectionName } })
+      .get("/api/teacher/getSubjectGrades", {
+        params: { section_name: sectionName, subject: subjectName },
+      })
       .then((res) => {
-        console.log(res.data);
         if (res.data) {
           const response = res.data as GradesWithStudent[];
 
@@ -94,7 +97,7 @@ export default function ClassAdvisory() {
           setGrades(resWithAve);
         }
       });
-  }, [session]);
+  }, [session, refreshList]);
 
   return (
     <Layout>
@@ -149,8 +152,15 @@ export default function ClassAdvisory() {
                     <Td>{data.second_grading}</Td>
                     <Td>{data.third_grading}</Td>
                     <Td>{data.fourth_grading}</Td>
-                    <Td>{data.average}</Td>
-                    <Td>{data.final_grading}</Td>
+                    <Td>{parseFloat(data.average.toString()).toFixed(2)}</Td>
+                    <Td>{data.remarks}</Td>
+                    <Td>
+                      <EditGradesModal
+                        refreshList={refreshList}
+                        setRefreshList={setRefreshList}
+                        grades={data}
+                      />
+                    </Td>
                   </Tr>
                 ))}
                 {/* {sa.map((data) => (
