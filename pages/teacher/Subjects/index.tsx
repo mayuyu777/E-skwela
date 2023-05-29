@@ -106,7 +106,7 @@ export default function TeacherSubjects() {
                     <Td>{`Grade ${data.section_assignment.sections.year_level}`.toUpperCase()}</Td>
                     <Td>
                       <Link
-                        href={`/teacher/Subjects/${data.section_assignment.sections.section_name}`}
+                        href={`/teacher/Subjects/${data.section_assignment.sections.section_name}?subject=${data.subjects.name}`}
                         style={{ cursor: "pointer" }}
                       >
                         <Button>Check Class</Button>
