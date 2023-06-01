@@ -7,391 +7,191 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model accounts {
-  account_id    Int             @id @default(autoincrement())
-  username      String          @db.VarChar(255)
-  password      String          @db.VarChar(255)
-  role          Int             @default(1)
-  status        accounts_status @default(active)
-  created_at    DateTime        @default(now()) @db.DateTime(0)
-  deleted_at    DateTime?       @db.DateTime(0)
-  updated_at    DateTime        @default(now()) @db.DateTime(0)
-  admins        admins?
-  announcements announcements[]
-  school_year   school_year[]
-  students      students?
-  teachers      teachers?
-}
-
-model address {
-  address_id      Int          @id @default(autoincrement())
-  learner_id      Int
-  house_or_street String?      @db.VarChar(255)
-  street_name     String?      @db.VarChar(255)
-  barangay        String?      @db.VarChar(255)
-  municipality    String?      @db.VarChar(255)
-  province        String?      @db.VarChar(255)
-  country         String?      @db.VarChar(255)
-  zip_code        String?      @db.VarChar(100)
-  type            Int          @default(1)
-  created_at      DateTime     @default(now()) @db.DateTime(0)
-  updated_at      DateTime     @default(now()) @db.DateTime(0)
-  learner_info    learner_info @relation(fields: [learner_id], references: [learner_id], onUpdate: Restrict, map: "address_ibfk_1")
-
-  @@index([learner_id], map: "learner_id")
-}
-
-model admins {
-  id             Int                   @id @default(autoincrement())
-  account_id     Int?                  @unique(map: "account_id")
-  school_id      Int                   @unique(map: "school_id")
-  first_name     String                @db.VarChar(255)
-  middle_name    String                @db.VarChar(255)
-  last_name      String                @db.VarChar(255)
-  suffix         String?               @db.VarChar(50)
-  gender         admins_gender
-  birthdate      DateTime              @db.Date
-  age            Int
-  contact_no     String?               @db.VarChar(50)
-  marital_status admins_marital_status
-  position       String                @db.VarChar(255)
-  created_at     DateTime              @default(now()) @db.DateTime(0)
-  updated_at     DateTime              @default(now()) @db.DateTime(0)
-  accounts       accounts?             @relation(fields: [account_id], references: [account_id], onDelete: Restrict, onUpdate: Restrict, map: "admins_ibfk_1")
-}
-
 model announcements {
-  announcement_id Int                @id @default(autoincrement())
-  title           String             @db.VarChar(120)
-  content         String             @db.VarChar(500)
-  type            announcements_type @default(all)
-  created_by      Int
-  created_at      DateTime           @default(now()) @db.DateTime(0)
-  accounts        accounts           @relation(fields: [created_by], references: [account_id], onUpdate: Restrict, map: "announcements_ibfk_1")
+  id         String  @id @db.VarChar(255)
+  faculty_fk String  @db.VarChar(255)
+  title      String  @db.VarChar(255)
+  content    String  @db.VarChar(255)
+  type       Int
+  faculty    faculty @relation(fields: [faculty_fk], references: [id], onUpdate: Restrict, map: "announcements_ibfk_1")
 
-  @@index([created_by], map: "created_by")
-}
-
-model applications {
-  application_id         Int                      @id @default(autoincrement())
-  school_yr_id           Int
-  year_level_to_enroll   Int                      @default(7)
-  student_id             Int?
-  created_at             DateTime                 @default(now()) @db.DateTime(0)
-  updated_at             DateTime                 @default(now()) @db.DateTime(0)
-  status                 Int                      @default(0)
-  email                  String                   @db.VarChar(500)
-  school_year            school_year              @relation(fields: [school_yr_id], references: [school_yr_id], onUpdate: Restrict, map: "applications_ibfk_1")
-  students               students?                @relation(fields: [student_id], references: [student_id], onDelete: Restrict, onUpdate: Restrict, map: "applications_ibfk_3")
-  learner_info           learner_info[]
-  parent_guardian_info   parent_guardian_info[]
-  returning_learner_info returning_learner_info[]
-
-  @@index([school_yr_id], map: "school_yr_id")
-  @@index([student_id], map: "student_id")
+  @@index([faculty_fk], map: "faculty_fk")
 }
 
 model grades {
-  grade_id              Int                @id @default(autoincrement())
-  subject_assignment_id Int
-  student_id            Int
-  first_grading         Int?
-  second_grading        Int?
-  third_grading         Int?
-  fourth_grading        Int?
-  final_grading         Int?
-  remarks               String?            @db.VarChar(500)
-  has_remedial          Boolean?           @default(false)
-  created_at            DateTime           @default(now()) @db.DateTime(0)
-  updated_at            DateTime           @default(now()) @db.DateTime(0)
-  deleted_at            DateTime?          @db.DateTime(0)
-  subject_assignment    subject_assignment @relation(fields: [subject_assignment_id], references: [subject_assignment_id], onUpdate: Restrict, map: "grades_ibfk_1")
-  students              students           @relation(fields: [student_id], references: [student_id], onUpdate: Restrict, map: "grades_ibfk_2")
-  remedial              remedial[]
+  id               String         @id @db.VarChar(255)
+  academic_level   Int
+  class_subject_fk String         @db.VarChar(255)
+  student_fk       String         @db.VarChar(255)
+  school_year_fk   String         @db.VarChar(255)
+  quarter          Int
+  grade            Float          @db.Float
+  class_subjects   class_subjects @relation(fields: [class_subject_fk], references: [id], onUpdate: Restrict, map: "grades_ibfk_1")
+  student          student        @relation(fields: [student_fk], references: [id], onUpdate: Restrict, map: "grades_ibfk_2")
+  school_year      school_year    @relation(fields: [school_year_fk], references: [id], onUpdate: Restrict, map: "grades_ibfk_3")
 
-  @@index([student_id], map: "student_id")
-  @@index([subject_assignment_id], map: "subject_assignment_id")
-}
-
-model learner_info {
-  learner_id     Int                 @id @default(autoincrement())
-  LRN            String?             @db.VarChar(500)
-  first_name     String              @db.VarChar(255)
-  middle_name    String              @db.VarChar(255)
-  last_name      String              @db.VarChar(255)
-  suffix         String?             @db.VarChar(50)
-  gender         learner_info_gender
-  birthdate      DateTime            @db.Date
-  age            Int
-  psa_birth_cert String?             @db.VarChar(500)
-  place_of_birth String?             @db.VarChar(500)
-  mother_tongue  String?             @db.VarChar(255)
-  indigenous     String?             @db.VarChar(255)
-  ps_no          String?             @map("4ps_no") @db.VarChar(255)
-  created_at     DateTime            @default(now()) @db.DateTime(0)
-  updated_at     DateTime            @default(now()) @db.DateTime(0)
-  application_id Int
-  address        address[]
-  applications   applications        @relation(fields: [application_id], references: [application_id], onUpdate: Restrict, map: "learner_info_ibfk_1")
-  students       students[]
-
-  @@index([application_id], map: "application_id")
-}
-
-model parent_guardian_info {
-  parent_guardian_id   Int          @id @default(autoincrement())
-  mother_first_name    String?      @db.VarChar(255)
-  mother_middle_name   String?      @db.VarChar(255)
-  mother_last_name     String?      @db.VarChar(255)
-  mother_contact_no    String?      @db.VarChar(255)
-  father_first_name    String?      @db.VarChar(255)
-  father_middle_name   String?      @db.VarChar(255)
-  father_last_name     String?      @db.VarChar(255)
-  father_contact_no    String?      @db.VarChar(255)
-  guardian_first_name  String?      @db.VarChar(255)
-  guardian_middle_name String?      @db.VarChar(255)
-  guardian_last_name   String?      @db.VarChar(255)
-  guardian_contact_no  String?      @db.VarChar(255)
-  created_at           DateTime     @default(now()) @db.DateTime(0)
-  updated_at           DateTime     @default(now()) @db.DateTime(0)
-  application_id       Int
-  applications         applications @relation(fields: [application_id], references: [application_id], onUpdate: Restrict, map: "parent_guardian_info_ibfk_1")
-  students             students[]
-
-  @@index([application_id], map: "application_id")
-}
-
-model remedial {
-  remedial_id              Int      @id @default(autoincrement())
-  grade_id                 Int
-  final_grading            Int
-  remedial_class_mark      Int
-  recomputed_final_grading Int
-  remarks                  String?  @db.VarChar(500)
-  conducted_from           DateTime @default(now()) @db.Date
-  conducted_to             DateTime @default(now()) @db.Date
-  grades                   grades   @relation(fields: [grade_id], references: [grade_id], onUpdate: Restrict, map: "remedial_ibfk_1")
-
-  @@index([grade_id], map: "grade_id")
-}
-
-model returning_learner_info {
-  returner_id                Int          @id @default(autoincrement())
-  last_grade_level_completed Int
-  last_school_attended       String       @db.VarChar(500)
-  last_school_year_completed String       @db.VarChar(255)
-  school_id                  String?      @db.VarChar(255)
-  created_at                 DateTime     @default(now()) @db.DateTime(0)
-  updated_at                 DateTime     @default(now()) @db.DateTime(0)
-  application_id             Int
-  applications               applications @relation(fields: [application_id], references: [application_id], onUpdate: Restrict, map: "returning_learner_info_ibfk_1")
-  students                   students[]
-
-  @@index([application_id], map: "application_id")
+  @@index([class_subject_fk], map: "class_subject_fk")
+  @@index([school_year_fk], map: "school_year_fk")
+  @@index([student_fk], map: "student_fk")
 }
 
 model school_year {
-  school_yr_id       Int                  @id @default(autoincrement())
-  start_date         DateTime             @db.Date
-  end_date           DateTime             @db.Date
-  account_id         Int
-  status             Boolean              @default(true)
-  applications       applications[]
-  accounts           accounts             @relation(fields: [account_id], references: [account_id], onUpdate: Restrict, map: "school_year_ibfk_1")
-  section_assignment section_assignment[]
-  subject_assignment subject_assignment[]
-
-  @@index([account_id], map: "account_id")
-}
-
-model section_assignment {
-  section_assigned_id Int                  @id @default(autoincrement())
-  teacher_id          Int?
-  population          Int?                 @default(0)
-  created_at          DateTime             @default(now()) @db.DateTime(0)
-  updated_at          DateTime             @default(now()) @db.DateTime(0)
-  deleted_at          DateTime?            @db.DateTime(0)
-  section_id          Int
-  school_yr_id        Int
-  teachers            teachers?            @relation(fields: [teacher_id], references: [teacher_id], onDelete: Restrict, onUpdate: Restrict, map: "section_assignment_ibfk_2")
-  sections            sections             @relation(fields: [section_id], references: [section_id], onUpdate: Restrict, map: "section_assignment_ibfk_3")
-  school_year         school_year          @relation(fields: [school_yr_id], references: [school_yr_id], onUpdate: Restrict, map: "section_assignment_ibfk_4")
-  sectioning          sectioning[]
-  students            students[]
-  subject_assignment  subject_assignment[]
-
-  @@index([school_yr_id], map: "school_yr_id")
-  @@index([section_id], map: "section_id")
-  @@index([teacher_id], map: "teacher_id")
-}
-
-model sectioning {
-  sectioning_id       Int                @id @default(autoincrement())
-  section_assigned_id Int
-  student_id          Int
-  created_at          DateTime           @db.DateTime(0)
-  updated_at          DateTime           @default(now()) @db.DateTime(0)
-  deleted_at          DateTime?          @default(now()) @db.DateTime(0)
-  section_assignment  section_assignment @relation(fields: [section_assigned_id], references: [section_assigned_id], onUpdate: Restrict, map: "sectioning_ibfk_2")
-  students            students           @relation(fields: [student_id], references: [student_id], onUpdate: Restrict, map: "sectioning_ibfk_3")
-
-  @@index([section_assigned_id], map: "section_id")
-  @@index([student_id], map: "student_id")
+  id                 String               @id @db.VarChar(255)
+  start              Int
+  enrollment_open    Int
+  status             Int
+  class_sections     class_sections[]
+  grades             grades[]
+  student_enrollment student_enrollment[]
 }
 
 model sections {
-  section_id         Int                  @id @default(autoincrement())
-  year_level         sections_year_level  @default(seven)
-  section_name       String               @db.VarChar(255)
-  created_at         DateTime             @default(now()) @db.DateTime(0)
-  updated_at         DateTime             @default(now()) @db.DateTime(0)
-  deleted_at         DateTime?            @db.DateTime(0)
-  section_assignment section_assignment[]
-}
-
-model students {
-  student_id             Int                    @id @default(autoincrement())
-  account_id             Int?                   @unique(map: "account_id")
-  school_id              Int                    @unique(map: "school_id")
-  year_level             students_year_level    @default(seven)
-  is_enrolled            Boolean?               @default(false)
-  created_at             DateTime               @default(now()) @db.DateTime(0)
-  updated_at             DateTime               @default(now()) @db.DateTime(0)
-  first_name             String                 @db.VarChar(255)
-  last_name              String                 @db.VarChar(255)
-  section_assigned_id    Int?
-  learner_id             Int
-  parent_guardian_id     Int
-  returner_id            Int
-  applications           applications[]
-  grades                 grades[]
-  sectioning             sectioning[]
-  accounts               accounts?              @relation(fields: [account_id], references: [account_id], onDelete: Restrict, onUpdate: Restrict, map: "students_ibfk_1")
-  section_assignment     section_assignment?    @relation(fields: [section_assigned_id], references: [section_assigned_id], onDelete: Restrict, onUpdate: Restrict, map: "students_ibfk_2")
-  learner_info           learner_info           @relation(fields: [learner_id], references: [learner_id], onUpdate: Restrict, map: "students_ibfk_3")
-  parent_guardian_info   parent_guardian_info   @relation(fields: [parent_guardian_id], references: [parent_guardian_id], onUpdate: Restrict, map: "students_ibfk_4")
-  returning_learner_info returning_learner_info @relation(fields: [returner_id], references: [returner_id], onUpdate: Restrict, map: "students_ibfk_5")
-
-  @@index([learner_id], map: "learner_id")
-  @@index([parent_guardian_id], map: "parent_guardian_id")
-  @@index([returner_id], map: "returner_id")
-  @@index([section_assigned_id], map: "students_ibfk_2")
-}
-
-model subject_assignment {
-  subject_assignment_id Int                @id @default(autoincrement())
-  subject_id            Int
-  teacher_id            Int?
-  school_yr_id          Int
-  section_assigned_id   Int
-  created_at            DateTime           @default(now()) @db.DateTime(0)
-  updated_at            DateTime           @default(now()) @db.DateTime(0)
-  deleted_at            DateTime?          @db.DateTime(0)
-  day                   String
-  time_start            DateTime           @db.Time(0)
-  time_end              DateTime           @db.Time(0)
-  grades                grades[]
-  school_year           school_year        @relation(fields: [school_yr_id], references: [school_yr_id], onUpdate: Restrict, map: "subject_assignment_ibfk_1")
-  section_assignment    section_assignment @relation(fields: [section_assigned_id], references: [section_assigned_id], onUpdate: Restrict, map: "subject_assignment_ibfk_2")
-  subjects              subjects           @relation(fields: [subject_id], references: [subject_id], onUpdate: Restrict, map: "subject_assignment_ibfk_3")
-  teachers              teachers?          @relation(fields: [teacher_id], references: [teacher_id], onDelete: Restrict, onUpdate: Restrict, map: "subject_assignment_ibfk_4")
-
-  @@index([school_yr_id], map: "school_yr_id")
-  @@index([section_assigned_id], map: "section_id")
-  @@index([subject_id], map: "subject_id")
-  @@index([teacher_id], map: "teacher_id")
+  id             String           @id @db.VarChar(255)
+  name           String           @db.VarChar(255)
+  academic_level Int
+  status         Int
+  class_sections class_sections[]
 }
 
 model subjects {
-  subject_id         Int                  @id @default(autoincrement())
-  year_level         subjects_year_level  @default(seven)
-  name               String               @db.VarChar(255)
-  created_at         DateTime             @default(now()) @db.DateTime(0)
-  updated_at         DateTime             @default(now()) @db.DateTime(0)
-  deleted_at         DateTime?            @db.DateTime(0)
-  subject_assignment subject_assignment[]
+  id             String           @id @db.VarChar(255)
+  name           String           @db.VarChar(255)
+  academic_level Int
+  status         Int
+  class_subjects class_subjects[]
 }
 
-model teachers {
-  teacher_id         Int                     @id @default(autoincrement())
-  account_id         Int?                    @unique(map: "account_id")
-  school_id          Int                     @unique(map: "school_id")
-  first_name         String                  @db.VarChar(255)
-  middle_name        String                  @db.VarChar(255)
-  last_name          String                  @db.VarChar(255)
-  suffix             String?                 @db.VarChar(50)
-  gender             teachers_gender
-  birthdate          DateTime                @db.Date
+model class_sections {
+  id                 String               @id @db.VarChar(255)
+  section_fk         String               @db.VarChar(255)
+  school_year_fk     String               @db.VarChar(255)
+  class_advisor_fk   String               @db.VarChar(255)
+  status             Int
+  sections           sections             @relation(fields: [section_fk], references: [id], onUpdate: Restrict, map: "class_sections_ibfk_1")
+  school_year        school_year          @relation(fields: [school_year_fk], references: [id], onUpdate: Restrict, map: "class_sections_ibfk_2")
+  faculty            faculty              @relation(fields: [class_advisor_fk], references: [id], onUpdate: Restrict, map: "class_sections_ibfk_3")
+  class_subjects     class_subjects[]
+  student_enrollment student_enrollment[]
+
+  @@index([class_advisor_fk], map: "class_advisor_fk")
+  @@index([school_year_fk], map: "school_year_fk")
+  @@index([section_fk], map: "section_fk")
+}
+
+model class_subjects {
+  id               String         @id @db.VarChar(255)
+  subject_fk       String         @db.VarChar(255)
+  teacher_fk       String         @db.VarChar(255)
+  class_section_fk String         @db.VarChar(255)
+  status           Int
+  subjects         subjects       @relation(fields: [subject_fk], references: [id], onUpdate: Restrict, map: "class_subjects_ibfk_1")
+  faculty          faculty        @relation(fields: [teacher_fk], references: [id], onUpdate: Restrict, map: "class_subjects_ibfk_2")
+  class_sections   class_sections @relation(fields: [class_section_fk], references: [id], onUpdate: Restrict, map: "class_subjects_ibfk_3")
+  grades           grades[]
+
+  @@index([class_section_fk], map: "class_section_fk")
+  @@index([subject_fk], map: "subject_fk")
+  @@index([teacher_fk], map: "teacher_fk")
+}
+
+model faculty {
+  id                 String               @id @db.VarChar(255)
+  school_id          String               @unique(map: "school_id") @db.VarChar(255)
+  password           String               @unique(map: "password") @db.VarChar(255)
+  role               Int
+  login_permission   Int
+  first_name         String               @db.VarChar(255)
+  middle_name        String               @db.VarChar(255)
+  last_name          String               @db.VarChar(255)
+  suffix             String?              @db.VarChar(5)
+  gender             Int
+  birthdate          DateTime             @db.Date
   age                Int
-  contact_no         String?                 @db.VarChar(50)
-  marital_status     teachers_marital_status
-  position           String                  @db.VarChar(255)
-  created_at         DateTime                @default(now()) @db.DateTime(0)
-  updated_at         DateTime                @default(now()) @db.DateTime(0)
-  section_assignment section_assignment[]
-  subject_assignment subject_assignment[]
-  accounts           accounts?               @relation(fields: [account_id], references: [account_id], onDelete: Restrict, onUpdate: Restrict, map: "teachers_ibfk_1")
+  contact_no         String               @db.VarChar(25)
+  marital_status     Int
+  position           Int
+  status             Int
+  announcements      announcements[]
+  class_sections     class_sections[]
+  class_subjects     class_subjects[]
+  notifications      notifications[]
+  student_enrollment student_enrollment[]
 }
 
-enum sections_year_level {
-  seven @map("7")
-  eight @map("8")
-  nine  @map("9")
-  ten   @map("10")
+model notifications {
+  id           String   @id @db.VarChar(255)
+  faculty_fk   String?  @db.VarChar(255)
+  student_fk   String?  @db.VarChar(255)
+  title        String   @db.VarChar(500)
+  description  String   @db.VarChar(1000)
+  mark_as_read Boolean?
+  faculty      faculty? @relation(fields: [faculty_fk], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "notifications_ibfk_1")
+  student      student? @relation(fields: [student_fk], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "notifications_ibfk_2")
+
+  @@index([faculty_fk], map: "faculty_fk")
+  @@index([student_fk], map: "student_fk")
 }
 
-enum subjects_year_level {
-  seven @map("7")
-  eight @map("8")
-  nine  @map("9")
-  ten   @map("10")
+model parent_guardian {
+  id                  String    @id @db.VarChar(255)
+  mother_full_name    String?   @db.VarChar(255)
+  father_full_name    String?   @db.VarChar(255)
+  guardian_full_name  String    @db.VarChar(255)
+  mother_contact_no   String?   @db.VarChar(255)
+  father_contact_no   String?   @db.VarChar(255)
+  guardian_contact_no String    @db.VarChar(255)
+  status              Int
+  student             student[]
 }
 
-enum announcements_type {
-  all
-  teachers
-  admin
+model student {
+  id                 String               @id @db.VarChar(255)
+  school_id          String               @unique(map: "school_id") @db.VarChar(255)
+  parentguardian_fk  String               @db.VarChar(255)
+  password           String               @db.VarChar(255)
+  login_permission   Int
+  LRN                String               @unique(map: "LRN") @db.VarChar(255)
+  academic_level     Int
+  is_enrolled        Boolean?
+  last_enrolled      DateTime?            @db.Date
+  first_name         String               @db.VarChar(255)
+  middle_name        String               @db.VarChar(255)
+  last_name          String               @db.VarChar(255)
+  gender             Int
+  birthdate          DateTime?            @db.Date
+  age                Int
+  contact_no         String               @db.VarChar(255)
+  marital_status     Int
+  psa_birth_cert     String?              @db.VarChar(255)
+  place_of_birth     String               @db.VarChar(255)
+  mother_tongue      String               @db.VarChar(255)
+  indigenous         String?              @db.VarChar(255)
+  ps_no              String?              @map("4ps_no") @db.VarChar(255)
+  current_address    String               @db.VarChar(2000)
+  permanent_address  String?              @db.VarChar(2000)
+  grades             grades[]
+  notifications      notifications[]
+  parent_guardian    parent_guardian      @relation(fields: [parentguardian_fk], references: [id], onUpdate: Restrict, map: "student_ibfk_1")
+  student_enrollment student_enrollment[]
+
+  @@index([parentguardian_fk], map: "parentguardian_fk")
 }
 
-enum students_year_level {
-  seven @map("7")
-  eight @map("8")
-  nine  @map("9")
-  ten   @map("10")
-}
+model student_enrollment {
+  id                String         @id @db.VarChar(255)
+  academic_level    Int
+  class_section_fk  String         @db.VarChar(255)
+  student_fk        String         @db.VarChar(255)
+  enrolled_by_fk    String?        @db.VarChar(255)
+  school_year_fk    String         @db.VarChar(255)
+  enrollment_status Int
+  class_sections    class_sections @relation(fields: [class_section_fk], references: [id], onUpdate: Restrict, map: "student_enrollment_ibfk_1")
+  student           student        @relation(fields: [student_fk], references: [id], onUpdate: Restrict, map: "student_enrollment_ibfk_2")
+  faculty           faculty?       @relation(fields: [enrolled_by_fk], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "student_enrollment_ibfk_3")
+  school_year       school_year    @relation(fields: [school_year_fk], references: [id], onUpdate: Restrict, map: "student_enrollment_ibfk_4")
 
-enum accounts_status {
-  active
-  inactive
-}
-
-enum learner_info_gender {
-  female
-  male
-}
-
-enum admins_gender {
-  female
-  male
-}
-
-enum teachers_gender {
-  female
-  male
-}
-
-enum admins_marital_status {
-  single
-  married
-  separated
-  divorced
-  widowed
-}
-
-enum teachers_marital_status {
-  single
-  married
-  separated
-  divorced
-  widowed
+  @@index([class_section_fk], map: "class_section_fk")
+  @@index([enrolled_by_fk], map: "enrolled_by_fk")
+  @@index([school_year_fk], map: "school_year_fk")
+  @@index([student_fk], map: "student_fk")
 }
