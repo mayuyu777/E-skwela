@@ -4,33 +4,34 @@ import bcrypt from 'bcrypt';
 
 const saltRounds = 10;
 
-export async function login(username: string, password: string) {
-  const user = await prisma.accounts.findFirst({
-    where: {
-      username: username,
-    },
-  });
+export async function login(username: string, password: string, userRole: number) {
 
-  console.log(user)
-
-  if (user && bcrypt.compareSync(password, user.password)) {
-    return { auth: true, user: user };
-
-    // let userRole =
-    //   user.role === role.admin
-    //     ? 'admins'
-    //     : user.role === role.teacher
-    //     ? 'teachers'
-    //     : 'students';
-
-    // if (user.role === role.admin) {
-    //   const userData = await prisma.admins.findFirst({
-    //     where: {
-    //       account_id: user.account_id,
-    //     },
-    //   });
-    // }
+  if(userRole == role.student){
+    const user = await prisma.student.findFirst({
+      where: {
+        school_id: username,
+      },
+    });
+  
+    console.log(user)
+  
+    if (user && bcrypt.compareSync(password, user.password)) {
+      return { auth: true, user: user, role: userRole };
+    }
+  }else{
+    const user = await prisma.faculty.findFirst({
+      where: {
+        school_id: username,
+      },
+    });
+  
+    console.log(user)
+  
+    if (user && bcrypt.compareSync(password, user.password)) {
+      return { auth: true, user: user, role: userRole };
+    }
   }
+ 
   return {
     auth: false,
     err: 'Invalid Username and/or Password Credentials',

@@ -46,9 +46,9 @@ export function hasAccess(path: string, role: number) {
   let authorized = false;
 
   routes.forEach((element) => {
-    if (element.role === role) {
+    if (element.role == role) {
       firstpath = element.access[0];
-
+      console.log(element.role)
       element.access.forEach((element) => {
         if (element === path) {
           authorized = true;
@@ -64,8 +64,8 @@ export function hasAccess(path: string, role: number) {
         }
       });
     }
-
   });
+
 
   return {
     authorized: authorized,
