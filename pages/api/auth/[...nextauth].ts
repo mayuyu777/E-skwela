@@ -14,21 +14,21 @@ const authOptions: NextAuthOptions = {
       /* eslint-disable */
       // @ts-ignore
       async authorize(credentials) {
-        const { username, password } = credentials as {
+        const { username, password, role } = credentials as {
           username: string;
           password: string;
+          role: number
         };
         
-        const res = await login(username, password);
-        console.log(res,username,password)
+        const res = await login(username, password, role);
+        console.log(res,username,password, role)
         
         if (res.auth) {
           const user = res.user;
-          console.log(user);
           return {
-            name: user?.username,
-            role: user?.role,
-            school_id: user?.account_id,
+            name: user?.first_name + ' ' + user?.last_name,
+            role: res.role,
+            school_id: user?.school_id,
           };
         } else {
           throw new Error(res.err);

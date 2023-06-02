@@ -150,7 +150,7 @@ model student {
   parentguardian_fk  String               @db.VarChar(255)
   password           String               @db.VarChar(255)
   login_permission   Int
-  LRN                String               @unique(map: "LRN") @db.VarChar(255)
+  LRN                String?              @unique(map: "LRN") @db.VarChar(255)
   academic_level     Int
   is_enrolled        Boolean?
   last_enrolled      DateTime?            @db.Date
