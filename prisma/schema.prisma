@@ -8,12 +8,14 @@ datasource db {
 }
 
 model announcements {
-  id         String  @id @db.VarChar(255)
-  faculty_fk String  @db.VarChar(255)
-  title      String  @db.VarChar(255)
-  content    String  @db.VarChar(255)
+  id         String   @id @db.VarChar(255)
+  faculty_fk String   @db.VarChar(255)
+  title      String   @db.VarChar(255)
+  content    String   @db.VarChar(255)
   type       Int
-  faculty    faculty @relation(fields: [faculty_fk], references: [id], onUpdate: Restrict, map: "announcements_ibfk_1")
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  updated_at DateTime @default(now()) @db.Timestamp(0)
+  faculty    faculty  @relation(fields: [faculty_fk], references: [id], onUpdate: Restrict, map: "announcements_ibfk_1")
 
   @@index([faculty_fk], map: "faculty_fk")
 }
@@ -109,7 +111,7 @@ model faculty {
   age                Int
   contact_no         String               @db.VarChar(25)
   marital_status     Int
-  position           Int
+  position           String               @db.VarChar(255)
   status             Int
   announcements      announcements[]
   class_sections     class_sections[]

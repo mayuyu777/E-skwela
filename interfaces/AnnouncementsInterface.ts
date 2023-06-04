@@ -1,8 +1,10 @@
+import FacultyInterface from "./FacultyInterface";
+
 export default interface AnnouncementInterface {
-  announcement_id: number;
+  id: string;
   title: string;
   content: string;
   type: string;
-  create_by: number;
-  create_at: string;
+  faculty?: FacultyInterface;
+  created_at: string;
 }

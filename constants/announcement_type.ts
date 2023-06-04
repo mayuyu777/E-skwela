@@ -1,1 +1,5 @@
-export const announcement_type = ["all", "teachers", "admin"];
+export const announcement_type = {
+    admin: 1,
+    teacher: 2,
+    everyone: 3
+};
