@@ -16,6 +16,7 @@ import {
   Th,
   Td,
   TableCaption,
+  Heading,
   TableContainer,
   Button,
   Spacer,
@@ -23,7 +24,7 @@ import {
 } from "@chakra-ui/react";
 import moment from "moment";
 import axios from "axios";
-import SectionAssignmentInterface from "@/interfaces/SectionAssignmentInterface";
+import SectionAssignmentInterface from "@/interfaces/ClassSectionsInterface";
 import SectionInterface from "@/interfaces/SectionInterface";
 import SchoolYearInterface from "@/interfaces/SchoolYearInterface";
 import StudentInterface from "@/interfaces/StudentInterface";
@@ -31,7 +32,7 @@ import SectioningInterface from "@/interfaces/SectioningInterface";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import GradesInterface from "@/interfaces/GradesInterface";
-import SubjectAssignmentInterface from "@/interfaces/SubjectAssignmentInterface";
+import SubjectAssignmentInterface from "@/interfaces/ClassSubjectInterface";
 import SubjectInterface from "@/interfaces/SubjectInterface";
 
 interface SubjectAssignmentWithSubject extends SubjectAssignmentInterface {
@@ -47,7 +48,7 @@ interface GradesWithStudent extends GradesInterface {
 export default function StudentGrades() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [grades, setGrades] = useState<GradesWithStudent[]>([]);
+  const [grades, setGrades] = useState<GradesWithStudent[][]>([]);
   const sectionName = router.query.section_name;
 
   useEffect(() => {
@@ -63,110 +64,89 @@ export default function StudentGrades() {
 
   useEffect(() => {
     axios
-      .get("/api/teacher/getSubjectGrades", { params: { section_name: sectionName } })
+      .get("/api/student/getGrades", { params: { school_id: session?.user?.role } })
       .then((res) => {
-        console.log(res.data);
+  
         if (res.data) {
-          const response = res.data as GradesWithStudent[];
-
+          const response = res.data as GradesWithStudent[][];
           const resWithAve = response.map((data) => {
-            let count = 0;
-            if (data["first_grading"]) {
-              count++;
-            }
-            if (data["second_grading"]) {
-              count++;
-            }
-            if (data["third_grading"]) {
-              count++;
-            }
-            if (data["fourth_grading"]) {
-              count++;
-            }
+            return data.map((data) => {
+              let count = 0;
+              if (data["first_grading"]) {
+                count++;
+              }
+              if (data["second_grading"]) {
+                count++;
+              }
+              if (data["third_grading"]) {
+                count++;
+              }
+              if (data["fourth_grading"]) {
+                count++;
+              }
 
-            const attributeCount = count;
-            const sum =
-              data.first_grading + data.second_grading + data.third_grading + data.fourth_grading;
+              const attributeCount = count;
+              const sum =
+                data.first_grading + data.second_grading + data.third_grading + data.fourth_grading;
 
-            const average = sum / attributeCount;
-            return { ...data, average: average };
-          });
+              const average = sum / attributeCount;
+              return { ...data, average: average };
+            })
+          })
           setGrades(resWithAve);
         }
       });
-  }, [session]);
+  }, []);
 
   return (
     <Layout>
       <Flex
         alignItems="center"
         mt="4vh"
-        w="80vw"
-        h="80vh"
+        w={"80vw"}
+        h={"auto"}
         bg="white"
         boxShadow="lg"
         flexDirection="column"
         gap="1rem"
         p="1rem"
       >
-        <Flex w="100%"></Flex>
-
-        <Flex w="80%" flexDirection="column" gap="2rem">
-          <TableContainer w="full" bg="gray.100">
-            <Flex alignContent="center">
-              <Spacer />
-              <Text>HELLO TEST</Text>
-              <Spacer />
-            </Flex>
-
-            <Table variant="simple">
-              <Thead>
-                <Tr>
-                  <Th>FULLNAME</Th>
-                  <Th>FIRST GRADING</Th>
-                  <Th>SECOND GRADING</Th>
-                  <Th>THIRD GRADING</Th>
-                  <Th>FOURTH GRADING</Th>
-                  <Th>AVERAGE</Th>
-                  <Th>REMARKS</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {grades.map((data) => (
-                  <Tr key={data.grade_id}>
-                    <Td>{`${data.students.first_name.toUpperCase()} ${data.students.last_name.toUpperCase()}`}</Td>
-                    <Td>{data.first_grading}</Td>
-                    <Td>{data.second_grading}</Td>
-                    <Td>{data.third_grading}</Td>
-                    <Td>{data.fourth_grading}</Td>
-                    <Td>{data.average}</Td>
-                    <Td>{data.final_grading}</Td>
+        <Flex flexDirection="column" gap="2rem" pt={"4pc"} pb={"5pc"}>
+          {grades.map((data) => (
+            <TableContainer p={"10px"} bg="gray.100" key={data[0].id}>
+              <Flex alignContent="center">
+                <Spacer />
+                <Text fontWeight={"bold"}>{"Grade " + data[0].class_subjects?.class_sections?.sections?.academic_level + " - " + data[0].class_subjects?.class_sections?.sections?.name}</Text>
+                <Spacer />
+              </Flex>
+              <Table variant="simple">
+                <Thead>
+                  <Tr>
+                    <Th>Subject</Th>
+                    <Th>1st Quarter</Th>
+                    <Th>2nd Quarter</Th>
+                    <Th>3rd Quarter</Th>
+                    <Th>4th Quarter</Th>
+                    <Th>Average</Th>
+                    <Th>REMARKS</Th>
                   </Tr>
-                ))}
-                {/* {sa.map((data) => (
-                  
-                  <Tr key={data.section_assigned_id}>
-                    <Td>{`Grade ${data.}`}</Td>
-                    <Td>{data.population}</Td>
-                  </Tr>
-                ))} */}
-                {/* {teachers.map((data) => (
-                  <Tr key={data.teacher_id}>
-                    <Td>{data.position}</Td>
-                    <Td>{data.first_name}</Td>
-                    <Td>{data.middle_name}</Td>
-                    <Td>{data.last_name}</Td>
-                    <Td>{data.suffix}</Td>
-                    <Td>{data.gender}</Td>
-                    <Td>{moment(data.birthdate).format("MM-DD-YYYY")}</Td>
-                    <Td>{data.age}</Td>
-                    <Td>{data.contact_no}</Td>
-                    <Td>{data.marital_status}</Td>
-                  </Tr>
-                ))} */}
-              </Tbody>
-            </Table>
-          </TableContainer>
+                </Thead>
+                <Tbody>
+                  {data.map((data) => (
+                    <Tr key={data.id}>
+                      <Td>{data.class_subjects?.subjects?.name}</Td>
+                      <Td>{data.first_grading}</Td>
+                      <Td>{data.second_grading}</Td>
+                      <Td>{data.third_grading}</Td>
+                      <Td>{data.fourth_grading}</Td>
+                      <Td>{data.average}</Td>
+                      <Td>{data.remarks}</Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table> 
+            </TableContainer>
+          ))}
         </Flex>
       </Flex>
     </Layout>

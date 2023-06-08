@@ -1,8 +1,6 @@
 export default interface SubjectInterface {
-  subject_id: number;
-  year_level: string;
+  id: string;
+  academic_level: number;
   name: string;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string;
+  status: number;
 }

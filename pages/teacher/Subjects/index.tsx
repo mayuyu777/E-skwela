@@ -22,11 +22,11 @@ import {
 } from "@chakra-ui/react";
 import moment from "moment";
 import axios from "axios";
-import SectionAssignmentInterface from "@/interfaces/SectionAssignmentInterface";
+import SectionAssignmentInterface from "@/interfaces/ClassSectionsInterface";
 import SectionInterface from "@/interfaces/SectionInterface";
 import SchoolYearInterface from "@/interfaces/SchoolYearInterface";
 import Link from "next/link";
-import SubjectAssignmentInterface from "@/interfaces/SubjectAssignmentInterface";
+import SubjectAssignmentInterface from "@/interfaces/ClassSubjectInterface";
 import SubjectInterface from "@/interfaces/SubjectInterface";
 
 interface SectionAssignmentWithSections extends SectionAssignmentInterface {

@@ -3,7 +3,7 @@ import { yearlevelString } from "@/constants/yearLevelString";
 import { yearlevels } from "@/constants/yearLevels";
 import GradesInterface from "@/interfaces/GradesInterface";
 import StudentInterface from "@/interfaces/StudentInterface";
-import SubjectAssignmentInterface from "@/interfaces/SubjectAssignmentInterface";
+import SubjectAssignmentInterface from "@/interfaces/ClassSubjectInterface";
 import SubjectInterface from "@/interfaces/SubjectInterface";
 import {
   useDisclosure,
