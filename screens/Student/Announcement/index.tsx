@@ -56,7 +56,7 @@ export default function StudentAnnouncementPage() {
             <Flex flexDirection='column'>
                 <Text color="blue.400" fontSize="18px" fontWeight="medium">{data.faculty?.first_name + ' ' + data.faculty?.last_name}</Text>
                 <Text color="gray.400" fontSize="14px">{data.faculty?.position}</Text>
-                <Text color="gray.400" fontSize="14px">{(moment(data.created_at)).format('LLLL')}</Text>
+                <Text color="gray.400" fontSize="14px">{new Date(data.created_at).toUTCString()}</Text>
                 <Flex flexDirection='column' bg="whiteAlpha.800" p="4" gap="2" marginTop="1pc">
                   <Text color="blue" fontSize="23px" fontWeight="bold">{data.title}</Text>
                   <Text color="black">{data.content}</Text>
