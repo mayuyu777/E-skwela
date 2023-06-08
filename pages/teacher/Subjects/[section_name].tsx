@@ -23,7 +23,7 @@ import {
 } from "@chakra-ui/react";
 import moment from "moment";
 import axios from "axios";
-import SectionAssignmentInterface from "@/interfaces/SectionAssignmentInterface";
+import SectionAssignmentInterface from "@/interfaces/ClassSectionsInterface";
 import SectionInterface from "@/interfaces/SectionInterface";
 import SchoolYearInterface from "@/interfaces/SchoolYearInterface";
 import StudentInterface from "@/interfaces/StudentInterface";
@@ -31,7 +31,7 @@ import SectioningInterface from "@/interfaces/SectioningInterface";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import GradesInterface from "@/interfaces/GradesInterface";
-import SubjectAssignmentInterface from "@/interfaces/SubjectAssignmentInterface";
+import SubjectAssignmentInterface from "@/interfaces/ClassSubjectInterface";
 import SubjectInterface from "@/interfaces/SubjectInterface";
 import EditGradesModal from "@/screens/Teacher/Subjects/components/EditGradesModal";
 

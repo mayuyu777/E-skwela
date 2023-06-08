@@ -1,16 +1,18 @@
+import ClassSubjectInterface from "./ClassSubjectInterface";
+import SchoolYearInterface from "./SchoolYearInterface";
+import SubjectInterface from "./SubjectInterface";
 export default interface GradesInterface {
-    grade_id : number;
-    subject_assignment_id : number;
-    student_id : number;
-    first_grading: number;
-    second_grading: number;
-    third_grading: number;
-    fourth_grading: number;
-    final_grading: number;
-    remarks: string;
-    has_remedial: number;
-    created_at: string;
-    updated_at: string;
-    deleted_at: string;
-  }
+  id : string;
+  academic_level: number;
+  class_subject_fk?: string;
+  student_fk?: string;
+  school_year_fk?: string;
+  first_grading: number;
+  second_grading: number;
+  third_grading: number;
+  fourth_grading: number;
+  remarks?: string | null;
+  class_subjects?: ClassSubjectInterface;
+  school_year?: SchoolYearInterface;
+}
   

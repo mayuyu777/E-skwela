@@ -11,7 +11,7 @@ model announcements {
   id         String   @id @db.VarChar(255)
   faculty_fk String   @db.VarChar(255)
   title      String   @db.VarChar(255)
-  content    String   @db.VarChar(255)
+  content    String   @db.VarChar(1000)
   type       Int
   created_at DateTime @default(now()) @db.Timestamp(0)
   updated_at DateTime @default(now()) @db.Timestamp(0)
@@ -26,8 +26,11 @@ model grades {
   class_subject_fk String         @db.VarChar(255)
   student_fk       String         @db.VarChar(255)
   school_year_fk   String         @db.VarChar(255)
-  quarter          Int
-  grade            Float          @db.Float
+  first_grading    Float          @default(0) @db.Float
+  second_grading   Float          @default(0) @db.Float
+  third_grading    Float          @default(0) @db.Float
+  fourth_grading   Float          @default(0) @db.Float
+  remarks          String         @db.VarChar(255)
   class_subjects   class_subjects @relation(fields: [class_subject_fk], references: [id], onUpdate: Restrict, map: "grades_ibfk_1")
   student          student        @relation(fields: [student_fk], references: [id], onUpdate: Restrict, map: "grades_ibfk_2")
   school_year      school_year    @relation(fields: [school_year_fk], references: [id], onUpdate: Restrict, map: "grades_ibfk_3")
