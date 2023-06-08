@@ -84,19 +84,22 @@ model class_sections {
 }
 
 model class_subjects {
-  id               String         @id @db.VarChar(255)
-  subject_fk       String         @db.VarChar(255)
-  teacher_fk       String         @db.VarChar(255)
-  class_section_fk String         @db.VarChar(255)
-  status           Int
-  subjects         subjects       @relation(fields: [subject_fk], references: [id], onUpdate: Restrict, map: "class_subjects_ibfk_1")
-  faculty          faculty        @relation(fields: [teacher_fk], references: [id], onUpdate: Restrict, map: "class_subjects_ibfk_2")
-  class_sections   class_sections @relation(fields: [class_section_fk], references: [id], onUpdate: Restrict, map: "class_subjects_ibfk_3")
-  grades           grades[]
+  id                String          @id @db.VarChar(255)
+  subject_fk        String          @db.VarChar(255)
+  teacher_fk        String          @db.VarChar(255)
+  class_section_fk  String          @db.VarChar(255)
+  class_schedule_fk String          @db.VarChar(255)
+  status            Int
+  subjects          subjects        @relation(fields: [subject_fk], references: [id], onUpdate: Restrict, map: "class_subjects_ibfk_1")
+  faculty           faculty         @relation(fields: [teacher_fk], references: [id], onUpdate: Restrict, map: "class_subjects_ibfk_2")
+  class_sections    class_sections  @relation(fields: [class_section_fk], references: [id], onUpdate: Restrict, map: "class_subjects_ibfk_3")
+  class_schedules   class_schedules @relation(fields: [class_schedule_fk], references: [id], onUpdate: Restrict, map: "class_subjects_ibfk_4")
+  grades            grades[]
 
   @@index([class_section_fk], map: "class_section_fk")
   @@index([subject_fk], map: "subject_fk")
   @@index([teacher_fk], map: "teacher_fk")
+  @@index([class_schedule_fk], map: "class_schedule_fk")
 }
 
 model faculty {
@@ -199,4 +202,12 @@ model student_enrollment {
   @@index([enrolled_by_fk], map: "enrolled_by_fk")
   @@index([school_year_fk], map: "school_year_fk")
   @@index([student_fk], map: "student_fk")
+}
+
+model class_schedules {
+  id             String           @id @db.VarChar(255)
+  days           Int
+  start          DateTime?        @db.Timestamp(0)
+  end            DateTime?        @db.Timestamp(0)
+  class_subjects class_subjects[]
 }
