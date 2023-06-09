@@ -43,7 +43,7 @@ export default function AdminNavbar() {
   };
 
   return (
-    <Flex px="12" w="full" h="4pc" boxShadow="lg" alignItems="center" bg="white">
+    <Flex px="12" w="full" h="4pc" boxShadow="md" alignItems="center" bg="white" zIndex={"500"}>
       {!isLargerThan800 ? (
         <>
           <Flex

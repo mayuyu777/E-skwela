@@ -5,6 +5,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { school_id } = req.body;
 
   try {
+
     const classSection = await prisma.student_enrollment.findFirst({
         select: {
             class_section_fk: true
@@ -19,16 +20,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     })
 
-    const classSchedule = await prisma.class_subjects.findMany({
-        where: {
-            class_section_fk: classSection?.class_section_fk
-        },
-        select: {
-            subjects: true,
-            class_schedules: true
-        }
-    })
-    return res.status(200).json(classSchedule);
+    if(classSection != null && classSection?.class_section_fk !== null){
+        const classSchedule = await prisma.class_subjects.findMany({
+            where: {
+                class_section_fk: classSection?.class_section_fk
+            },
+            select: {
+                subjects: true,
+                class_schedules: true
+            }
+        })
+        return res.status(200).json(classSchedule);
+    }else{
+        return res.status(200).json(null);
+    }
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: error, ok: false });

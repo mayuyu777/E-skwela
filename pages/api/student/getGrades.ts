@@ -32,7 +32,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           }
         }
       });
-      gradesArray.push(result);
+      if(result.length > 0){
+        gradesArray.push(result as GradesInterface[]);
+      }
     }))
   
     return res.status(200).json(gradesArray);

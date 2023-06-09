@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 08, 2023 at 05:13 PM
+-- Generation Time: Jun 09, 2023 at 11:23 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -223,7 +223,7 @@ INSERT INTO `parent_guardian` (`id`, `mother_full_name`, `father_full_name`, `gu
 CREATE TABLE `school_year` (
   `id` varchar(255) NOT NULL,
   `start` int(11) NOT NULL,
-  `enrollment_open` int(11) NOT NULL,
+  `enrollment_open` int(11) NOT NULL DEFAULT 0,
   `status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -232,7 +232,7 @@ CREATE TABLE `school_year` (
 --
 
 INSERT INTO `school_year` (`id`, `start`, `enrollment_open`, `status`) VALUES
-('ty6utrttutr', 2022, 0, 0),
+('ty6utrttutr', 2022, 1, 0),
 ('wlkfjnofewf', 2023, 0, 1);
 
 -- --------------------------------------------------------
@@ -305,20 +305,21 @@ INSERT INTO `student` (`id`, `school_id`, `parentguardian_fk`, `password`, `logi
 CREATE TABLE `student_enrollment` (
   `id` varchar(255) NOT NULL,
   `academic_level` int(11) NOT NULL,
-  `class_section_fk` varchar(255) NOT NULL,
+  `class_section_fk` varchar(255) DEFAULT NULL,
   `student_fk` varchar(255) NOT NULL,
   `enrolled_by_fk` varchar(255) DEFAULT NULL,
   `school_year_fk` varchar(255) NOT NULL,
-  `enrollment_status` int(11) NOT NULL
+  `enrollment_status` int(11) NOT NULL,
+  `status` int(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `student_enrollment`
 --
 
-INSERT INTO `student_enrollment` (`id`, `academic_level`, `class_section_fk`, `student_fk`, `enrolled_by_fk`, `school_year_fk`, `enrollment_status`) VALUES
-('k554tqt32t', 9, 'bgntu,ir,trhe', 'geherjtyktrthwrhetw', 'fhthrtrktyktrktye', 'wlkfjnofewf', 3),
-('ltyryetwetqe', 8, 'weerhrjtykrk', 'geherjtyktrthwrhetw', 'fhthrtrktyktrktye', 'ty6utrttutr', 3);
+INSERT INTO `student_enrollment` (`id`, `academic_level`, `class_section_fk`, `student_fk`, `enrolled_by_fk`, `school_year_fk`, `enrollment_status`, `status`) VALUES
+('k554tqt32t', 9, 'bgntu,ir,trhe', 'geherjtyktrthwrhetw', 'fhthrtrktyktrktye', 'wlkfjnofewf', 4, 1),
+('ltyryetwetqe', 8, 'weerhrjtykrk', 'geherjtyktrthwrhetw', 'fhthrtrktyktrktye', 'ty6utrttutr', 3, 0);
 
 -- --------------------------------------------------------
 

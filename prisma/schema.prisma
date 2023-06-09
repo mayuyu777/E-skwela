@@ -43,7 +43,7 @@ model grades {
 model school_year {
   id                 String               @id @db.VarChar(255)
   start              Int
-  enrollment_open    Int
+  enrollment_open    Int                  @default(0)
   status             Int
   class_sections     class_sections[]
   grades             grades[]
@@ -186,17 +186,18 @@ model student {
 }
 
 model student_enrollment {
-  id                String         @id @db.VarChar(255)
+  id                String          @id @db.VarChar(255)
   academic_level    Int
-  class_section_fk  String         @db.VarChar(255)
-  student_fk        String         @db.VarChar(255)
-  enrolled_by_fk    String?        @db.VarChar(255)
-  school_year_fk    String         @db.VarChar(255)
+  class_section_fk  String?         @db.VarChar(255)
+  student_fk        String          @db.VarChar(255)
+  enrolled_by_fk    String?         @db.VarChar(255)
+  school_year_fk    String          @db.VarChar(255)
   enrollment_status Int
-  class_sections    class_sections @relation(fields: [class_section_fk], references: [id], onUpdate: Restrict, map: "student_enrollment_ibfk_1")
-  student           student        @relation(fields: [student_fk], references: [id], onUpdate: Restrict, map: "student_enrollment_ibfk_2")
-  faculty           faculty?       @relation(fields: [enrolled_by_fk], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "student_enrollment_ibfk_3")
-  school_year       school_year    @relation(fields: [school_year_fk], references: [id], onUpdate: Restrict, map: "student_enrollment_ibfk_4")
+  status            Int             @default(1)
+  class_sections    class_sections? @relation(fields: [class_section_fk], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "student_enrollment_ibfk_1")
+  student           student         @relation(fields: [student_fk], references: [id], onUpdate: Restrict, map: "student_enrollment_ibfk_2")
+  faculty           faculty?        @relation(fields: [enrolled_by_fk], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "student_enrollment_ibfk_3")
+  school_year       school_year     @relation(fields: [school_year_fk], references: [id], onUpdate: Restrict, map: "student_enrollment_ibfk_4")
 
   @@index([class_section_fk], map: "class_section_fk")
   @@index([enrolled_by_fk], map: "enrolled_by_fk")
