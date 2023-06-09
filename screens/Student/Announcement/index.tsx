@@ -18,6 +18,7 @@ export default function StudentAnnouncementPage() {
     <Flex
       mt="4vh"
       w={['90vw','90vw','80vw','80vw']}
+      minH={"80vh"}
       h="auto"
       bg="white"
       pb='10pc'

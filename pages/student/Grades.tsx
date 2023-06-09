@@ -66,7 +66,6 @@ export default function StudentGrades() {
     axios
       .get("/api/student/getGrades", { params: { school_id: session?.user?.role } })
       .then((res) => {
-  
         if (res.data) {
           const response = res.data as GradesWithStudent[][];
           const resWithAve = response.map((data) => {
@@ -104,6 +103,7 @@ export default function StudentGrades() {
         alignItems="center"
         mt="4vh"
         w={"80vw"}
+        minH={"80vh"}
         h={"auto"}
         bg="white"
         boxShadow="lg"
@@ -111,43 +111,52 @@ export default function StudentGrades() {
         gap="1rem"
         p="1rem"
       >
-        <Flex flexDirection="column" gap="2rem" pt={"4pc"} pb={"5pc"}>
-          {grades.map((data) => (
-            <TableContainer p={"10px"} bg="gray.100" key={data[0].id}>
-              <Flex alignContent="center">
-                <Spacer />
-                <Text fontWeight={"bold"}>{"Grade " + data[0].class_subjects?.class_sections?.sections?.academic_level + " - " + data[0].class_subjects?.class_sections?.sections?.name}</Text>
-                <Spacer />
-              </Flex>
-              <Table variant="simple">
-                <Thead>
-                  <Tr>
-                    <Th>Subject</Th>
-                    <Th>1st Quarter</Th>
-                    <Th>2nd Quarter</Th>
-                    <Th>3rd Quarter</Th>
-                    <Th>4th Quarter</Th>
-                    <Th>Average</Th>
-                    <Th>REMARKS</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {data.map((data) => (
-                    <Tr key={data.id}>
-                      <Td>{data.class_subjects?.subjects?.name}</Td>
-                      <Td>{data.first_grading}</Td>
-                      <Td>{data.second_grading}</Td>
-                      <Td>{data.third_grading}</Td>
-                      <Td>{data.fourth_grading}</Td>
-                      <Td>{data.average}</Td>
-                      <Td>{data.remarks}</Td>
+        {
+          grades.length > 0 ? 
+          (<Flex flexDirection="column" gap="2rem" pt={"4pc"} pb={"5pc"}>
+            {grades.map((data) => (
+              <TableContainer p={"10px"} bg="gray.100" key={data[0].id}>
+                <Flex alignContent="center">
+                  <Spacer />
+                  <Text fontWeight={"bold"}>{"Grade " + data[0].class_subjects?.class_sections?.sections?.academic_level + " - " + data[0].class_subjects?.class_sections?.sections?.name}</Text>
+                  <Spacer />
+                </Flex>
+                <Table variant="simple">
+                  <Thead>
+                    <Tr>
+                      <Th>Subject</Th>
+                      <Th>1st Quarter</Th>
+                      <Th>2nd Quarter</Th>
+                      <Th>3rd Quarter</Th>
+                      <Th>4th Quarter</Th>
+                      <Th>Average</Th>
+                      <Th>REMARKS</Th>
                     </Tr>
-                  ))}
-                </Tbody>
-              </Table> 
-            </TableContainer>
-          ))}
-        </Flex>
+                  </Thead>
+                  <Tbody>
+                    {data.map((data) => (
+                      <Tr key={data.id}>
+                        <Td>{data.class_subjects?.subjects?.name}</Td>
+                        <Td>{data.first_grading}</Td>
+                        <Td>{data.second_grading}</Td>
+                        <Td>{data.third_grading}</Td>
+                        <Td>{data.fourth_grading}</Td>
+                        <Td>{data.average}</Td>
+                        <Td>{data.remarks}</Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table> 
+              </TableContainer>
+            ))}
+          </Flex>)
+          : 
+          (
+            <Flex w={"80%"} bg={"gray.200"} padding={"3pc"} mt={"3pc"} alignItems={"center"} justifyContent={"center"}>
+              <Text color={"gray.500"} fontWeight={"medium"} fontSize={"25px"}>No Grades</Text>
+            </Flex>
+          )
+        }
       </Flex>
     </Layout>
   );

@@ -1,5 +1,5 @@
 export default interface SchoolYearInterface{
-    school_yr_id: number,
+    id: string,
     start?: number | null,
     enrollment_open: number,
     status: number,

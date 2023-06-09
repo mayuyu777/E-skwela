@@ -99,7 +99,7 @@ export default function Home() {
             allDaySlot={false}
             height={"auto"}
             weekends={false}
-            events={ fullcalendarEvents(totalSchoolDays,subjects) }
+            events={ subjects.length > 0? fullcalendarEvents(totalSchoolDays,subjects) : {} }
             slotMinTime={{
               hour: 6,
             }}
