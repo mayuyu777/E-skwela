@@ -26,3 +26,14 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+.about-info-div{
+  background: rgb(255,255,255) !important;
+  background: linear-gradient(0deg, rgba(255,255,255,0) 8%, rgba(255,255,255,0.227328431372549) 18%, rgba(255,255,255,0.6923144257703081) 41%, rgba(255,255,255,1) 69%, rgba(255,255,255,1) 100%) !important;
+}
+
+.about-bg-image{
+  background-image: url('https://i.ibb.co/f9VyxmD/101437826-114057670323532-5750187153158045696-n.jpg') !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;  
+  background-size: cover !important;
+}
