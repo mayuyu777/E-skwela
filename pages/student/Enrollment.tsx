@@ -39,14 +39,14 @@ export default function Home() {
 
   useEffect(() => {
     axios
-      .get("/api/student/getEnrollment", { params: { school_id: session?.user?.school_id }})
+      .post("/api/student/getEnrollment", { school_id: session?.user?.school_id })
       .then((res) => {
         if(res.data){
           setlatestSchoolYear(res.data.latestSchoolYear as SchoolYearInterface);
           setStudentCurEnrollment(res.data.studentEnrollment as StudentEnrollmentInterface);
         }
       });
-  },[]);
+  },[session]);
 
   function submitEnrollment(studentCurEnrollment: StudentEnrollmentInterface, nextGrade: number){
     axios
