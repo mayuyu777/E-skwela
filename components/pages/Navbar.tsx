@@ -280,7 +280,10 @@ export default function AdminNavbar() {
                             <Text>{data.content}</Text>
                         </MenuItem>
                       ))
-                    ) : null
+                    ) : 
+                    (
+                      <Text align={"center"}>You have zero notification.</Text>
+                    )
                   }
                 </MenuList>
               </Menu>
