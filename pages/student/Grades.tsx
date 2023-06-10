@@ -92,7 +92,7 @@ export default function StudentGrades() {
               return { ...data, average: average };
             })
           })
-          setGrades(resWithAve);
+          setGrades(resWithAve.sort((a, b) => b[0].academic_level - a[0].academic_level));
         }
       });
   }, []);
