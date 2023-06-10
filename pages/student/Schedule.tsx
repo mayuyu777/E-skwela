@@ -32,7 +32,7 @@ export default function Home() {
 
   useEffect(() => {
     axios
-      .get("/api/student/getSchedule", { params: { school_id: session?.user?.role } })
+      .get("/api/student/getSchedule", { params: { school_id: session?.user?.school_id } })
       .then((res) => {
         if (res.data) {
           setSubjects(res.data as SubWithSched[])

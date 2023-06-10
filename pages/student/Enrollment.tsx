@@ -39,7 +39,7 @@ export default function Home() {
 
   useEffect(() => {
     axios
-      .get("/api/student/getEnrollment", { params: { school_id: session?.user?.school_id}})
+      .get("/api/student/getEnrollment", { params: { school_id: session?.user?.school_id }})
       .then((res) => {
         if(res.data){
           setlatestSchoolYear(res.data.latestSchoolYear as SchoolYearInterface);
