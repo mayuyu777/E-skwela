@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 09, 2023 at 11:23 AM
+-- Generation Time: Jun 10, 2023 at 11:59 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -212,7 +212,29 @@ CREATE TABLE `parent_guardian` (
 --
 
 INSERT INTO `parent_guardian` (`id`, `mother_full_name`, `father_full_name`, `guardian_full_name`, `mother_contact_no`, `father_contact_no`, `guardian_contact_no`, `status`) VALUES
+('097e446c-6a86-4003-b13f-375fe37cfa3b', 'Natalie Invento Sagnoy', 'Natalie Invento Sagnoy', 'Natalie Invento Sagnoy', '9772013342', '9772013342', '9772013342', 1),
 ('safsdggjjtyjtjty', 'Rose Sagnoy', 'Pelagio Sagnoy', 'Rose Sagnoy', '09772013342', '09772013342', '09772013342', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `returner`
+--
+
+CREATE TABLE `returner` (
+  `id` varchar(255) NOT NULL,
+  `last_grade_level_completed` int(11) NOT NULL,
+  `last_school_attended` varchar(1000) NOT NULL,
+  `last_school_year_completed` varchar(50) NOT NULL,
+  `school_id` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `returner`
+--
+
+INSERT INTO `returner` (`id`, `last_grade_level_completed`, `last_school_attended`, `last_school_year_completed`, `school_id`) VALUES
+('e11f762b-2930-41f9-80f8-ef9cc74e2a5f', 8, 'Hatdog School', '2021-2022', '12344567');
 
 -- --------------------------------------------------------
 
@@ -264,9 +286,11 @@ INSERT INTO `sections` (`id`, `name`, `academic_level`, `status`) VALUES
 
 CREATE TABLE `student` (
   `id` varchar(255) NOT NULL,
-  `school_id` varchar(255) NOT NULL,
+  `school_id` varchar(255) DEFAULT NULL,
+  `email` varchar(1000) NOT NULL,
   `parentguardian_fk` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
+  `returner_fk` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
   `login_permission` int(11) NOT NULL,
   `LRN` varchar(255) DEFAULT NULL,
   `academic_level` int(11) NOT NULL,
@@ -278,7 +302,7 @@ CREATE TABLE `student` (
   `gender` int(11) NOT NULL,
   `birthdate` date DEFAULT NULL,
   `age` int(11) NOT NULL,
-  `contact_no` varchar(255) NOT NULL,
+  `contact_no` varchar(255) DEFAULT NULL,
   `marital_status` int(11) NOT NULL,
   `psa_birth_cert` varchar(255) DEFAULT NULL,
   `place_of_birth` varchar(255) NOT NULL,
@@ -286,15 +310,17 @@ CREATE TABLE `student` (
   `indigenous` varchar(255) DEFAULT NULL,
   `4ps_no` varchar(255) DEFAULT NULL,
   `current_address` varchar(2000) NOT NULL,
-  `permanent_address` varchar(2000) DEFAULT NULL
+  `permanent_address` varchar(2000) DEFAULT NULL,
+  `suffix` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `student`
 --
 
-INSERT INTO `student` (`id`, `school_id`, `parentguardian_fk`, `password`, `login_permission`, `LRN`, `academic_level`, `is_enrolled`, `last_enrolled`, `first_name`, `middle_name`, `last_name`, `gender`, `birthdate`, `age`, `contact_no`, `marital_status`, `psa_birth_cert`, `place_of_birth`, `mother_tongue`, `indigenous`, `4ps_no`, `current_address`, `permanent_address`) VALUES
-('geherjtyktrthwrhetw', '18106334', 'safsdggjjtyjtjty', '$2a$10$r65bhF/xlFDHR8E.Gd/Amei9YzIx.eYJMsNW3BZVV2..zNayroy.q', 1, NULL, 7, NULL, NULL, 'Natalie', 'Invento', 'Sagnoy', 1, '2023-06-22', 23, '09772013342', 1, NULL, 'efwfwqgtthjt', 'sdgdsgsdg', NULL, NULL, 'wegwegwegsdgsgwrger', NULL);
+INSERT INTO `student` (`id`, `school_id`, `email`, `parentguardian_fk`, `returner_fk`, `password`, `login_permission`, `LRN`, `academic_level`, `is_enrolled`, `last_enrolled`, `first_name`, `middle_name`, `last_name`, `gender`, `birthdate`, `age`, `contact_no`, `marital_status`, `psa_birth_cert`, `place_of_birth`, `mother_tongue`, `indigenous`, `4ps_no`, `current_address`, `permanent_address`, `suffix`) VALUES
+('58e10119-6cab-42da-b8df-15b357e0d3de', NULL, 'sagnoynatalie@gmail.com', '097e446c-6a86-4003-b13f-375fe37cfa3b', 'e11f762b-2930-41f9-80f8-ef9cc74e2a5f', NULL, 0, 'dfgsfdgfdg', 8, 0, NULL, 'Natalie', 'Invento', 'Sagnoy', 1, '2023-06-01', 17, NULL, 1, 'fdsgfdgdf', 'gdsgfdgdg', 'fasdfsdf', 'fdhfdhds', 'hdfshfdhdfh', 'Unit 305 Building 3 Urban Deca Homes, Tipolo, Mandaue, Cebu, fdgfdg, dhsdfhdsfhdsh, sadasd, fdsfsdf, Philippines, 6546', 'Unit 305 Building 3 Urban Deca Homes, Tipolo, Mandaue, Cebu, fdgfdg, dhsdfhdsfhdsh, sadasd, fdsfsdf, Philippines, 6546', 'ggreger'),
+('geherjtyktrthwrhetw', '18106334', 'sagnoy@gmail.com', 'safsdggjjtyjtjty', NULL, '$2a$10$r65bhF/xlFDHR8E.Gd/Amei9YzIx.eYJMsNW3BZVV2..zNayroy.q', 1, NULL, 7, NULL, NULL, 'Natalie', 'Invento', 'Sagnoy', 1, '2023-06-22', 23, '09772013342', 1, NULL, 'efwfwqgtthjt', 'sdgdsgsdg', NULL, NULL, 'wegwegwegsdgsgwrger', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -318,6 +344,7 @@ CREATE TABLE `student_enrollment` (
 --
 
 INSERT INTO `student_enrollment` (`id`, `academic_level`, `class_section_fk`, `student_fk`, `enrolled_by_fk`, `school_year_fk`, `enrollment_status`, `status`) VALUES
+('7c97384e-7cb6-4989-8eb3-d158b68e09b0', 8, NULL, '58e10119-6cab-42da-b8df-15b357e0d3de', NULL, 'ty6utrttutr', 0, 1),
 ('k554tqt32t', 9, 'bgntu,ir,trhe', 'geherjtyktrthwrhetw', 'fhthrtrktyktrktye', 'wlkfjnofewf', 4, 1),
 ('ltyryetwetqe', 8, 'weerhrjtykrk', 'geherjtyktrthwrhetw', 'fhthrtrktyktrktye', 'ty6utrttutr', 3, 0);
 
@@ -412,6 +439,12 @@ ALTER TABLE `parent_guardian`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `returner`
+--
+ALTER TABLE `returner`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `school_year`
 --
 ALTER TABLE `school_year`
@@ -430,7 +463,8 @@ ALTER TABLE `student`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `school_id` (`school_id`),
   ADD UNIQUE KEY `LRN` (`LRN`),
-  ADD KEY `parentguardian_fk` (`parentguardian_fk`);
+  ADD KEY `parentguardian_fk` (`parentguardian_fk`),
+  ADD KEY `returner_fk` (`returner_fk`);
 
 --
 -- Indexes for table `student_enrollment`
@@ -494,7 +528,8 @@ ALTER TABLE `notifications`
 -- Constraints for table `student`
 --
 ALTER TABLE `student`
-  ADD CONSTRAINT `student_ibfk_1` FOREIGN KEY (`parentguardian_fk`) REFERENCES `parent_guardian` (`id`);
+  ADD CONSTRAINT `student_ibfk_1` FOREIGN KEY (`parentguardian_fk`) REFERENCES `parent_guardian` (`id`),
+  ADD CONSTRAINT `student_ibfk_2` FOREIGN KEY (`returner_fk`) REFERENCES `returner` (`id`);
 
 --
 -- Constraints for table `student_enrollment`

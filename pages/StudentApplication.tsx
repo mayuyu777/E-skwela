@@ -40,8 +40,7 @@ export default function StudentApplication({
   async function submitApplication(values: object) {
     console.log(values);
     const res = await fetch("/api/createStudentApplication", {
-      // @ts-ignore
-      body: { dataFields: JSON.stringify(values) },
+      body: JSON.stringify(values),
       headers: {
         "Content-Type": "application/json",
       },
@@ -176,20 +175,17 @@ export default function StudentApplication({
                       backgroundColor={"white"}
                       placeholder=" "
                     >
-                      {" "}
-                      <option key={1} value={1}>
-                        2023
-                      </option>
-                      ;
-                      {schoolYears.map((item) => {
+                      {
+                       schoolYears.length > 0 ? 
+                       (schoolYears.map((item) => {
                         return (
-                          <option key={item.school_yr_id} value={item.school_yr_id}>
-                            {new Date(item.start_date).getFullYear() +
-                              "-" +
-                              new Date(item.end_date).getFullYear()}
+                          <option key={item.id} value={item.id}>
+                            {item.start +
+                              " - " +
+                              (item?.start+1)}
                           </option>
                         );
-                      })}
+                      })) : null}
                     </FastField>
                   </FormControl>
                   <FormControl
@@ -205,9 +201,9 @@ export default function StudentApplication({
                       backgroundColor={"white"}
                       placeholder=" "
                     >
-                      {yearlevels.map((item) => {
+                      {yearlevels.map((item,index) => {
                         return (
-                          <option key={item} value={item}>
+                          <option key={index} value={item}>
                             {"Grade " + item}
                           </option>
                         );
@@ -295,8 +291,8 @@ export default function StudentApplication({
                       backgroundColor={"white"}
                       placeholder=" "
                     >
-                      <option value="female">Female</option>
-                      <option value="male">Male</option>
+                      <option value="1">Female</option>
+                      <option value="2">Male</option>
                     </FastField>
                   </FormControl>
                   <TextField
