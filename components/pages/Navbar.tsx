@@ -54,15 +54,17 @@ export default function AdminNavbar() {
           setNotifications(res.data as NotificationInterface[]);
         }
       });
+      console.log("jshda")
 
-  },[session, notifications]);
+  },[session]);
 
   function markNotifAsRead(notifID: string){
     axios
       .post('/api/updateNotification', { notif_id: notifID })
       .then((res) => {
         if(res.data){
-          console.log(res.data)
+          const updatedItems = notifications.filter((item) => item.id !== notifID);
+          setNotifications(updatedItems);
         }
       })
   }
