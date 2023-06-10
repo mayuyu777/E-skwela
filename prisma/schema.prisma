@@ -154,9 +154,11 @@ model parent_guardian {
 
 model student {
   id                 String               @id @db.VarChar(255)
-  school_id          String               @unique(map: "school_id") @db.VarChar(255)
+  school_id          String?              @unique(map: "school_id") @db.VarChar(255)
+  email              String               @db.VarChar(1000)
   parentguardian_fk  String               @db.VarChar(255)
-  password           String               @db.VarChar(255)
+  returner_fk        String?              @db.VarChar(255)
+  password           String?              @db.VarChar(255)
   login_permission   Int
   LRN                String?              @unique(map: "LRN") @db.VarChar(255)
   academic_level     Int
@@ -168,7 +170,7 @@ model student {
   gender             Int
   birthdate          DateTime?            @db.Date
   age                Int
-  contact_no         String               @db.VarChar(255)
+  contact_no         String?              @db.VarChar(255)
   marital_status     Int
   psa_birth_cert     String?              @db.VarChar(255)
   place_of_birth     String               @db.VarChar(255)
@@ -177,12 +179,15 @@ model student {
   ps_no              String?              @map("4ps_no") @db.VarChar(255)
   current_address    String               @db.VarChar(2000)
   permanent_address  String?              @db.VarChar(2000)
+  suffix             String?              @db.VarChar(50)
   grades             grades[]
   notifications      notifications[]
   parent_guardian    parent_guardian      @relation(fields: [parentguardian_fk], references: [id], onUpdate: Restrict, map: "student_ibfk_1")
+  returner           returner?            @relation(fields: [returner_fk], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "student_ibfk_2")
   student_enrollment student_enrollment[]
 
   @@index([parentguardian_fk], map: "parentguardian_fk")
+  @@index([returner_fk], map: "returner_fk")
 }
 
 model student_enrollment {
@@ -211,4 +216,13 @@ model class_schedules {
   start          DateTime?        @db.Timestamp(0)
   end            DateTime?        @db.Timestamp(0)
   class_subjects class_subjects[]
+}
+
+model returner {
+  id                         String    @id @db.VarChar(255)
+  last_grade_level_completed Int
+  last_school_attended       String    @db.VarChar(1000)
+  last_school_year_completed String    @db.VarChar(50)
+  school_id                  String    @db.VarChar(100)
+  student                    student[]
 }

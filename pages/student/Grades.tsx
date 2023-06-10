@@ -64,7 +64,7 @@ export default function StudentGrades() {
 
   useEffect(() => {
     axios
-      .get("/api/student/getGrades", { params: { school_id: session?.user?.role } })
+      .post("/api/student/getGrades", { school_id: session?.user?.school_id })
       .then((res) => {
         if (res.data) {
           const response = res.data as GradesWithStudent[][];

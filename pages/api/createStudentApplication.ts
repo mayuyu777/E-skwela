@@ -2,105 +2,91 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../prisma/client";
 import { message } from "antd";
 import { address_type } from "@/constants/address_type";
+import { v4 as uuidv4 } from 'uuid';
+import StudentInterface from "@/interfaces/StudentInterface";
+import StudentEnrollmentInterface from "@/interfaces/StudentEnrollmentInterface";
+import { student_enrollment_stat } from "@/constants/student_enrollment_stat";
+import { enrollment_status } from "@/constants/enrollment_status";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const values = req.body;
+  console.log(values)
   try {
-    const result = await prisma.applications.create({
+
+    const parentGuardian = await prisma.parent_guardian.create({
       data: {
-        year_level_to_enroll: parseInt(values?.year_level),
-        school_yr_id: parseInt(values?.school_year),
-        email: values.email,
-        learner_info: {
-          create: {
-            LRN: values.lrn,
-            first_name: values.firstname,
-            middle_name: values.middlename,
-            last_name: values.lastname,
-            suffix: values.suffix,
-            gender: values.sex,
-            birthdate: new Date(values.birthdate),
-            age: values.age,
-            psa_birth_cert: values.psa,
-            place_of_birth: values.birthplace,
-            mother_tongue: values.mother_tongue,
-            indigenous: values.ip,
-            ps_no: values.four_ps,
-          },
-        },
-        parent_guardian_info: {
-          create: {
-            mother_first_name: values.first_mother,
-            mother_middle_name: values.middle_mother,
-            mother_last_name: values.last_mother,
-            mother_contact_no: String(values.contact_mother),
-            father_first_name: values.first_father,
-            father_middle_name: values.middle_father,
-            father_last_name: values.last_father,
-            father_contact_no: String(values.contact_father),
-            guardian_first_name: values.first_guardian,
-            guardian_middle_name: values.middle_guardian,
-            guardian_last_name: values.last_guardian,
-            guardian_contact_no: String(values.contact_guardian),
-          },
-        },
-        returning_learner_info: {
-          create: {
-            last_grade_level_completed: values.last_grade,
-            last_school_attended: values.last_school,
-            last_school_year_completed: values.last_school_year,
-            school_id: String(values.school_id),
-          },
-        },
+        id: uuidv4(),
+        mother_full_name: values.first_mother+" "+values.middle_mother+" "+values.last_mother,
+        mother_contact_no: String(values.contact_mother),
+        father_full_name: values.first_father+" "+values.middle_father+" "+values.last_father,
+        father_contact_no: String(values.contact_father),
+        guardian_full_name: values.first_guardian+" "+values.middle_guardian+" "+values.last_guardian,
+        guardian_contact_no: String(values.contact_guardian),
+        status: 1,
       },
       select: {
-        learner_info: true,
-      },
+        id: true
+      }
     });
 
-    if (values.house_no_2 != "") {
-      const address = await prisma.address.createMany({
-        data: [
-          {
-            learner_id: result.learner_info[0].learner_id,
-            house_or_street: values.house_no,
-            street_name: values.street,
-            barangay: values.barangay,
-            municipality: values.municipality,
-            province: values.province,
-            country: values.country,
-            zip_code: String(values.zip),
-            type: address_type.current,
-          },
-          {
-            learner_id: result.learner_info[0].learner_id,
-            house_or_street: values.house_no_2,
-            street_name: values.street_2,
-            barangay: values.barangay_2,
-            municipality: values.municipality_2,
-            province: values.province_2,
-            country: values.country_2,
-            zip_code: String(values.zip_2),
-            type: address_type.permanent,
-          },
-        ],
-      });
-    } else {
-      const address = await prisma.address.create({
-        data: {
-          learner_id: result.learner_info[0].learner_id,
-          house_or_street: values.house_no,
-          street_name: values.street,
-          barangay: values.barangay,
-          municipality: values.municipality,
-          province: values.province,
-          country: values.country,
-          zip_code: String(values.zip),
-          type: address_type.both,
-        },
-      });
-    }
+    const returner = await prisma.returner.create({
+      data: {
+        id: uuidv4(),
+        last_grade_level_completed: parseInt(values.last_grade),
+        last_school_attended: values.last_school,
+        last_school_year_completed: values.last_school_year,
+        school_id: String(values.school_id),
+      },
+      select: {
+        id: true
+      }
+    })
 
+    const studentRes = await prisma.student.create({
+      data: {
+        id: uuidv4(),
+        parentguardian_fk: parentGuardian.id,
+        returner_fk: returner.id,
+        email: values.email,
+        LRN: values.lrn,
+        first_name: values.firstname,
+        middle_name: values.middlename,
+        last_name: values.lastname,
+        suffix: values.suffix,
+        gender: parseInt(values.sex),
+        birthdate: new Date(values.birthdate),
+        age: parseInt(values.age),
+        psa_birth_cert: values.psa,
+        place_of_birth: values.birthplace,
+        mother_tongue: values.mother_tongue,
+        indigenous: values.ip,
+        ps_no: values.four_ps,
+        login_permission: 0,
+        academic_level: parseInt(values.year_level),
+        is_enrolled: false,
+        contact_no: values.contact_no,
+        marital_status: 1,
+        current_address: values.house_no+", "+values.street+", "+values.barangay+", "+values.municipality+", "+values.province+", "+values.country+", "+values.zip,
+        permanent_address: values.house_no_2 != ""? 
+          ( String(values.house_no_2+", "+values.street_2+", "+values.barangay_2+", "+values.municipality_2+", "+values.province_2+", "+values.country_2+", "+values.zip_2))
+          :
+          ( String(values.house_no+", "+values.street+", "+values.barangay+", "+values.municipality+", "+values.province+", "+values.country+", "+values.zip)),
+      },
+      select:{
+        id: true
+      }
+    })
+
+    const result = await prisma.student_enrollment.create({ data: {
+      id: uuidv4(),
+      academic_level: parseInt(values.year_level),
+      school_year_fk: values.school_year,
+      enrollment_status: student_enrollment_stat.new,
+      status: enrollment_status.active,
+      student_fk: studentRes.id
+    }});
+
+    console.log(result)
     res.status(200).send({
       message:
         "Your application has been successfully submitted. Please check your email for updates regarding your application. Thank you.",
@@ -108,6 +94,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
   } catch (error) {
     console.log(error);
-    res.status(500).send({ message: error, ok: false });
+    res.status(500).send({ message: String(error), ok: false });
   }
 }
