@@ -38,7 +38,7 @@ export default function Home() {
           setSubjects(res.data as SubWithSched[])
         }
       });
-  },[]);
+  },[session]);
 
   function fullcalendarEvents(totalSchoolDays: number, subjects: SubWithSched[]): EventFullCalendar[] {
     let eventArray: EventFullCalendar[] = [];

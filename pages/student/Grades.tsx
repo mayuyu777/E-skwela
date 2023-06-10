@@ -95,7 +95,7 @@ export default function StudentGrades() {
           setGrades(resWithAve.sort((a, b) => b[0].academic_level - a[0].academic_level));
         }
       });
-  }, []);
+  }, [session]);
 
   return (
     <Layout>

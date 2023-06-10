@@ -3,8 +3,10 @@ import { Flex, Heading, Image, Text } from "@chakra-ui/react";
 import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 export default function StudentAnnouncementPage() {
+  const { data: session, status } = useSession();
   const [refreshList, setRefreshList] = useState<boolean>(false);
   const [announcements, setAnnouncements] = useState<AnnouncementInterface[]>([]);
 
@@ -12,7 +14,7 @@ export default function StudentAnnouncementPage() {
     axios.get("/api/student/getAnnouncements").then((res) => {
       setAnnouncements(res.data);
     });
-  }, [refreshList]);
+  }, [session]);
 
   return (
     <Flex
