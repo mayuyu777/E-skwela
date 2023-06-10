@@ -6,6 +6,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const result = await prisma.announcements.findMany({
+        orderBy: {
+          created_at: "desc"
+        },
         where: {
             type: announcement_type.everyone
         },
