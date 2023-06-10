@@ -130,9 +130,9 @@ model notifications {
   id           String   @id @db.VarChar(255)
   faculty_fk   String?  @db.VarChar(255)
   student_fk   String?  @db.VarChar(255)
-  title        String   @db.VarChar(500)
-  description  String   @db.VarChar(1000)
-  mark_as_read Boolean?
+  content      String   @db.VarChar(1000)
+  mark_as_read Boolean  @default(false)
+  created_at   DateTime @default(now()) @db.Timestamp(0)
   faculty      faculty? @relation(fields: [faculty_fk], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "notifications_ibfk_1")
   student      student? @relation(fields: [student_fk], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "notifications_ibfk_2")
 
