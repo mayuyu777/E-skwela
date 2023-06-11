@@ -19,14 +19,17 @@ import {
   DrawerBody,
   useMediaQuery,
   Box,
+  Badge
 } from "@chakra-ui/react";
 import { MdAccountCircle, MdCircleNotifications } from "react-icons/md";
 import Link from "next/link";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Router, { useRouter } from "next/router";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { signOut, useSession } from "next-auth/react";
 import { role } from "@/constants/role";
+import axios from "axios";
+import NotificationInterface from "@/interfaces/NotificationInterface";
 
 export default function AdminNavbar() {
   const { data: session, status } = useSession();
@@ -35,12 +38,36 @@ export default function AdminNavbar() {
   const [isLargerThan800] = useMediaQuery("(min-width: 800px)");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
+  const [notifications, setNotifications] = useState<NotificationInterface[]>([]);
 
   const logout = async () => {
     signOut().then(() => {
       router.push("/SignIn");
     });
   };
+
+  useEffect(() => {
+    axios
+      .post("/api/getNotifications", { school_id: session?.user?.school_id })
+      .then((res) => {
+        if(res.data){
+          setNotifications(res.data as NotificationInterface[]);
+        }
+      });
+      console.log("jshda")
+
+  },[session]);
+
+  function markNotifAsRead(notifID: string){
+    axios
+      .post('/api/updateNotification', { notif_id: notifID })
+      .then((res) => {
+        if(res.data){
+          const updatedItems = notifications.filter((item) => item.id !== notifID);
+          setNotifications(updatedItems);
+        }
+      })
+  }
 
   return (
     <Flex px="12" w="full" h="4pc" boxShadow="md" alignItems="center" bg="white" zIndex={"500"}>
@@ -237,7 +264,28 @@ export default function AdminNavbar() {
                   _active={{ background: "white" }}
                 >
                   <MdCircleNotifications size="32" />
+                  {
+                    notifications.length > 0 ? (
+                      <Badge ml='1' fontSize='0.8em' colorScheme='green' position={"absolute"} top={"0"}>
+                        { notifications.length }
+                      </Badge>
+                    ) : null
+                  }
                 </MenuButton>
+                <MenuList>
+                  {
+                    notifications.length > 0 ? (
+                      notifications.map((data) => (
+                        <MenuItem color="black" key={data.id} onClick={() => markNotifAsRead(data.id)}>
+                            <Text>{data.content}</Text>
+                        </MenuItem>
+                      ))
+                    ) : 
+                    (
+                      <Text align={"center"}>You have zero notification.</Text>
+                    )
+                  }
+                </MenuList>
               </Menu>
             </Flex>
             <Flex>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 10, 2023 at 11:59 AM
+-- Generation Time: Jun 10, 2023 at 04:51 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -43,6 +43,7 @@ CREATE TABLE `announcements` (
 
 INSERT INTO `announcements` (`id`, `faculty_fk`, `title`, `content`, `type`, `created_at`, `updated_at`) VALUES
 ('ewgwegweggrthreh', 'fhthrtrktyktrktye', 'Working Scholarship Program', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 3, '2023-06-03 23:44:44', '2023-06-04 14:49:36'),
+('hhjyrkukrt', 'fhthrtrktyktrktye', 'HAHHAHA', 'gsfdgfdgdsg', 3, '2023-06-10 13:31:46', '2023-06-10 13:31:46'),
 ('rgergwergerwge', 'fhthrtrktyktrktye', 'Reminder on pending INC grades', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 3, '2023-06-04 14:44:44', '2023-06-04 14:49:36');
 
 -- --------------------------------------------------------
@@ -171,8 +172,8 @@ CREATE TABLE `grades` (
 --
 
 INSERT INTO `grades` (`id`, `academic_level`, `class_subject_fk`, `student_fk`, `school_year_fk`, `first_grading`, `second_grading`, `third_grading`, `fourth_grading`, `remarks`) VALUES
-('kuyltyrewte', 9, 'teykeyrewr', 'geherjtyktrthwrhetw', 'wlkfjnofewf', 80, 85, 90, 0, ''),
-('kuytyiltwewfwe', 8, 'ukuktykerwqrq', 'geherjtyktrthwrhetw', 'ty6utrttutr', 90, 81, 0, 0, ''),
+('kuyltyrewte', 9, 'teykeyrewr', 'geherjtyktrthwrhetw', 'wlkfjnofewf', 80, 85, 90, 80, ''),
+('kuytyiltwewfwe', 8, 'ukuktykerwqrq', 'geherjtyktrthwrhetw', 'ty6utrttutr', 90, 81, 75, 0, ''),
 ('uykyuktrewrqe', 8, 'grkuilifef', 'geherjtyktrthwrhetw', 'ty6utrttutr', 89, 89, 89, 0, 'PASS');
 
 -- --------------------------------------------------------
@@ -185,10 +186,20 @@ CREATE TABLE `notifications` (
   `id` varchar(255) NOT NULL,
   `faculty_fk` varchar(255) DEFAULT NULL,
   `student_fk` varchar(255) DEFAULT NULL,
-  `title` varchar(500) NOT NULL,
-  `description` varchar(1000) NOT NULL,
-  `mark_as_read` tinyint(1) DEFAULT NULL
+  `content` varchar(1000) NOT NULL,
+  `mark_as_read` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`id`, `faculty_fk`, `student_fk`, `content`, `mark_as_read`, `created_at`) VALUES
+('dwfqrt4h6hhhhhhhhhhhh45', NULL, 'geherjtyktrthwrhetw', 'hahahahah', 0, '2023-06-10 14:21:57'),
+('gdfgdsfgdsgf', NULL, 'geherjtyktrthwrhetw', 'dfgsdfgfdsgs', 0, '2023-06-10 14:31:54'),
+('gtwergrggwer', NULL, 'geherjtyktrthwrhetw', 'ergergergergerg', 0, '2023-06-10 14:31:54'),
+('yjuykyuktyk', NULL, 'geherjtyktrthwrhetw', 'jfoiahowigheiogd', 0, '2023-06-10 14:26:39');
 
 -- --------------------------------------------------------
 
@@ -319,7 +330,7 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`id`, `school_id`, `email`, `parentguardian_fk`, `returner_fk`, `password`, `login_permission`, `LRN`, `academic_level`, `is_enrolled`, `last_enrolled`, `first_name`, `middle_name`, `last_name`, `gender`, `birthdate`, `age`, `contact_no`, `marital_status`, `psa_birth_cert`, `place_of_birth`, `mother_tongue`, `indigenous`, `4ps_no`, `current_address`, `permanent_address`, `suffix`) VALUES
-('58e10119-6cab-42da-b8df-15b357e0d3de', NULL, 'sagnoynatalie@gmail.com', '097e446c-6a86-4003-b13f-375fe37cfa3b', 'e11f762b-2930-41f9-80f8-ef9cc74e2a5f', NULL, 0, 'dfgsfdgfdg', 8, 0, NULL, 'Natalie', 'Invento', 'Sagnoy', 1, '2023-06-01', 17, NULL, 1, 'fdsgfdgdf', 'gdsgfdgdg', 'fasdfsdf', 'fdhfdhds', 'hdfshfdhdfh', 'Unit 305 Building 3 Urban Deca Homes, Tipolo, Mandaue, Cebu, fdgfdg, dhsdfhdsfhdsh, sadasd, fdsfsdf, Philippines, 6546', 'Unit 305 Building 3 Urban Deca Homes, Tipolo, Mandaue, Cebu, fdgfdg, dhsdfhdsfhdsh, sadasd, fdsfsdf, Philippines, 6546', 'ggreger'),
+('58e10119-6cab-42da-b8df-15b357e0d3de', '1111', 'sagnoynatalie@gmail.com', '097e446c-6a86-4003-b13f-375fe37cfa3b', 'e11f762b-2930-41f9-80f8-ef9cc74e2a5f', NULL, 0, 'dfgsfdgfdg', 8, 0, NULL, 'Natalie', 'Invento', 'Sagnoy', 1, '2023-06-01', 17, NULL, 1, 'fdsgfdgdf', 'gdsgfdgdg', 'fasdfsdf', 'fdhfdhds', 'hdfshfdhdfh', 'Unit 305 Building 3 Urban Deca Homes, Tipolo, Mandaue, Cebu, fdgfdg, dhsdfhdsfhdsh, sadasd, fdsfsdf, Philippines, 6546', 'Unit 305 Building 3 Urban Deca Homes, Tipolo, Mandaue, Cebu, fdgfdg, dhsdfhdsfhdsh, sadasd, fdsfsdf, Philippines, 6546', 'ggreger'),
 ('geherjtyktrthwrhetw', '18106334', 'sagnoy@gmail.com', 'safsdggjjtyjtjty', NULL, '$2a$10$r65bhF/xlFDHR8E.Gd/Amei9YzIx.eYJMsNW3BZVV2..zNayroy.q', 1, NULL, 7, NULL, NULL, 'Natalie', 'Invento', 'Sagnoy', 1, '2023-06-22', 23, '09772013342', 1, NULL, 'efwfwqgtthjt', 'sdgdsgsdg', NULL, NULL, 'wegwegwegsdgsgwrger', NULL, NULL);
 
 -- --------------------------------------------------------
