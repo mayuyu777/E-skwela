@@ -15,12 +15,14 @@ import {
   Flex,
   Text,
   Stack,
-  Button 
+  Button,
+  Spinner
 } from "@chakra-ui/react";
 import { v4 as uuidv4 } from 'uuid';
 
 export default function Home() {
   const { data: session, status } = useSession();
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [studentCurEnrollment, setStudentCurEnrollment] = useState<StudentEnrollmentInterface>();
   const [latestSchoolYear, setlatestSchoolYear] = useState<SchoolYearInterface>();
@@ -49,6 +51,7 @@ export default function Home() {
   },[session]);
 
   function submitEnrollment(studentCurEnrollment: StudentEnrollmentInterface, nextGrade: number){
+    setLoading(true);
     axios
       .post('/api/student/updateEnrollment', {
         id: studentCurEnrollment.id,
@@ -68,6 +71,7 @@ export default function Home() {
           })
           .then((res) => {
             if(res?.data){
+              setLoading(false);
               router.reload();
             }
           })
@@ -102,8 +106,9 @@ export default function Home() {
               <Text color={"gray.500"} fontSize={"18px"} fontWeight={"medium"}>
                 Enrollment is open. You are eligible to enroll to the next academic level.
               </Text>
-              <Button colorScheme="green" variant='solid' mt={"2pc"} onClick={() => submitEnrollment(studentCurEnrollment, nextGrade)}>
-                { "+ Enroll to Grade " + nextGrade}
+              <Button colorScheme="green" variant='solid' mt={"2pc"} disabled={loading} onClick={() => submitEnrollment(studentCurEnrollment, nextGrade)}>
+                { "+ Enroll to Grade " + nextGrade + " " }
+                {loading && <Spinner ml="1rem" />}
               </Button>
             </Flex>
           );
