@@ -14,7 +14,7 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import { TextField } from "../../formik/TextField";
-import { role } from "@/constants/role";
+
 export default function LoginForm() {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
@@ -32,7 +32,6 @@ export default function LoginForm() {
         const res = await signIn("credentials", {
           username: values.username,
           password: values.password,
-          role: role.student,
           redirect: false,
         });
 

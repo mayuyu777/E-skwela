@@ -4,32 +4,26 @@ import bcrypt from 'bcrypt';
 
 const saltRounds = 10;
 
-export async function login(username: string, password: string, userRole: number) {
+export async function login(username: string, password: string) {
+  let user;
+  let userRole = role.student;
+  user = await prisma.student.findFirst({
+    where: {
+      school_id: username,
+    },
+  });
 
-  if(userRole == role.student){
-    const user = await prisma.student.findFirst({
+  if(user === null){
+    user = await prisma.faculty.findFirst({
       where: {
         school_id: username,
       },
     });
-  
-    console.log(user)
-  
-    if (user && bcrypt.compareSync(password, user.password)) {
-      return { auth: true, user: user, role: userRole };
-    }
-  }else{
-    const user = await prisma.faculty.findFirst({
-      where: {
-        school_id: username,
-      },
-    });
-  
-    console.log(user)
-  
-    if (user && bcrypt.compareSync(password, user.password)) {
-      return { auth: true, user: user, role: userRole };
-    }
+    userRole = user !== null? user.role: userRole;
+  }
+
+  if (user && bcrypt.compareSync(password, user?.password)) {
+    return { auth: true, user: user, role: userRole };
   }
  
   return {
