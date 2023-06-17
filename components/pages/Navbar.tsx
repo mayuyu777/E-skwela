@@ -208,10 +208,10 @@ export default function AdminNavbar() {
               <Link href={userRole == role.student ? "/student/Home" : "/teacher/Home"}>Home</Link>
             </Text>
             <Text mx="1vw" color={"gray.700"}>
-              <Link href="/student/About">About</Link>
+              <Link href={userRole == role.student ? "/student/About" : "/teacher/About"}>About</Link>
             </Text>
             <Text mx="1vw" color={"gray.700"}>
-              <Link href="/student/Announcements">Announcements</Link>
+              <Link href={userRole == role.student ? "/student/Announcements" : "/teacher/Announcements"}>Announcements</Link>
             </Text>
             <Menu>
               <MenuButton

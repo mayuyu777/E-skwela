@@ -21,6 +21,7 @@ const routes = [
     access: [
       "/teacher/Home",
       "/teacher/About",
+      "/teacher/Announcements",
       "/teacher/ClassAdvisory",
       "/teacher/ClassAdvisory/*",
       "/teacher/Subjects/*",
