@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if(!isMyAnnoucements){
       const result = await prisma.announcements.findMany({
         orderBy: {
-          created_at: "desc"
+          updated_at: "desc"
         },
         where: {
             OR: [
@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }else{
       const result = await prisma.announcements.findMany({
         orderBy: {
-          created_at: "desc"
+          updated_at: "desc"
         },
         where: {
             faculty: {

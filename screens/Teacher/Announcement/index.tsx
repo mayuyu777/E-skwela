@@ -51,6 +51,11 @@ export default function TeacherAnnouncementPage() {
     onClose();
   }
 
+  const editModal = (annoucement: AnnouncementInterface) => {
+    setAnnouncement(annoucement);
+    onOpen();
+  }
+
   function getAnnouncements(type: boolean){
     axios.post("/api/teacher/getAnnouncements", { school_id: session?.user?.school_id, isMyAnnoucements: isMyAnnoucements}).then((res) => {
       setAnnouncements(res.data);
@@ -67,6 +72,22 @@ export default function TeacherAnnouncementPage() {
         toast({
           title: "Success",
           description: "Announcement have successfully submitted.",
+          status: "success",
+          duration: 5000,
+          position: "top",
+        });
+        getAnnouncements(isMyAnnoucements);
+        closeModal();
+      }
+    });
+  }
+
+  function updateAnnouncement(){
+    axios.post("/api/teacher/updateAnnouncement", { announcement: announcement}).then((res) => {
+      if (res.status === 200) {
+        toast({
+          title: "Success",
+          description: "Announcement was successfully updated.",
           status: "success",
           duration: 5000,
           position: "top",
@@ -173,6 +194,15 @@ export default function TeacherAnnouncementPage() {
                   <Text color="blue" fontSize="23px" fontWeight="bold">{data.title}</Text>
                   <Text color="black">{data.content}</Text>
                 </Flex>
+                {
+                  isMyAnnoucements?
+                  (
+                    <Flex alignItems={"end"} justifyContent={"end"} pt="10px" gap={"10px"}>
+                      <Button colorScheme='green' onClick={()=>editModal(data)}>Edit</Button>
+                      <Button colorScheme='red'>Delete</Button>
+                    </Flex>
+                  ) : null
+                }
             </Flex>
             </Flex>
         </Flex>
@@ -184,12 +214,13 @@ export default function TeacherAnnouncementPage() {
           <ModalHeader>{announcement?.id ? "Edit" : "Add"} Announcement</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form>
+            <form action={"#"}>
               <FormControl isRequired>
                 <FormLabel>Title</FormLabel>
                 <Input
                   type="text"
                   size="sm"
+                  required
                   value={announcement.title}
                   onChange={(e) => setAnnouncement((prevState) => ({
                     ...prevState,
@@ -201,6 +232,7 @@ export default function TeacherAnnouncementPage() {
                 <FormLabel>Content</FormLabel>
                 <Textarea
                   size="sm"
+                  required
                   value={announcement.content}
                   onChange={(e) => setAnnouncement((prevState) => ({
                     ...prevState,
@@ -211,6 +243,7 @@ export default function TeacherAnnouncementPage() {
               <FormControl isRequired>
                 <FormLabel>Type</FormLabel>
                 <Select
+                  required
                   value={announcement.type}
                   onChange={(e) => setAnnouncement((prevState) => ({
                     ...prevState,
@@ -226,7 +259,7 @@ export default function TeacherAnnouncementPage() {
           <ModalFooter>
             {
               announcement?.id? 
-              ( <Button colorScheme='blue' mr={3}>Save</Button> ) 
+              ( <Button colorScheme='blue' mr={3} onClick={updateAnnouncement}>Save</Button> ) 
               : ( <Button colorScheme='blue' mr={3} onClick={createAnnouncement}>Submit</Button> ) 
             }
             <Button variant='ghost' onClick={closeModal}>Cancel</Button>
