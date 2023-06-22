@@ -67,18 +67,22 @@ export default function TeacherAnnouncementPage() {
     });
   }
 
+  function success(message: string){
+    toast({
+      title: "Success",
+      description: message,
+      status: "success",
+      duration: 5000,
+      position: "top",
+    });
+    getAnnouncements(isMyAnnoucements);
+    closeModal();
+  }
+
   function createAnnouncement(){
     axios.post("/api/teacher/createAnnouncement", { school_id: session?.user?.school_id, announcement: announcement}).then((res) => {
       if (res.status === 200) {
-        toast({
-          title: "Success",
-          description: "Announcement have successfully submitted.",
-          status: "success",
-          duration: 5000,
-          position: "top",
-        });
-        getAnnouncements(isMyAnnoucements);
-        closeModal();
+        success("Announcement have successfully submitted.");
       }
     });
   }
@@ -86,15 +90,15 @@ export default function TeacherAnnouncementPage() {
   function updateAnnouncement(){
     axios.post("/api/teacher/updateAnnouncement", { announcement: announcement}).then((res) => {
       if (res.status === 200) {
-        toast({
-          title: "Success",
-          description: "Announcement was successfully updated.",
-          status: "success",
-          duration: 5000,
-          position: "top",
-        });
-        getAnnouncements(isMyAnnoucements);
-        closeModal();
+        success("Announcement was successfully updated.");
+      }
+    });
+  }
+
+  function deleteAnnouncement(item: AnnouncementInterface){
+    axios.post("/api/teacher/deleteAnnouncement", {announcement: item} ).then((res) => {
+      if (res.status === 200) {
+        success("Announcement was deleted.");
       }
     });
   }
@@ -200,7 +204,7 @@ export default function TeacherAnnouncementPage() {
                   (
                     <Flex alignItems={"end"} justifyContent={"end"} pt="10px" gap={"10px"}>
                       <Button colorScheme='green' onClick={()=>editModal(data)}>Edit</Button>
-                      <Button colorScheme='red'>Delete</Button>
+                      <Button colorScheme='red' onClick={()=>deleteAnnouncement(data)}>Delete</Button>
                     </Flex>
                   ) : null
                 }
