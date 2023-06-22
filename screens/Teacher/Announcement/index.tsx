@@ -22,8 +22,8 @@ import {
   FormLabel,
   Input,
   Textarea,
-  Select,
   useToast, 
+  Select
 } from "@chakra-ui/react";
 import axios from "axios";
 import moment from "moment";
@@ -32,6 +32,7 @@ import { useSession } from "next-auth/react";
 import { LuMoreHorizontal } from 'react-icons/lu';
 import { MdAdd, MdPersonOutline } from 'react-icons/md';
 import { announcement_type } from "@/constants/announcement_type";
+import { Button as AntButton, Form, Input as AntInput } from 'antd';
 
 export default function TeacherAnnouncementPage() {
   const { data: session, status } = useSession();
@@ -213,37 +214,51 @@ export default function TeacherAnnouncementPage() {
         <ModalContent>
           <ModalHeader>{announcement?.id ? "Edit" : "Add"} Announcement</ModalHeader>
           <ModalCloseButton />
+          <Form
+            initialValues={announcement}
+            onFinish={(values) => {
+              announcement?.id? updateAnnouncement() : createAnnouncement()
+            }}>
           <ModalBody>
-            <form action={"#"}>
-              <FormControl isRequired>
-                <FormLabel>Title</FormLabel>
-                <Input
-                  type="text"
-                  size="sm"
-                  required
-                  value={announcement.title}
-                  onChange={(e) => setAnnouncement((prevState) => ({
+              <Form.Item 
+              name="title" 
+              label="Title"
+              labelCol={{span:24}}
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter title."
+                }
+              ]}
+              >
+                <AntInput onChange={(e)=>{
+                  setAnnouncement((prevState) => ({
                     ...prevState,
-                    title: e.target.value,
-                  }))}
-                />
-              </FormControl>
-              <FormControl isRequired>
-                <FormLabel>Content</FormLabel>
-                <Textarea
-                  size="sm"
-                  required
-                  value={announcement.content}
-                  onChange={(e) => setAnnouncement((prevState) => ({
+                    title: e.target.value
+                  }))
+                }}/>
+              </Form.Item>
+              <Form.Item 
+              name="content" 
+              label="Content"
+              labelCol={{span:24}}
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter content."
+                }
+              ]}
+              >
+                <AntInput.TextArea onChange={(e)=>{
+                  setAnnouncement((prevState) => ({
                     ...prevState,
-                    content: e.target.value,
-                  }))}
-                />
-              </FormControl>
-              <FormControl isRequired>
-                <FormLabel>Type</FormLabel>
-                <Select
+                    content: e.target.value
+                  }))
+                }}/>
+              </Form.Item>
+              <Select
                   required
+                  size={"sm"}
                   value={announcement.type}
                   onChange={(e) => setAnnouncement((prevState) => ({
                     ...prevState,
@@ -253,17 +268,12 @@ export default function TeacherAnnouncementPage() {
                   <option value={announcement_type.everyone}>Everyone</option>
                   <option value={announcement_type.teacher}>Teachers</option>
                 </Select>
-              </FormControl>
-            </form>
           </ModalBody>
           <ModalFooter>
-            {
-              announcement?.id? 
-              ( <Button colorScheme='blue' mr={3} onClick={updateAnnouncement}>Save</Button> ) 
-              : ( <Button colorScheme='blue' mr={3} onClick={createAnnouncement}>Submit</Button> ) 
-            }
+            <Button colorScheme='blue' mr={3} type="submit">{announcement?.id? "Save" : "Submit"}</Button>
             <Button variant='ghost' onClick={closeModal}>Cancel</Button>
           </ModalFooter>
+          </Form>
         </ModalContent>
       </Modal>
     </Flex>
