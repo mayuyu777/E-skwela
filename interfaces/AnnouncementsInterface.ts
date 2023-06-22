@@ -4,7 +4,8 @@ export default interface AnnouncementInterface {
   id: string,
   title: string,
   content: string,
-  type: string,
+  type: number,
   faculty?: FacultyInterface,
   created_at: string,
+  updated_at: string
 }
