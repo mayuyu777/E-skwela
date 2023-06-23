@@ -53,7 +53,7 @@ export default function ClassAdvisory() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [sa, setSA] = useState<SectionAssignmentWithSections[]>([]);
-  const sectionName = router.query.section_name;
+  const sectionID = router.query.section_id;
 
   useEffect(() => {
     let sessionUser = session?.user as SessionInterface;
@@ -69,7 +69,7 @@ export default function ClassAdvisory() {
 
   useEffect(() => {
     axios
-      .get("/api/teacher/getClassAdvisoryByName", { params: { section_name: sectionName } })
+      .get("/api/teacher/getClassAdvisoryByID", { params: { section_id: sectionID } })
       .then((res) => {
         console.log(res.data);
         setSA(res.data);
@@ -96,7 +96,7 @@ export default function ClassAdvisory() {
           <Spacer />
 
           <Text mr="auto" ml="auto">
-            CLASS ADVISORY LIST
+            {}
           </Text>
           <Spacer />
         </Flex>
@@ -114,14 +114,14 @@ export default function ClassAdvisory() {
                 </Tr>
               </Thead>
               <Tbody>
-                {sa.map((data) => {
+                {/* {sa.map((data) => {
                   return data.sectioning.map((sec) => (
                     <Tr key={sec.sectioning_id}>
                       <Td>{`${sec.students.first_name.toUpperCase()} ${sec.students.learner_info.middle_name.toUpperCase()} ${sec.students.last_name.toUpperCase()}, ${sec.students.learner_info.suffix.toUpperCase()}`}</Td>
                       <Td>{sec.students.learner_info.gender.toUpperCase()}</Td>
                     </Tr>
                   ));
-                })}
+                })} */}
                 {/* {sa.map((data) => (
                   
                   <Tr key={data.section_assigned_id}>

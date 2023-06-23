@@ -2,25 +2,109 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/prisma/client";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { teacher_id } = req.query;
+  const { school_id, page, take, search } = req.body;
+
   try {
-    const teacher = await prisma.teachers.findFirst({
-      where: {
-        account_id: Number(teacher_id),
-      },
-    });
+    let result = [{}];
+    let count = 0;
 
-    const result = await prisma.section_assignment.findMany({
-      include: {
-        sections: true,
-        school_year: true,
-      },
-      where: {
-        teacher_id: teacher?.teacher_id,
-      },
-    });
+    if(search === ""){
+      result = await prisma.class_sections.findMany({
+        take:take,
+        skip: (page-1) * take,
+        where: {
+          faculty: {
+            school_id: school_id
+          }
+        },
+        include: {
+          school_year: true,
+          sections: true,
+          _count: {
+            select: {
+              student_enrollment: true
+            }
+          }
+        }
+      });
 
-    return res.status(200).json(result);
+      count = await prisma.class_sections.count({
+        where: {
+          faculty: {
+            school_id: school_id
+          }
+        }
+      })
+    }else{
+      result = await prisma.class_sections.findMany({
+        take:take,
+        skip: (page-1) * take,
+        where: {
+          OR: [
+            {
+              school_year: {
+                start: {
+                  equals: Number(search) || 0
+                }
+              }
+            },
+            {
+              sections: {
+                name: {
+                  contains: search
+                }
+              }
+            },
+            {
+              sections: {
+                academic_level: {
+                  equals: Number(search) || 0
+                }
+              }
+            }
+          ]
+        },
+        include: {
+          school_year: true,
+          sections: true,
+          _count: {
+            select: {
+              student_enrollment: true
+            }
+          }
+        }
+      });
+
+      count = await prisma.class_sections.count({
+        where: {
+          OR: [
+            {
+              school_year: {
+                start: {
+                  equals: Number(search) || 0
+                }
+              }
+            },
+            {
+              sections: {
+                name: {
+                  contains: search
+                }
+              }
+            },
+            {
+              sections: {
+                academic_level: {
+                  equals: Number(search) || 0
+                }
+              }
+            }
+          ]
+        }
+      });;
+    }
+
+    return res.status(200).json({sections: result, count: count});
   } catch (error) {
     console.log(error);
     return res.status(500).send({ message: error, ok: false });
