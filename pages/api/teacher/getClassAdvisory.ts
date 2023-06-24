@@ -40,6 +40,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         take:take,
         skip: (page-1) * take,
         where: {
+          faculty: {
+            school_id: school_id
+          },
           OR: [
             {
               school_year: {
@@ -77,6 +80,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       count = await prisma.class_sections.count({
         where: {
+          faculty: {
+            school_id: school_id
+          },
           OR: [
             {
               school_year: {
