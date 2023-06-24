@@ -19,6 +19,7 @@ import {
   TableContainer,
   Button,
   Spacer,
+  Heading
 } from "@chakra-ui/react";
 import moment from "moment";
 import axios from "axios";
@@ -30,12 +31,17 @@ import Link from "next/link";
 interface SectionAssignmentWithSections extends SectionAssignmentInterface {
   sections: SectionInterface;
   school_year: SchoolYearInterface;
+  _count: {student_enrollment: number};
 }
 
 export default function ClassAdvisory() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [sa, setSA] = useState<SectionAssignmentWithSections[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const [search, setSearch] = useState("");
+  const take = 2;
 
   useEffect(() => {
     let sessionUser = session?.user as SessionInterface;
@@ -51,14 +57,23 @@ export default function ClassAdvisory() {
 
   useEffect(() => {
     if (session) {
-      axios
-        .get("/api/teacher/getClassAdvisory", { params: { teacher_id: session?.user?.school_id } })
-        .then((res) => {
-          console.log(res.data);
-          setSA(res.data);
-        });
+      getClassAdvisory();
     }
-  }, [session]);
+  }, [session, page]);
+
+  function getClassAdvisory(){
+    axios
+    .post("/api/teacher/getClassAdvisory", { school_id: session?.user?.school_id, page: page, take: take, search: search })
+    .then((res) => {
+      console.log(res.data)
+      setTotalItems(res.data.count);
+      setSA(res.data.sections);
+    });
+  }
+
+  function searchClassAdvisory(){
+    getClassAdvisory();
+  }
 
   return (
     <Layout>
@@ -66,46 +81,74 @@ export default function ClassAdvisory() {
         alignItems="center"
         mt="4vh"
         w="80vw"
-        h="80vh"
+        h="120vh"
         bg="white"
         boxShadow="lg"
         flexDirection="column"
         gap="1rem"
         p="1rem"
+        position={"relative"}
+        mb="4vh"
       >
-        <Text mr="auto" ml="auto">
-          CLASS ADVISORY LIST
-        </Text>
-        <Flex w="80%" flexDirection="column" gap="2rem">
-          <Flex gap="1rem" alignItems="center" w="40%">
-            <Text>Search</Text> <Input />
+        <Heading py="4vh">Class Advisory</Heading>
+        <Flex w="80%" flexDirection="column" gap="1rem">
+          <Flex gap="0.5rem" justifyContent="flex-start">
+            <Input
+              w={"15pc"} 
+              size={"sm"} 
+              placeholder="Type here..."
+              onChange={(e) => {
+                setSearch((prev)=>e.target.value);
+              }}/>
+            <Button size={"sm"} w={"7pc"} colorScheme="teal" onClick={()=>{ setPage(1); searchClassAdvisory()}}>Search</Button>
           </Flex>
-          <TableContainer w="full">
-            <Table variant="simple">
-              <Thead>
+          <TableContainer w="full" rounded='md' p="0" h={"70vh"} borderColor={"gray.300"} borderWidth={'1px'}>
+            <Table variant="simple" size={"md"}>
+              <Thead bg='teal.500'>
                 <Tr>
-                  <Th>SCHOOL YEAR</Th>
-                  <Th>SECTION NAME</Th>
-                  <Th>GRADE LEVEL</Th>
-                  <Th>POPULATION</Th>
-                  <Th>ACTION</Th>
+                  <Th color={"whiteAlpha.800"}>SCHOOL YEAR</Th>
+                  <Th color={"whiteAlpha.800"}>SECTION NAME</Th>
+                  <Th color={"whiteAlpha.800"}>GRADE LEVEL</Th>
+                  <Th color={"whiteAlpha.800"}>Population</Th>
                 </Tr>
               </Thead>
               <Tbody>
                 {sa.map((data) => (
-                  <Tr key={data.section_assigned_id}>
-                    <Td>{`${moment(data.school_year.start_date.toString()).format("YYYY")}-${moment(
-                      data.school_year.end_date.toString()
-                    ).format("YYYY")}`}</Td>
-                    <Td>{data.sections.section_name}</Td>
-                    <Td>{`Grade ${data.sections.year_level}`}</Td>
-                    <Td>{data.population}</Td>
+                  <Tr 
+                    key={data.id} 
+                    _hover={{
+                      bg: "teal.100"
+                    }}>
                     <Td>
                       <Link
-                        href={`/teacher/ClassAdvisory/${data.sections.section_name}`}
-                        style={{ cursor: "pointer" }}
-                      >
-                        <Button>Check Class</Button>
+                            href={`/teacher/ClassAdvisory/${data.id}`}
+                            style={{ cursor: "pointer" }}
+                          >
+                        <Flex>{data.school_year.start + " - " + (data.school_year.start + 1)}</Flex>
+                      </Link>
+                    </Td>
+                    <Td>
+                      <Link
+                            href={`/teacher/ClassAdvisory/${data.id}`}
+                            style={{ cursor: "pointer" }}
+                          >
+                        <Flex>{data.sections.name}</Flex>
+                      </Link>
+                    </Td>
+                    <Td>
+                      <Link
+                          href={`/teacher/ClassAdvisory/${data.id}`}
+                          style={{ cursor: "pointer" }}
+                        >
+                        <Flex>{data.sections.academic_level}</Flex>
+                      </Link>
+                    </Td>
+                    <Td>
+                      <Link
+                          href={`/teacher/ClassAdvisory/${data.id}`}
+                          style={{ cursor: "pointer" }}
+                        >
+                        <Flex>{data._count?.student_enrollment}</Flex>
                       </Link>
                     </Td>
                   </Tr>
@@ -113,6 +156,11 @@ export default function ClassAdvisory() {
               </Tbody>
             </Table>
           </TableContainer>
+        </Flex>
+        <Flex gap={"10px"} alignItems={"center"} position={"absolute"} bottom={"5pc"}>
+          <Button size={"sm"} onClick={()=>setPage((prev)=> --prev)} isDisabled={page > 1? false : true}>Prev</Button>
+          <Text fontSize={"15px"} color={"gray.600"}>{ (((page-1)*take)+sa.length) + " of " + totalItems }</Text>
+          <Button size={"sm"} onClick={()=>setPage((prev)=> ++prev)} isDisabled={(((page-1)*take)+sa.length) === totalItems? true : false}>Next</Button>
         </Flex>
       </Flex>
     </Layout>
