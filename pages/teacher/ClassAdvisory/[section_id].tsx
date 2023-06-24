@@ -20,6 +20,7 @@ import {
   Button,
   Spacer,
   Icon,
+  Heading
 } from "@chakra-ui/react";
 import moment from "moment";
 import axios from "axios";
@@ -30,29 +31,26 @@ import StudentInterface from "@/interfaces/StudentInterface";
 import SectioningInterface from "@/interfaces/SectioningInterface";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import Link from "next/link";
-
-interface LN {
-  gender: string;
-  suffix: string;
-  middle_name: string;
-}
-
-interface StudentWithGender extends StudentInterface {
-  learner_info: LN;
-}
-
-interface SectionWithStudents extends SectioningInterface {
-  students: StudentWithGender;
-}
+import { gender } from "@/constants/gender";
 
 interface SectionAssignmentWithSections extends SectionAssignmentInterface {
-  sectioning: SectionWithStudents[];
+  sections: any;
+  school_year: SchoolYearInterface;
+}
+
+interface Student {
+  student: StudentInterface
 }
 
 export default function ClassAdvisory() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [sa, setSA] = useState<SectionAssignmentWithSections[]>([]);
+  const [sa, setSA] = useState<SectionAssignmentWithSections>({} as SectionAssignmentWithSections);
+  const [students, setStudents] = useState<Student[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const [search, setSearch] = useState("");
+  const take = 2;
   const sectionID = router.query.section_id;
 
   useEffect(() => {
@@ -68,13 +66,22 @@ export default function ClassAdvisory() {
   }, [session]);
 
   useEffect(() => {
+    if (session) {
+      getStudents();
+    }
+  }, [session, page]);
+
+  function getStudents(){
     axios
-      .get("/api/teacher/getClassAdvisoryByID", { params: { section_id: sectionID } })
-      .then((res) => {
-        console.log(res.data);
-        setSA(res.data);
-      });
-  }, [session]);
+    .post("/api/teacher/getClassAdvisoryByID", { section_id: sectionID, page: page, take: take, search: search })
+    .then((res) => {
+      console.log(res.data)
+      const data = res.data.section as SectionAssignmentWithSections;
+      setSA(data);
+      setStudents(res.data.students);
+      setTotalItems(res.data.count)
+    });
+  }
 
   return (
     <Layout>
@@ -82,70 +89,74 @@ export default function ClassAdvisory() {
         alignItems="center"
         mt="4vh"
         w="80vw"
-        h="80vh"
+        h="120vh"
         bg="white"
         boxShadow="lg"
         flexDirection="column"
         gap="1rem"
         p="1rem"
+        position={"relative"}
+        mb="4vh"
       >
         <Flex w="100%">
           <Link href="/teacher/ClassAdvisory">
             <ArrowBackIcon />
           </Link>
           <Spacer />
-
-          <Text mr="auto" ml="auto">
-            {}
-          </Text>
+          <Heading py="4vh">
+            {"Grade " + sa.sections?.academic_level + " - " + sa.sections?.name + " (" + sa.school_year?.start 
+            + "-" + (sa?.school_year?.start? (sa?.school_year?.start+1) : null) + ")"}
+          </Heading>
           <Spacer />
         </Flex>
-
-        <Flex w="80%" flexDirection="column" gap="2rem">
-          <Flex gap="1rem" alignItems="center" w="40%">
-            <Text>Search</Text> <Input />
+        <Flex w="80%" flexDirection="column" gap="1rem">
+          <Flex gap="0.5rem" alignItems="center" w="40%">
+            <Input 
+              size={"sm"} 
+              placeholder="Type here..."
+              value={search}
+              onChange={(e) => {
+                setSearch((prev)=>e.target.value);
+              }}
+              />
+            <Button size={"sm"} w={"7pc"} colorScheme="teal" onClick={()=>{setPage(1); getStudents()}}>Search</Button>
           </Flex>
-          <TableContainer w="full">
-            <Table variant="simple">
-              <Thead>
+          <TableContainer w="full" rounded='md' p="0" h={"70vh"} borderColor={"gray.300"} borderWidth={'1px'}>
+            <Table variant="simple" size={"md"}>
+              <Thead bg='teal.500'>
                 <Tr>
-                  <Th>FULLNAME</Th>
-                  <Th>GENDER</Th>
+                  <Th color={"whiteAlpha.800"}>School Id</Th>
+                  <Th color={"whiteAlpha.800"}>FULLNAME</Th>
+                  <Th color={"whiteAlpha.800"}>GENDER</Th>
+                  <Th color={"whiteAlpha.800"}>Age</Th>
                 </Tr>
               </Thead>
               <Tbody>
-                {/* {sa.map((data) => {
-                  return data.sectioning.map((sec) => (
-                    <Tr key={sec.sectioning_id}>
-                      <Td>{`${sec.students.first_name.toUpperCase()} ${sec.students.learner_info.middle_name.toUpperCase()} ${sec.students.last_name.toUpperCase()}, ${sec.students.learner_info.suffix.toUpperCase()}`}</Td>
-                      <Td>{sec.students.learner_info.gender.toUpperCase()}</Td>
+                {
+                  students?.map((data) => (
+                    <Tr 
+                      key={data.student.id}
+                      _hover={{
+                        bg:"teal.100"
+                      }}>
+                      <Td>{data.student.school_id}</Td>
+                      <Td>
+                      {data.student.first_name + " " + data.student.middle_name + " " + data.student.last_name}
+                      {data.student.suffix? (", " + data.student.suffix) : null}
+                      </Td>
+                      <Td>{gender[data.student.gender]}</Td>
+                      <Td>{data.student.age}</Td>
                     </Tr>
-                  ));
-                })} */}
-                {/* {sa.map((data) => (
-                  
-                  <Tr key={data.section_assigned_id}>
-                    <Td>{`Grade ${data.}`}</Td>
-                    <Td>{data.population}</Td>
-                  </Tr>
-                ))} */}
-                {/* {teachers.map((data) => (
-                  <Tr key={data.teacher_id}>
-                    <Td>{data.position}</Td>
-                    <Td>{data.first_name}</Td>
-                    <Td>{data.middle_name}</Td>
-                    <Td>{data.last_name}</Td>
-                    <Td>{data.suffix}</Td>
-                    <Td>{data.gender}</Td>
-                    <Td>{moment(data.birthdate).format("MM-DD-YYYY")}</Td>
-                    <Td>{data.age}</Td>
-                    <Td>{data.contact_no}</Td>
-                    <Td>{data.marital_status}</Td>
-                  </Tr>
-                ))} */}
+                  ))
+                }
               </Tbody>
             </Table>
           </TableContainer>
+        </Flex>
+        <Flex gap={"10px"} alignItems={"center"} position={"absolute"} bottom={"5pc"}>
+          <Button size={"sm"} onClick={()=>setPage((prev)=> --prev)} isDisabled={page > 1? false : true}>Prev</Button>
+          <Text fontSize={"15px"} color={"gray.600"}>{ (((page-1)*take)+students?.length) + " of " + totalItems }</Text>
+          <Button size={"sm"} onClick={()=>setPage((prev)=> ++prev)} isDisabled={(((page-1)*take)+students?.length) === totalItems? true : false}>Next</Button>
         </Flex>
       </Flex>
     </Layout>

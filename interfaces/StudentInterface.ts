@@ -3,6 +3,7 @@ import ReturningLearnerInfoInterface from "./ReturningLearnerInfoInterface"
 
 export default interface StudentInterface {
   id: string,
+  school_id: string,
   email:string,
   LRN: string,
   first_name: string,

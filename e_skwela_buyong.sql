@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 10, 2023 at 04:51 PM
+-- Generation Time: Jun 24, 2023 at 07:28 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -42,8 +42,11 @@ CREATE TABLE `announcements` (
 --
 
 INSERT INTO `announcements` (`id`, `faculty_fk`, `title`, `content`, `type`, `created_at`, `updated_at`) VALUES
-('ewgwegweggrthreh', 'fhthrtrktyktrktye', 'Working Scholarship Program', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 3, '2023-06-03 23:44:44', '2023-06-04 14:49:36'),
-('hhjyrkukrt', 'fhthrtrktyktrktye', 'HAHHAHA', 'gsfdgfdgdsg', 3, '2023-06-10 13:31:46', '2023-06-10 13:31:46'),
+('5445b896-5d55-4b96-b308-1f3e88bd97c1', 'fhthrtrktyktrktye', 'Practice Title 2', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 2, '2023-06-21 21:13:45', '2023-06-21 21:13:53'),
+('66206fe9-0d35-4856-8498-a1462246df9f', 'fhthrtrktyktrktye', 'regergerge', 'egerer', 3, '2023-06-21 22:31:37', '2023-06-21 22:31:37'),
+('c86e71f2-5b7e-4206-9e36-c5eb2902ceea', 'fhthrtrktyktrktye', 'ahahahaa 7777', 'sdsdgdsgghfgh fgfhfghfg', 3, '2023-06-21 21:29:08', '2023-06-21 21:29:30'),
+('ewgwegweggrthreh', 'fhthrtrktyktrktye', 'Working Scholarship Program 2', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 3, '2023-06-03 23:44:44', '2023-06-21 19:00:18'),
+('rdtrhetjrtjr', 'rtrtejejerjerwhq', 'hreerhhe', 'rhrehreh', 2, '2023-06-17 05:37:43', '2023-06-17 05:37:43'),
 ('rgergwergerwge', 'fhthrtrktyktrktye', 'Reminder on pending INC grades', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 3, '2023-06-04 14:44:44', '2023-06-04 14:49:36');
 
 -- --------------------------------------------------------
@@ -89,7 +92,9 @@ CREATE TABLE `class_sections` (
 
 INSERT INTO `class_sections` (`id`, `section_fk`, `school_year_fk`, `class_advisor_fk`, `status`) VALUES
 ('bgntu,ir,trhe', 'hykr67i;tfdgd', 'wlkfjnofewf', 'fhthrtrktyktrktye', 1),
-('weerhrjtykrk', 'yiukdhfhsdf', 'ty6utrttutr', 'fhthrtrktyktrktye', 1);
+('dfgdfgabgntu,ir,trhe', 'trhrththtrhrt', 'wlkfjnofewf', 'fhthrtrktyktrktye', 1),
+('weerhrjtykrk', 'yiukdhfhsdf', 'ty6utrttutr', 'fhthrtrktyktrktye', 1),
+('ytururutuyu', 'trhrththtrhrt', 'ty6utrttutr', 'rtrtejejerjerwhq', 1);
 
 -- --------------------------------------------------------
 
@@ -146,7 +151,8 @@ CREATE TABLE `faculty` (
 --
 
 INSERT INTO `faculty` (`id`, `school_id`, `password`, `role`, `login_permission`, `first_name`, `middle_name`, `last_name`, `suffix`, `gender`, `birthdate`, `age`, `contact_no`, `marital_status`, `position`, `status`) VALUES
-('fhthrtrktyktrktye', '777', '$2a$10$r65bhF/xlFDHR8E.Gd/Amei9YzIx.eYJMsNW3BZVV2..zNayroy.q', 3, 1, 'Peaches', 'Invento', 'Sagnoy', NULL, 1, '2023-06-13', 45, '09772013342', 1, 'Teacher', 1);
+('fhthrtrktyktrktye', '777', '$2a$10$r65bhF/xlFDHR8E.Gd/Amei9YzIx.eYJMsNW3BZVV2..zNayroy.q', 2, 1, 'Peaches', 'Invento', 'Sagnoy', NULL, 1, '2023-06-13', 45, '09772013342', 1, 'Teacher', 1),
+('rtrtejejerjerwhq', '888', 'wfewqgqew', 2, 1, 'Nat', 'Nat', 'Nat', NULL, 2, '2023-06-14', 45, '09772013342', 1, 'Teacher', 1);
 
 -- --------------------------------------------------------
 
@@ -173,8 +179,8 @@ CREATE TABLE `grades` (
 
 INSERT INTO `grades` (`id`, `academic_level`, `class_subject_fk`, `student_fk`, `school_year_fk`, `first_grading`, `second_grading`, `third_grading`, `fourth_grading`, `remarks`) VALUES
 ('kuyltyrewte', 9, 'teykeyrewr', 'geherjtyktrthwrhetw', 'wlkfjnofewf', 80, 85, 90, 80, ''),
-('kuytyiltwewfwe', 8, 'ukuktykerwqrq', 'geherjtyktrthwrhetw', 'ty6utrttutr', 90, 81, 75, 0, ''),
-('uykyuktrewrqe', 8, 'grkuilifef', 'geherjtyktrthwrhetw', 'ty6utrttutr', 89, 89, 89, 0, 'PASS');
+('kuytyiltwewfwe', 8, 'ukuktykerwqrq', 'geherjtyktrthwrhetw', 'ty6utrttutr', 90, 81, 75, 79, ''),
+('uykyuktrewrqe', 8, 'grkuilifef', 'geherjtyktrthwrhetw', 'ty6utrttutr', 89, 89, 89, 79, 'PASS');
 
 -- --------------------------------------------------------
 
@@ -196,10 +202,10 @@ CREATE TABLE `notifications` (
 --
 
 INSERT INTO `notifications` (`id`, `faculty_fk`, `student_fk`, `content`, `mark_as_read`, `created_at`) VALUES
-('dwfqrt4h6hhhhhhhhhhhh45', NULL, 'geherjtyktrthwrhetw', 'hahahahah', 0, '2023-06-10 14:21:57'),
-('gdfgdsfgdsgf', NULL, 'geherjtyktrthwrhetw', 'dfgsdfgfdsgs', 0, '2023-06-10 14:31:54'),
+('dwfqrt4h6hhhhhhhhhhhh45', NULL, 'geherjtyktrthwrhetw', 'hahahahah', 1, '2023-06-10 14:21:57'),
+('gdfgdsfgdsgf', NULL, 'geherjtyktrthwrhetw', 'dfgsdfgfdsgs', 1, '2023-06-10 14:31:54'),
 ('gtwergrggwer', NULL, 'geherjtyktrthwrhetw', 'ergergergergerg', 0, '2023-06-10 14:31:54'),
-('yjuykyuktyk', NULL, 'geherjtyktrthwrhetw', 'jfoiahowigheiogd', 0, '2023-06-10 14:26:39');
+('yjuykyuktyk', NULL, 'geherjtyktrthwrhetw', 'jfoiahowigheiogd', 1, '2023-06-10 14:26:39');
 
 -- --------------------------------------------------------
 
@@ -287,6 +293,7 @@ CREATE TABLE `sections` (
 
 INSERT INTO `sections` (`id`, `name`, `academic_level`, `status`) VALUES
 ('hykr67i;tfdgd', 'Lansones', 9, 1),
+('trhrththtrhrt', 'Kalabasa', 7, 1),
 ('yiukdhfhsdf', 'Kamunggay', 8, 1);
 
 -- --------------------------------------------------------
@@ -330,8 +337,8 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`id`, `school_id`, `email`, `parentguardian_fk`, `returner_fk`, `password`, `login_permission`, `LRN`, `academic_level`, `is_enrolled`, `last_enrolled`, `first_name`, `middle_name`, `last_name`, `gender`, `birthdate`, `age`, `contact_no`, `marital_status`, `psa_birth_cert`, `place_of_birth`, `mother_tongue`, `indigenous`, `4ps_no`, `current_address`, `permanent_address`, `suffix`) VALUES
-('58e10119-6cab-42da-b8df-15b357e0d3de', '1111', 'sagnoynatalie@gmail.com', '097e446c-6a86-4003-b13f-375fe37cfa3b', 'e11f762b-2930-41f9-80f8-ef9cc74e2a5f', NULL, 0, 'dfgsfdgfdg', 8, 0, NULL, 'Natalie', 'Invento', 'Sagnoy', 1, '2023-06-01', 17, NULL, 1, 'fdsgfdgdf', 'gdsgfdgdg', 'fasdfsdf', 'fdhfdhds', 'hdfshfdhdfh', 'Unit 305 Building 3 Urban Deca Homes, Tipolo, Mandaue, Cebu, fdgfdg, dhsdfhdsfhdsh, sadasd, fdsfsdf, Philippines, 6546', 'Unit 305 Building 3 Urban Deca Homes, Tipolo, Mandaue, Cebu, fdgfdg, dhsdfhdsfhdsh, sadasd, fdsfsdf, Philippines, 6546', 'ggreger'),
-('geherjtyktrthwrhetw', '18106334', 'sagnoy@gmail.com', 'safsdggjjtyjtjty', NULL, '$2a$10$r65bhF/xlFDHR8E.Gd/Amei9YzIx.eYJMsNW3BZVV2..zNayroy.q', 1, NULL, 7, NULL, NULL, 'Natalie', 'Invento', 'Sagnoy', 1, '2023-06-22', 23, '09772013342', 1, NULL, 'efwfwqgtthjt', 'sdgdsgsdg', NULL, NULL, 'wegwegwegsdgsgwrger', NULL, NULL);
+('g777eherjtyktrthwrhetwtrgt', '111', 'sagnoy@gmail.com', 'safsdggjjtyjtjty', NULL, '$2a$10$r65bhF/xlFDHR8E.Gd/Amei9YzIx.eYJMsNW3BZVV2..zNayroy.q', 1, NULL, 7, NULL, NULL, 'Ariel', 'Invento', 'Sagnoy', 1, '2023-06-22', 16, '09772013342', 1, NULL, 'efwfwqgtthjt', 'sdgdsgsdg', NULL, NULL, 'wegwegwegsdgsgwrger', NULL, NULL),
+('geherjtyktrthwrhetw', '18106334', 'sagnoy@gmail.com', 'safsdggjjtyjtjty', NULL, '$2a$10$r65bhF/xlFDHR8E.Gd/Amei9YzIx.eYJMsNW3BZVV2..zNayroy.q', 1, NULL, 7, NULL, NULL, 'Natalie', 'Invento', 'Sagnoy', 1, '2023-06-22', 16, '09772013342', 1, NULL, 'efwfwqgtthjt', 'sdgdsgsdg', NULL, NULL, 'wegwegwegsdgsgwrger', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -355,7 +362,7 @@ CREATE TABLE `student_enrollment` (
 --
 
 INSERT INTO `student_enrollment` (`id`, `academic_level`, `class_section_fk`, `student_fk`, `enrolled_by_fk`, `school_year_fk`, `enrollment_status`, `status`) VALUES
-('7c97384e-7cb6-4989-8eb3-d158b68e09b0', 8, NULL, '58e10119-6cab-42da-b8df-15b357e0d3de', NULL, 'ty6utrttutr', 0, 1),
+('6567gk554tqt32t', 9, 'bgntu,ir,trhe', 'g777eherjtyktrthwrhetwtrgt', 'fhthrtrktyktrktye', 'wlkfjnofewf', 4, 1),
 ('k554tqt32t', 9, 'bgntu,ir,trhe', 'geherjtyktrthwrhetw', 'fhthrtrktyktrktye', 'wlkfjnofewf', 4, 1),
 ('ltyryetwetqe', 8, 'weerhrjtykrk', 'geherjtyktrthwrhetw', 'fhthrtrktyktrktye', 'ty6utrttutr', 3, 0);
 

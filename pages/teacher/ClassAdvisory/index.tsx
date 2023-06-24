@@ -72,7 +72,6 @@ export default function ClassAdvisory() {
   }
 
   function searchClassAdvisory(){
-    console.log(search)
     getClassAdvisory();
   }
 
@@ -82,49 +81,74 @@ export default function ClassAdvisory() {
         alignItems="center"
         mt="4vh"
         w="80vw"
-        h="80vh"
+        h="120vh"
         bg="white"
         boxShadow="lg"
         flexDirection="column"
         gap="1rem"
         p="1rem"
         position={"relative"}
+        mb="4vh"
       >
         <Heading py="4vh">Class Advisory</Heading>
         <Flex w="80%" flexDirection="column" gap="1rem">
-          <Flex gap="0.5rem" alignItems="center" w="40%">
-            <Input 
+          <Flex gap="0.5rem" justifyContent="flex-start">
+            <Input
+              w={"15pc"} 
               size={"sm"} 
               placeholder="Type here..."
               onChange={(e) => {
                 setSearch((prev)=>e.target.value);
               }}/>
-            <Button size={"sm"} w={"7pc"} colorScheme="teal" onClick={searchClassAdvisory}>Search</Button>
+            <Button size={"sm"} w={"7pc"} colorScheme="teal" onClick={()=>{ setPage(1); searchClassAdvisory()}}>Search</Button>
           </Flex>
-          <TableContainer w="full" rounded='md' p="0">
-            <Table variant="simple" size={"sm"}>
+          <TableContainer w="full" rounded='md' p="0" h={"70vh"} borderColor={"gray.300"} borderWidth={'1px'}>
+            <Table variant="simple" size={"md"}>
               <Thead bg='teal.500'>
                 <Tr>
                   <Th color={"whiteAlpha.800"}>SCHOOL YEAR</Th>
                   <Th color={"whiteAlpha.800"}>SECTION NAME</Th>
                   <Th color={"whiteAlpha.800"}>GRADE LEVEL</Th>
                   <Th color={"whiteAlpha.800"}>Population</Th>
-                  <Th color={"whiteAlpha.800"}>ACTION</Th>
                 </Tr>
               </Thead>
               <Tbody>
                 {sa.map((data) => (
-                  <Tr key={data.id}>
-                    <Td>{data.school_year.start + " - " + (data.school_year.start + 1)}</Td>
-                    <Td>{data.sections.name}</Td>
-                    <Td>{data.sections.academic_level}</Td>
-                    <Td>{data._count?.student_enrollment}</Td>
-                    <Td color='teal.500' textDecor={"underline"}>
+                  <Tr 
+                    key={data.id} 
+                    _hover={{
+                      bg: "teal.100"
+                    }}>
+                    <Td>
                       <Link
-                        href={`/teacher/ClassAdvisory/${data.id}`}
-                        style={{ cursor: "pointer" }}
-                      >
-                        Check Class
+                            href={`/teacher/ClassAdvisory/${data.id}`}
+                            style={{ cursor: "pointer" }}
+                          >
+                        <Flex>{data.school_year.start + " - " + (data.school_year.start + 1)}</Flex>
+                      </Link>
+                    </Td>
+                    <Td>
+                      <Link
+                            href={`/teacher/ClassAdvisory/${data.id}`}
+                            style={{ cursor: "pointer" }}
+                          >
+                        <Flex>{data.sections.name}</Flex>
+                      </Link>
+                    </Td>
+                    <Td>
+                      <Link
+                          href={`/teacher/ClassAdvisory/${data.id}`}
+                          style={{ cursor: "pointer" }}
+                        >
+                        <Flex>{data.sections.academic_level}</Flex>
+                      </Link>
+                    </Td>
+                    <Td>
+                      <Link
+                          href={`/teacher/ClassAdvisory/${data.id}`}
+                          style={{ cursor: "pointer" }}
+                        >
+                        <Flex>{data._count?.student_enrollment}</Flex>
                       </Link>
                     </Td>
                   </Tr>
@@ -135,7 +159,7 @@ export default function ClassAdvisory() {
         </Flex>
         <Flex gap={"10px"} alignItems={"center"} position={"absolute"} bottom={"5pc"}>
           <Button size={"sm"} onClick={()=>setPage((prev)=> --prev)} isDisabled={page > 1? false : true}>Prev</Button>
-          <Text fontSize={"12px"} color={"gray.600"}>{ (((page-1)*take)+sa.length) + " of " + totalItems }</Text>
+          <Text fontSize={"15px"} color={"gray.600"}>{ (((page-1)*take)+sa.length) + " of " + totalItems }</Text>
           <Button size={"sm"} onClick={()=>setPage((prev)=> ++prev)} isDisabled={(((page-1)*take)+sa.length) === totalItems? true : false}>Next</Button>
         </Flex>
       </Flex>
