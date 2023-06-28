@@ -20,7 +20,8 @@ import {
   Button,
   Spacer,
   Icon,
-  Heading
+  Heading,
+  useDisclosure
 } from "@chakra-ui/react";
 import moment from "moment";
 import axios from "axios";
@@ -32,6 +33,7 @@ import SectioningInterface from "@/interfaces/SectioningInterface";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { gender } from "@/constants/gender";
+import StudentInformationModal from "@/components/pages/StudentInformationModal";
 
 interface SectionAssignmentWithSections extends SectionAssignmentInterface {
   sections: any;
@@ -47,9 +49,11 @@ export default function ClassAdvisory() {
   const router = useRouter();
   const [sa, setSA] = useState<SectionAssignmentWithSections>({} as SectionAssignmentWithSections);
   const [students, setStudents] = useState<Student[]>([]);
+  const [student, setStudent] = useState<StudentInterface>({} as StudentInterface);
   const [page, setPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [search, setSearch] = useState("");
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const take = 2;
   const sectionID = router.query.section_id;
 
@@ -81,6 +85,11 @@ export default function ClassAdvisory() {
       setStudents(res.data.students);
       setTotalItems(res.data.count)
     });
+  }
+
+  const openStudentModal = (data: StudentInterface) => {
+    setStudent(data);
+    onOpen();
   }
 
   return (
@@ -139,13 +148,17 @@ export default function ClassAdvisory() {
                       _hover={{
                         bg:"teal.100"
                       }}>
-                      <Td>{data.student.school_id}</Td>
                       <Td>
-                      {data.student.first_name + " " + data.student.middle_name + " " + data.student.last_name}
-                      {data.student.suffix? (", " + data.student.suffix) : null}
+                        <Flex style={{ cursor: "pointer" }} onClick={()=>openStudentModal(data.student)}>{data.student.school_id}</Flex>
                       </Td>
-                      <Td>{gender[data.student.gender]}</Td>
-                      <Td>{data.student.age}</Td>
+                      <Td>
+                        <Flex style={{ cursor: "pointer" }} onClick={()=>openStudentModal(data.student)}>
+                        {data.student.first_name + " " + data.student.middle_name + " " + data.student.last_name}
+                        {data.student.suffix? (", " + data.student.suffix) : null}
+                        </Flex>
+                      </Td>
+                      <Td><Flex style={{ cursor: "pointer" }} onClick={()=>openStudentModal(data.student)}>{gender[data.student.gender]}</Flex></Td>
+                      <Td><Flex style={{ cursor: "pointer" }} onClick={()=>openStudentModal(data.student)}>{data.student.age}</Flex></Td>
                     </Tr>
                   ))
                 }
@@ -159,6 +172,7 @@ export default function ClassAdvisory() {
           <Button size={"sm"} onClick={()=>setPage((prev)=> ++prev)} isDisabled={(((page-1)*take)+students?.length) === totalItems? true : false}>Next</Button>
         </Flex>
       </Flex>
+      <StudentInformationModal isOpen={isOpen} onClose={onClose} student={student}/>
     </Layout>
   );
 }
