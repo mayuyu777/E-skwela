@@ -2,7 +2,7 @@ import ClassSubjectInterface from "./ClassSubjectInterface";
 import SchoolYearInterface from "./SchoolYearInterface";
 import SubjectInterface from "./SubjectInterface";
 export default interface GradesInterface {
-  id : string,
+  id: string,
   academic_level: number,
   class_subject_fk?: string,
   student_fk?: string,

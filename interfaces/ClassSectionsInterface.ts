@@ -1,4 +1,5 @@
 import SectionInterface from "./SectionInterface";
+import SchoolYearInterface from "./SchoolYearInterface";
 
 export default interface ClassSectionsInterface {
   id: string,
@@ -7,4 +8,5 @@ export default interface ClassSectionsInterface {
   class_advisor_fk: string,
   status: number,
   sections?: SectionInterface,
+  school_year?: SchoolYearInterface
 }

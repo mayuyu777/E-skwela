@@ -1,5 +1,6 @@
 import ParentGuardianInterface from "./ParentGuardianInterface"
 import ReturningLearnerInfoInterface from "./ReturningLearnerInfoInterface"
+import GradesInterface from "./GradesInterface"
 
 export default interface StudentInterface {
   id: string,
@@ -30,5 +31,6 @@ export default interface StudentInterface {
   permanent_address: string,
   parent_guardian?: ParentGuardianInterface,
   returner?: ReturningLearnerInfoInterface,
+  grades?: GradesInterface
 }
   
