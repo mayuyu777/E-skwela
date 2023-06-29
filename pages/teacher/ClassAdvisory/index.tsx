@@ -103,7 +103,7 @@ export default function ClassAdvisory() {
             <Button size={"sm"} w={"7pc"} colorScheme="teal" onClick={()=>{ setPage(1); searchClassAdvisory()}}>Search</Button>
           </Flex>
           <TableContainer w="full" rounded='md' p="0" h={"70vh"} borderColor={"gray.300"} borderWidth={'1px'}>
-            <Table variant="simple" size={"md"}>
+            <Table variant="simple" size={"md"} wordBreak={"break-word"} layout={"fixed"}>
               <Thead bg='teal.500'>
                 <Tr>
                   <Th color={"whiteAlpha.800"}>SCHOOL YEAR</Th>
