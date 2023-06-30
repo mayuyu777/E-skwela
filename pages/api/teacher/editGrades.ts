@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const res = await prisma.notifications.create({
         data: {
           id: uuidv4(),
-          faculty_fk: result.class_subjects?.faculty.id,
+          faculty_fk: null,
           student_fk: result.student_fk,
           content: "Your " + result.class_subjects?.subjects.name + 
           " grade have been updated by " + result.class_subjects?.faculty.first_name +
