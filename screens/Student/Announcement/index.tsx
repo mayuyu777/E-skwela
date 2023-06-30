@@ -1,5 +1,5 @@
 import AnnouncementInterface from "@/interfaces/AnnouncementsInterface";
-import { Flex, Heading, Image, Text } from "@chakra-ui/react";
+import { Flex, Heading, Image, Text, Button } from "@chakra-ui/react";
 import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
@@ -9,12 +9,19 @@ export default function StudentAnnouncementPage() {
   const { data: session, status } = useSession();
   const [refreshList, setRefreshList] = useState<boolean>(false);
   const [announcements, setAnnouncements] = useState<AnnouncementInterface[]>([]);
+  const [totalItems, setTotalItems] = useState(0);
+  const [page, setPage] = useState(1);
+  const take = 3;
+  
+
 
   useEffect(() => {
-    axios.get("/api/student/getAnnouncements").then((res) => {
-      setAnnouncements(res.data);
+    axios.post("/api/student/getAnnouncements", { page: page, take: take}).then((res) => {
+      setAnnouncements(res.data.announcements);
+      setTotalItems(res.data.count);
+
     });
-  }, [session]);
+  }, [session, page]);
 
   return (
     <Flex
@@ -69,6 +76,11 @@ export default function StudentAnnouncementPage() {
         </Flex>
         ))}
       </Flex>
+      <Flex gap={"10px"} alignItems={"center"} position={"absolute"} bottom={"5pc"}>
+          <Button size={"sm"} onClick={()=>setPage((prev)=> --prev)} isDisabled={page > 1? false : true}>Prev</Button>
+          <Text fontSize={"15px"} color={"gray.600"}>{ (((page-1)*take)+announcements.length) + " of " + totalItems }</Text>
+          <Button size={"sm"} onClick={()=>setPage((prev)=> ++prev)} isDisabled={(((page-1)*take)+announcements.length) === totalItems? true : false}>Next</Button>
+        </Flex>
     </Flex>
   );
 }
