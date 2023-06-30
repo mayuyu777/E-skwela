@@ -40,12 +40,15 @@ export default function TeacherAnnouncementPage() {
   const [refreshList, setRefreshList] = useState<boolean>(false);
   const [announcements, setAnnouncements] = useState<AnnouncementInterface[]>([]);
   const [announcement, setAnnouncement] = useState<AnnouncementInterface>({} as AnnouncementInterface);
+  const [totalItems, setTotalItems] = useState(0);
+  const [page, setPage] = useState(1);
+  const take = 3;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
   useEffect(() => {
     getAnnouncements(isMyAnnoucements);
-  }, [session, isMyAnnoucements]);
+  }, [session, isMyAnnoucements, page]);
 
   const closeModal = () => {
     setAnnouncement({} as AnnouncementInterface);;
@@ -58,8 +61,9 @@ export default function TeacherAnnouncementPage() {
   }
 
   function getAnnouncements(type: boolean){
-    axios.post("/api/teacher/getAnnouncements", { school_id: session?.user?.school_id, isMyAnnoucements: isMyAnnoucements}).then((res) => {
-      setAnnouncements(res.data);
+    axios.post("/api/teacher/getAnnouncements", { school_id: session?.user?.school_id, isMyAnnoucements: isMyAnnoucements, page: page, take: take}).then((res) => {
+      setAnnouncements(res.data.announcements);
+      setTotalItems(res.data.count);
       setAnnouncement((prevState) => ({
         ...prevState,
         type: announcement_type.everyone,
@@ -280,6 +284,11 @@ export default function TeacherAnnouncementPage() {
           </Form>
         </ModalContent>
       </Modal>
+      <Flex gap={"10px"} alignItems={"center"} position={"absolute"} bottom={"5pc"}>
+        <Button size={"sm"} onClick={()=>setPage((prev)=> --prev)} isDisabled={page > 1? false : true}>Prev</Button>
+        <Text fontSize={"15px"} color={"gray.600"}>{ (((page-1)*take)+announcements.length) + " of " + totalItems }</Text>
+        <Button size={"sm"} onClick={()=>setPage((prev)=> ++prev)} isDisabled={(((page-1)*take)+announcements.length) === totalItems? true : false}>Next</Button>
+      </Flex>
     </Flex>
   );
 }

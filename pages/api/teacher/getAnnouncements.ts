@@ -3,11 +3,13 @@ import { prisma } from "@/prisma/client";
 import { announcement_type } from "@/constants/announcement_type";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { school_id, isMyAnnoucements } = req.body
+  const { school_id, isMyAnnoucements, page, take } = req.body
   try {
 
     if(!isMyAnnoucements){
       const result = await prisma.announcements.findMany({
+        take:take,
+        skip: (page-1) * take,
         orderBy: {
           updated_at: "desc"
         },
@@ -26,9 +28,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       });
 
-      return res.status(200).json(result);
+      const count = await prisma.announcements.count({
+        where: {
+          OR: [
+            {
+              type: announcement_type.everyone
+            },
+            {
+              type: announcement_type.teacher
+            }
+          ]
+      }
+      })
+
+      return res.status(200).json({announcements: result, count: count});
     }else{
       const result = await prisma.announcements.findMany({
+        take:take,
+        skip: (page-1) * take,
         orderBy: {
           updated_at: "desc"
         },
@@ -42,7 +59,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       });
 
-      return res.status(200).json(result);
+      const count = await prisma.announcements.count({
+        where: {
+          faculty: {
+            school_id: school_id
+          }
+        },
+      })
+
+      return res.status(200).json({announcements: result, count: count});
     }
     
   } catch (error) {
