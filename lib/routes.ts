@@ -19,9 +19,8 @@ const routes = [
   {
     role: role.teacher,
     access: [
-      "/teacher/Home",
-      "/teacher/About",
       "/teacher/Announcements",
+      "/teacher/About",
       "/teacher/ClassAdvisory",
       "/teacher/ClassAdvisory/*",
       "/teacher/Subjects/*",
@@ -32,9 +31,8 @@ const routes = [
   {
     role: role.student,
     access: [
-      "/student/Home",
-      "/student/About",
       "/student/Announcements",
+      "/student/About",
       "/student/Grades",
       "/student/Schedule",
       "/student/Enrollment",

@@ -205,13 +205,10 @@ export default function AdminNavbar() {
           <Spacer />
           <Flex alignItems="center">
             <Text mx="1vw" color={"gray.700"}>
-              <Link href={userRole == role.student ? "/student/Home" : "/teacher/Home"}>Home</Link>
+            <Link href={userRole == role.student ? "/student/Announcements" : "/teacher/Announcements"}>Home</Link>
             </Text>
             <Text mx="1vw" color={"gray.700"}>
               <Link href={userRole == role.student ? "/student/About" : "/teacher/About"}>About</Link>
-            </Text>
-            <Text mx="1vw" color={"gray.700"}>
-              <Link href={userRole == role.student ? "/student/Announcements" : "/teacher/Announcements"}>Announcements</Link>
             </Text>
             <Menu>
               <MenuButton
