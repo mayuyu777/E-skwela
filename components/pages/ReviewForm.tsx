@@ -65,7 +65,7 @@ export default function ReviewForm({formData, setIsReview, isReview, isSameWithC
       .then((res) => {
         console.log(res);
       });
-      // router.push('/SignIn');
+      router.push('/SignIn');
     } else {
       toast({
         title: "Error",
