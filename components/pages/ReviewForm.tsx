@@ -22,13 +22,49 @@ import {
   TableCaption,
   TableContainer,
   border,
-  Spacer
+  Spacer,
+  Spinner,
 } from "@chakra-ui/react";
 import ApplicationInterface from "@/interfaces/ApplicationInterface";
 import { gender } from "@/constants/gender";
 
-export default function ReviewForm({formData, setIsReview, isReview}:{formData: ApplicationInterface; setIsReview: Dispatch<SetStateAction<boolean>>; isReview: boolean;}){
+export default function ReviewForm({formData, setIsReview, isReview, isSameWithCurAddress}:{formData: ApplicationInterface; setIsReview: Dispatch<SetStateAction<boolean>>; isReview: boolean; isSameWithCurAddress: boolean;}){
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
+  
 
+
+  async function submitApplication() {
+    setLoading(true);
+    const res = await fetch("/api/createStudentApplication", {
+      body: JSON.stringify(formData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+    }).then((res) => {
+      return res.json();
+    });
+    console.log(res);
+    if (res?.ok) {
+      toast({
+        title: "Success",
+        description: res.message,
+        status: "success",
+        duration: 25000,
+        position: "top",
+      });
+    } else {
+      toast({
+        title: "Error",
+        description: res.message,
+        status: "error",
+        duration: 5000,
+        position: "top",
+      });
+    }
+    setLoading(false);
+  }
 
   return(
     <Card w={["95%", "80%", "70%", "60%"]} p={"1pc"} minH={"100vh"} bg={"gray.50"} m={"auto"}>
@@ -140,7 +176,7 @@ export default function ReviewForm({formData, setIsReview, isReview}:{formData: 
               </Thead>
               <Tbody>
                 <Tr whiteSpace={"break-spaces"}>
-                  <Td p={"3px"} fontWeight={"medium"}>Current Address:</Td>
+                  <Td p={"3px"} fontWeight={"medium"}>Current{isSameWithCurAddress? " & Permanent " : null} Address</Td>
                   <Td p={"3px"} fontWeight={"bold"} textTransform={"uppercase"} color={"blue.400"}>
                     {formData.house_no} {formData.street} {formData.barangay} {formData.municipality} {formData.province} {formData.country} {formData.zip}
                   </Td>
@@ -186,7 +222,7 @@ export default function ReviewForm({formData, setIsReview, isReview}:{formData: 
                   (
                   <Tr whiteSpace={"break-spaces"}>
                     <Td p={"3px"} fontWeight={"medium"}>{"Mother's Contact No:"}</Td>
-                    <Td p={"3px"} fontWeight={"bold"} textTransform={"uppercase"} color={"blue.400"}>{formData.contact_mother}</Td>
+                    <Td p={"3px"} fontWeight={"bold"} textTransform={"uppercase"} color={"blue.400"}>{"0"}{formData.contact_mother}</Td>
                   </Tr>
                   ) : null
                 }
@@ -195,7 +231,7 @@ export default function ReviewForm({formData, setIsReview, isReview}:{formData: 
                   (
                   <Tr whiteSpace={"break-spaces"}>
                     <Td p={"3px"} fontWeight={"medium"}>{"Father's Contact No:"}</Td>
-                    <Td p={"3px"} fontWeight={"bold"} textTransform={"uppercase"} color={"blue.400"}>{formData.contact_father}</Td>
+                    <Td p={"3px"} fontWeight={"bold"} textTransform={"uppercase"} color={"blue.400"}>{"0"}{formData.contact_father}</Td>
                   </Tr>
                   ) : null
                 }
@@ -204,7 +240,7 @@ export default function ReviewForm({formData, setIsReview, isReview}:{formData: 
                   (
                   <Tr whiteSpace={"break-spaces"}>
                     <Td p={"3px"} fontWeight={"medium"}>{"Guardian's Contact No:"}</Td>
-                    <Td p={"3px"} fontWeight={"bold"} textTransform={"uppercase"} color={"blue.400"}>{formData.contact_guardian}</Td>
+                    <Td p={"3px"} fontWeight={"bold"} textTransform={"uppercase"} color={"blue.400"}>{"0"}{formData.contact_guardian}</Td>
                   </Tr>
                   ) : null
                 }
@@ -252,7 +288,7 @@ export default function ReviewForm({formData, setIsReview, isReview}:{formData: 
               <Tbody>
                 <Tr whiteSpace={"break-spaces"}>
                   <Td p={"3px"} fontWeight={"medium"}>School Year:</Td>
-                  <Td p={"3px"} fontWeight={"bold"} textTransform={"uppercase"} color={"blue.400"}>{formData.school_year}</Td>
+                  <Td p={"3px"} fontWeight={"bold"} textTransform={"uppercase"} color={"blue.400"}>{formData.school_year+" - "+(parseInt(formData.school_year)+1)}</Td>
                 </Tr>
                 <Tr whiteSpace={"break-spaces"}>
                   <Td p={"3px"} fontWeight={"medium"}>Grade Level to Enroll:</Td>
@@ -273,8 +309,12 @@ export default function ReviewForm({formData, setIsReview, isReview}:{formData: 
         gap={"4"}
         mt={"5pc"}
       >
-        <Button backgroundColor={"blue.600"} color={"white"}>
-          Submit
+        <Button 
+          backgroundColor={"blue.600"} 
+          color={"white"}
+          onClick={submitApplication}
+          >
+          Submit {loading && <Spinner ml="1rem" />}
         </Button>
         <Button
           type="button"

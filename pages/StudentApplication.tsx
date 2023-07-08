@@ -66,6 +66,7 @@ function StudentApplication({
           }
           validateOnChange={false}
           onSubmit={(values) => {
+            console.log("jigiugugi")
             setFormData(values);
             setIsReview(true);
           }}
@@ -156,7 +157,7 @@ function StudentApplication({
                        schoolYears.length > 0 ? 
                        (schoolYears.map((item, index) => {
                         return (
-                          <option key={item.id} value={item.id}>
+                          <option key={item.id} value={String(item.start)}>
                             {item.start +
                               " - " +
                               (item?.start+1)}
@@ -424,15 +425,18 @@ function StudentApplication({
                       color={"blue.700"}
                       isChecked={isSameWithCurAddress}
                       onChange={() => {
-                        setFormData((prev)=>({...prev, 
-                          house_no_2:"", 
-                          street_2:"", 
-                          barangay_2:"", 
-                          municipality_2:"", 
-                          province_2:"",
-                          country_2:"",
-                          zip_2:""
-                        }));
+                        if(formData.house_no_2){
+                          setFormData((prev)=>({...prev, 
+                            house_no_2:"",
+                            street_2:"", 
+                            barangay_2:"", 
+                            municipality_2:"", 
+                            province_2:"",
+                            country_2:"",
+                            zip_2:""
+                          }));
+                        }
+                        
                         setIsSameWithCurAddress(!isSameWithCurAddress);
                       }}
                     >
@@ -746,39 +750,7 @@ export default function Main({
   const [formData, setFormData] = useState<ApplicationInterface>({} as ApplicationInterface);
   const [isReview, setIsReview] = useState(false);
   const [isSameWithCurAddress, setIsSameWithCurAddress] = useState(false);
-  const toast = useToast();
   const router = useRouter();
-
-  async function submitApplication(values: object) {
-    console.log(values);
-    const res = await fetch("/api/createStudentApplication", {
-      body: JSON.stringify(values),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-    }).then((res) => {
-      return res.json();
-    });
-    console.log(res);
-    if (res?.ok) {
-      toast({
-        title: "Success",
-        description: res.message,
-        status: "success",
-        duration: 25000,
-        position: "top",
-      });
-    } else {
-      toast({
-        title: "Error",
-        description: res.message,
-        status: "error",
-        duration: 5000,
-        position: "top",
-      });
-    }
-  }
 
 
   return(
@@ -792,7 +764,7 @@ export default function Main({
     >
       <ShoolHeader color={"whiteAlpha.900"} />
       {isReview? 
-        <ReviewForm formData={formData} setIsReview={setIsReview} isReview={isReview}/> 
+        <ReviewForm formData={formData} setIsReview={setIsReview} isReview={isReview} isSameWithCurAddress={isSameWithCurAddress}/> 
         : 
         <StudentApplication 
           schoolYears={schoolYears} 
