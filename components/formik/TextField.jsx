@@ -4,6 +4,7 @@ import {
     FormLabel,
     FormErrorMessage,
     Input,
+    Text
   } from '@chakra-ui/react'
 
 export const TextField = ({ label,withError,...props }) => {
@@ -12,7 +13,7 @@ export const TextField = ({ label,withError,...props }) => {
     return (
       <FormControl isInvalid={meta.error && meta.touched}>
         {
-          label !== '' ? <FormLabel fontSize={'13px'} color={'blue.800'} fontWeight={'regular'}>{label}</FormLabel> : <></>
+          label !== '' ? <FormLabel fontSize={'13px'} color={'blue.800'} fontWeight={'regular'}>{label}{props.required? <span style={{color:'red'}}> *</span> : null}</FormLabel> : <></>
         }
        <FastField as={Input} {...field} {...props}/>
         {
