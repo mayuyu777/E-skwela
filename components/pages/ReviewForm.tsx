@@ -28,6 +28,7 @@ import {
 import ApplicationInterface from "@/interfaces/ApplicationInterface";
 import { gender } from "@/constants/gender";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 export default function ReviewForm({formData, setIsReview, isReview, isSameWithCurAddress}:{formData: ApplicationInterface; setIsReview: Dispatch<SetStateAction<boolean>>; isReview: boolean; isSameWithCurAddress: boolean;}){
   const [loading, setLoading] = useState(false);
@@ -55,7 +56,16 @@ export default function ReviewForm({formData, setIsReview, isReview, isSameWithC
         duration: 25000,
         position: "top",
       });
-      router.push('/SignIn');
+      const name = formData.firstname+" "+formData.lastname;
+      const subject = "Application for Admission";
+      const email = formData.email;
+      const content = `Good day, ${name}!\n\nYou have successfully applied for admission at Buyong Highschool.`;
+      axios
+      .post("/api/sendEmail", { name, subject, email, content })
+      .then((res) => {
+        console.log(res);
+      });
+      // router.push('/SignIn');
     } else {
       toast({
         title: "Error",
