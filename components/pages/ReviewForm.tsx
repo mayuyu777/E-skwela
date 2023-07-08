@@ -27,11 +27,12 @@ import {
 } from "@chakra-ui/react";
 import ApplicationInterface from "@/interfaces/ApplicationInterface";
 import { gender } from "@/constants/gender";
+import { useRouter } from "next/router";
 
 export default function ReviewForm({formData, setIsReview, isReview, isSameWithCurAddress}:{formData: ApplicationInterface; setIsReview: Dispatch<SetStateAction<boolean>>; isReview: boolean; isSameWithCurAddress: boolean;}){
   const [loading, setLoading] = useState(false);
   const toast = useToast();
-  
+  const router = useRouter();
 
 
   async function submitApplication() {
@@ -54,6 +55,7 @@ export default function ReviewForm({formData, setIsReview, isReview, isSameWithC
         duration: 25000,
         position: "top",
       });
+      router.push('/SignIn');
     } else {
       toast({
         title: "Error",
