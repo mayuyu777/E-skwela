@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { Formik, FastField } from "formik";
 import {
   Flex,
@@ -27,71 +27,48 @@ import {
   yupWithoutPermanentAddress,
 } from "@/components/formik/application";
 import { useRouter } from "next/router";
+import ApplicationInterface from "@/interfaces/ApplicationInterface";
+import { isFunctionTypeNode } from "typescript";
+import ReviewForm from "@/components/pages/ReviewForm";
+import { preventDefault } from "@fullcalendar/common";
 
-export default function StudentApplication({
+
+function StudentApplication({
   schoolYears,
+  setFormData,
+  setIsReview,
+  isReview,
+  formData,
+  isSameWithCurAddress,
+  setIsSameWithCurAddress
 }: {
   schoolYears: SchoolYearInterface[];
+  setFormData: Dispatch<SetStateAction<ApplicationInterface>>;
+  setIsReview: Dispatch<SetStateAction<boolean>>;
+  isReview: boolean;
+  formData: ApplicationInterface;
+  isSameWithCurAddress: boolean;
+  setIsSameWithCurAddress:Dispatch<SetStateAction<boolean>>;
 }) {
-  const [isSameWithCurAddress, setIsSameWithCurAddress] = useState(false);
-  const toast = useToast();
+
   const router = useRouter();
 
-  async function submitApplication(values: object) {
-    console.log(values);
-    const res = await fetch("/api/createStudentApplication", {
-      body: JSON.stringify(values),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-    }).then((res) => {
-      return res.json();
-    });
-    console.log(res);
-    if (res?.ok) {
-      toast({
-        title: "Success",
-        description: res.message,
-        status: "success",
-        duration: 25000,
-        position: "top",
-      });
-    } else {
-      toast({
-        title: "Error",
-        description: res.message,
-        status: "error",
-        duration: 5000,
-        position: "top",
-      });
-    }
-  }
-
   return (
-    <Grid
-      w={"100%"}
-      minH={"150vh"}
-      bg={["gray.800"]}
-      pb={"10pc"}
-      pt={["3pc", "3pc", "4pc", "4pc"]}
-      gap={["12", "12", "20", "20"]}
-    >
-      <ShoolHeader color={"whiteAlpha.900"} />
+    
       <Card w={["95%", "95%", "80%", "70%"]} minH={"100vh"} bg={"gray.50"} m={"auto"}>
         <Formik
           initialValues={
-            !isSameWithCurAddress
-              ? initValuesWithPermanentAddress
-              : initValuesWithoutPermanentAddress
+            formData
           }
+          enableReinitialize
           validationSchema={
             !isSameWithCurAddress ? yupWithPermanentAddress : yupWithoutPermanentAddress
           }
           validateOnChange={false}
-          onSubmit={(values, actions) => {
-            submitApplication(values);
-            actions.resetForm();
+          onSubmit={(values) => {
+            console.log("jigiugugi")
+            setFormData(values);
+            setIsReview(true);
           }}
         >
           {(formik) => (
@@ -127,7 +104,7 @@ export default function StudentApplication({
                     fontSize={["12px", "13px", "14px", "14px"]}
                     fontWeight={"medium"}
                   >
-                    NOTE: Please fill-out the form carefully and honestly.
+                    NOTE: Please fill-out the form carefully and honestly. Fields with * are required.
                   </Text>
                 </Flex>
                 <Grid
@@ -167,6 +144,7 @@ export default function StudentApplication({
                   >
                     <FormLabel fontSize={"13px"} color={"blue.800"} fontWeight={"regular"}>
                       1. School Year to enroll
+                      <span style={{color:'red'}}> *</span>
                     </FormLabel>
                     <FastField
                       as={Select}
@@ -177,9 +155,9 @@ export default function StudentApplication({
                     >
                       {
                        schoolYears.length > 0 ? 
-                       (schoolYears.map((item) => {
+                       (schoolYears.map((item, index) => {
                         return (
-                          <option key={item.id} value={item.id}>
+                          <option key={item.id} value={String(item.start)}>
                             {item.start +
                               " - " +
                               (item?.start+1)}
@@ -193,6 +171,7 @@ export default function StudentApplication({
                   >
                     <FormLabel fontSize={"13px"} color={"blue.800"} fontWeight={"regular"}>
                       2. Grade level
+                      <span style={{color:'red'}}> *</span>
                     </FormLabel>
                     <FastField
                       as={Select}
@@ -237,6 +216,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"4. First Name"}
@@ -245,6 +225,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"5. Middle Name"}
@@ -253,6 +234,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"6. Suffix e.g. Jr., III"}
@@ -269,6 +251,7 @@ export default function StudentApplication({
                     type="date"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"8. Age"}
@@ -279,10 +262,12 @@ export default function StudentApplication({
                     max="100"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <FormControl isInvalid={formik.errors.sex !== "" && formik.touched.sex}>
                     <FormLabel fontSize={"13px"} color={"blue.800"} fontWeight={"regular"}>
-                      9. Sex
+                      9. Gender
+                      <span style={{color:'red'}}> *</span>
                     </FormLabel>
                     <FastField
                       as={Select}
@@ -292,7 +277,7 @@ export default function StudentApplication({
                       placeholder=" "
                     >
                       <option value="1">Female</option>
-                      <option value="2">Male</option>
+                      <option value="0">Male</option>
                     </FastField>
                   </FormControl>
                   <TextField
@@ -302,6 +287,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"11. PSA Birth Certificate No."}
@@ -326,6 +312,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"14. Indigenous People Community"}
@@ -370,6 +357,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"17. Street Name"}
@@ -378,6 +366,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"18. Barangay"}
@@ -386,6 +375,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"19. Municipality/City"}
@@ -394,6 +384,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"20. Province"}
@@ -402,6 +393,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"21. Country"}
@@ -410,6 +402,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"22. Zip Code"}
@@ -419,6 +412,7 @@ export default function StudentApplication({
                     max="9999"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                 </Grid>
                 <Flex w={"full"} pl={"2pc"} pr={"2pc"} pb={"1pc"} flexDirection={"column"}>
@@ -429,7 +423,20 @@ export default function StudentApplication({
                     <Checkbox
                       size={"sm"}
                       color={"blue.700"}
+                      isChecked={isSameWithCurAddress}
                       onChange={() => {
+                        if(formData.house_no_2){
+                          setFormData((prev)=>({...prev, 
+                            house_no_2:"",
+                            street_2:"", 
+                            barangay_2:"", 
+                            municipality_2:"", 
+                            province_2:"",
+                            country_2:"",
+                            zip_2:""
+                          }));
+                        }
+                        
                         setIsSameWithCurAddress(!isSameWithCurAddress);
                       }}
                     >
@@ -458,6 +465,7 @@ export default function StudentApplication({
                       type="text"
                       bg={"white"}
                       size={"sm"}
+                      required
                     />
                     <TextField
                       label={"24. Street Name"}
@@ -466,6 +474,7 @@ export default function StudentApplication({
                       type="text"
                       bg={"white"}
                       size={"sm"}
+                      required
                     />
                     <TextField
                       label={"25. Barangay"}
@@ -474,6 +483,7 @@ export default function StudentApplication({
                       type="text"
                       bg={"white"}
                       size={"sm"}
+                      required
                     />
                     <TextField
                       label={"26. Municipality/City"}
@@ -482,6 +492,7 @@ export default function StudentApplication({
                       type="text"
                       bg={"white"}
                       size={"sm"}
+                      required
                     />
                     <TextField
                       label={"27. Province"}
@@ -490,6 +501,7 @@ export default function StudentApplication({
                       type="text"
                       bg={"white"}
                       size={"sm"}
+                      required
                     />
                     <TextField
                       label={"28. Country"}
@@ -498,6 +510,7 @@ export default function StudentApplication({
                       type="text"
                       bg={"white"}
                       size={"sm"}
+                      required
                     />
                     <TextField
                       label={"29. Zip Code"}
@@ -507,6 +520,7 @@ export default function StudentApplication({
                       max="9999"
                       bg={"white"}
                       size={"sm"}
+                      required
                     />
                   </Grid>
                 ) : (
@@ -538,6 +552,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"31. Middle name of mother"}
@@ -546,6 +561,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"32. Last name of mother"}
@@ -554,6 +570,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"33. Mother Contact No."}
@@ -562,6 +579,7 @@ export default function StudentApplication({
                     type="number"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"34. First name of father"}
@@ -570,6 +588,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"35. Middle name of father"}
@@ -578,6 +597,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"36. Last name of father"}
@@ -586,6 +606,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"37. Father Contact No."}
@@ -594,6 +615,7 @@ export default function StudentApplication({
                     type="number"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"38. First name of guardian"}
@@ -602,6 +624,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"39. Middle name of guardian"}
@@ -610,6 +633,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"40. Last name of guardian"}
@@ -618,6 +642,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"41. Guardian Contact No."}
@@ -656,6 +681,7 @@ export default function StudentApplication({
                     min="6"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"43. School Year Completed e.g 2017-2018"}
@@ -664,6 +690,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"44. Last School Attented"}
@@ -672,6 +699,7 @@ export default function StudentApplication({
                     type="text"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                   <TextField
                     label={"45. School ID"}
@@ -680,6 +708,7 @@ export default function StudentApplication({
                     type="number"
                     bg={"white"}
                     size={"sm"}
+                    required
                   />
                 </Grid>
                 <Grid
@@ -693,7 +722,7 @@ export default function StudentApplication({
                   gap={"4"}
                 >
                   <Button type="submit" backgroundColor={"blue.600"} color={"white"}>
-                    Submit
+                    Next
                   </Button>
                   <Button
                     type="button"
@@ -710,8 +739,44 @@ export default function StudentApplication({
           )}
         </Formik>
       </Card>
-    </Grid>
   );
+}
+
+export default function Main({
+  schoolYears,
+}: {
+  schoolYears: SchoolYearInterface[];
+}){
+  const [formData, setFormData] = useState<ApplicationInterface>({} as ApplicationInterface);
+  const [isReview, setIsReview] = useState(false);
+  const [isSameWithCurAddress, setIsSameWithCurAddress] = useState(false);
+  const router = useRouter();
+
+
+  return(
+    <Grid
+      w={"100%"}
+      minH={"150vh"}
+      bg={["gray.800"]}
+      pb={"10pc"}
+      pt={["3pc", "3pc", "4pc", "4pc"]}
+      gap={["12", "12", "20", "20"]}
+    >
+      <ShoolHeader color={"whiteAlpha.900"} />
+      {isReview? 
+        <ReviewForm formData={formData} setIsReview={setIsReview} isReview={isReview} isSameWithCurAddress={isSameWithCurAddress}/> 
+        : 
+        <StudentApplication 
+          schoolYears={schoolYears} 
+          setFormData={setFormData} 
+          setIsReview={setIsReview} 
+          isReview={isReview} 
+          formData={formData}
+          isSameWithCurAddress={isSameWithCurAddress}
+          setIsSameWithCurAddress={setIsSameWithCurAddress}
+          />}
+    </Grid>
+  )
 }
 
 export const getServerSideProps = async () => {

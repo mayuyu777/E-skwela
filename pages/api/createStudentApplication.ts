@@ -13,6 +13,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   console.log(values)
   try {
 
+    const SY = await prisma.school_year.findFirst({
+      where: {
+        start: parseInt(values.school_year)
+      },
+      select: {
+        id: true
+      }
+    });
+    
     const parentGuardian = await prisma.parent_guardian.create({
       data: {
         id: uuidv4(),
@@ -77,13 +86,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     })
 
-    const result = await prisma.student_enrollment.create({ data: {
-      id: uuidv4(),
-      academic_level: parseInt(values.year_level),
-      school_year_fk: values.school_year,
-      enrollment_status: student_enrollment_stat.new,
-      status: enrollment_status.active,
-      student_fk: studentRes.id
+    const result = await prisma.student_enrollment.create({ 
+      data: {
+        id: uuidv4(),
+        academic_level: parseInt(values.year_level),
+        school_year_fk: SY.id,
+        enrollment_status: student_enrollment_stat.new,
+        status: enrollment_status.active,
+        student_fk: studentRes.id
     }});
 
     console.log(result)
