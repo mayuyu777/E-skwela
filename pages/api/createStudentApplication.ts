@@ -7,6 +7,7 @@ import StudentInterface from "@/interfaces/StudentInterface";
 import StudentEnrollmentInterface from "@/interfaces/StudentEnrollmentInterface";
 import { student_enrollment_stat } from "@/constants/student_enrollment_stat";
 import { enrollment_status } from "@/constants/enrollment_status";
+import axios from "axios";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const values = req.body;
@@ -96,7 +97,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         student_fk: studentRes.id
     }});
 
-    console.log(result)
     res.status(200).send({
       message:
         "Your application has been successfully submitted. Please check your email for updates regarding your application. Thank you.",
