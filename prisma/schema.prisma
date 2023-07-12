@@ -105,7 +105,7 @@ model class_subjects {
 model faculty {
   id                 String               @id @db.VarChar(255)
   school_id          String               @unique(map: "school_id") @db.VarChar(255)
-  password           String               @unique(map: "password") @db.VarChar(255)
+  password           String               @db.VarChar(255)
   role               Int
   login_permission   Int
   first_name         String               @db.VarChar(255)
