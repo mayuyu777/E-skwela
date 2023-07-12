@@ -4,8 +4,6 @@ const routes = [
   {
     role: role.admin,
     access: [
-      "/admin/Home",
-      "/admin/Home",
       "/admin/Dashboard",
       "/admin/Students",
       "/admin/Teachers",
@@ -14,6 +12,8 @@ const routes = [
       "/admin/Announcements",
       "/admin/Accounts",
       "/admin/Enrollment",
+      "/admin/Admission",
+      "/admin/SchoolYear",
     ],
   },
   {

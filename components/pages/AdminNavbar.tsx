@@ -47,7 +47,11 @@ import {
   FiBook,
   FiUsers,
   FiPackage,
+  FiCalendar,
+  FiList
 } from "react-icons/fi";
+import { TfiAnnouncement } from "react-icons/Tfi";
+import { MdOutlineManageAccounts, MdOutlineLibraryBooks } from "react-icons/Md";
 import { IconType } from "react-icons";
 import { ReactText } from "react";
 import { signOut, useSession } from "next-auth/react";
@@ -58,22 +62,72 @@ import ShoolHeader from "./shoolheader";
 interface LinkItemProps {
   name: string;
   icon: IconType;
-  link: string;
+  link?: string;
+  subLinkItems?: LinkItemProps[]
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Home", icon: FiHome, link: "/admin/Home" },
-  { name: "Dashboard", icon: FiArchive, link: "/admin/Dashboard" },
-  { name: "Accounts", icon: FiUsers, link: "/admin/Accounts" },
-  { name: "Enrollment", icon: FiPackage, link: "/admin/Enrollment" },
+  { name: "Dashboard", 
+    icon: FiHome, 
+    link: "/admin/Dashboard"
+  },
+  { name: "Announcements", 
+    icon: TfiAnnouncement, 
+    link: "/admin/Announcements" 
+  },
+  { name: "Applications", 
+    icon: FiArchive, 
+    subLinkItems: [
+      {
+        name: "Enrollment", 
+        icon: FiArchive, 
+        link: "/admin/Enrollment"
+      },
+      {
+        name: "Admission", 
+        icon: FiArchive, 
+        link: "/admin/Admission"
+      }
+    ]
+  },
+  { name: "Information", 
+    icon: FiUsers, 
+    subLinkItems: [
+      { name: "Students", 
+        icon: FiUser, 
+        link: "/admin/Students" 
+      },
+      { name: "Teachers", 
+        icon: FiUser, 
+        link: "/admin/Teachers" 
+      },
+    ]
+  },
+  { name: "Subjects", 
+    icon: MdOutlineLibraryBooks, 
+    link: "/admin/Subjects" 
+  },
+  { name: "Sections", 
+    icon: FiList, 
+    link: "/admin/Sections" 
+  },
+  { name: "Accounts", 
+    icon: MdOutlineManageAccounts, 
+    link: "/admin/Accounts" 
+  },
+  { name: "School Year", 
+    icon: FiCalendar, 
+    link: "/admin/SchoolYear" 
+  },
+  
 ];
 
-const AccordionItems: Array<LinkItemProps> = [
-  { name: "Students", icon: FiUser, link: "/admin/Students" },
-  { name: "Teachers", icon: FiUserPlus, link: "/admin/Teachers" },
-  { name: "Sections", icon: FiUsers, link: "/admin/Sections" },
-  { name: "Subjects", icon: FiBook, link: "/admin/Subjects" },
-  { name: "Announcements", icon: FiBell, link: "/admin/Announcements" },
-];
+// const AccordionItems: Array<LinkItemProps> = [
+//   { name: "Students", icon: FiUser, link: "/admin/Students" },
+//   { name: "Teachers", icon: FiUserPlus, link: "/admin/Teachers" },
+//   { name: "Sections", icon: FiUsers, link: "/admin/Sections" },
+//   { name: "Subjects", icon: FiBook, link: "/admin/Subjects" },
+//   { name: "Announcements", icon: FiBell, link: "/admin/Announcements" },
+// ];
 
 export default function SidebarWithHeader({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -139,6 +193,7 @@ const SidebarContent = ({ onClose, routerPath, ...rest }: SidebarProps) => {
       w={{ base: "full", sm: 60 }}
       pos="fixed"
       h="full"
+      overflowY={"scroll"}
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
@@ -155,10 +210,10 @@ const SidebarContent = ({ onClose, routerPath, ...rest }: SidebarProps) => {
         <CloseButton display={{ base: "flex", sm: "none" }} mr={0} ml={"auto"} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => {
-        if (link.name === "Dashboard") {
+        if (link.subLinkItems) {
           return (
             <Accordion key={link.name} allowMultiple borderTopWidth="0px">
-              <AccordionItem>
+              <AccordionItem borderTopWidth="0px">
                 <AccordionButton p={0} borderTopWidth="0px">
                   <NavItem icon={link.icon} borderTopWidth="0px">
                     {link.name}
@@ -166,10 +221,12 @@ const SidebarContent = ({ onClose, routerPath, ...rest }: SidebarProps) => {
                   <AccordionIcon />
                 </AccordionButton>
                 <AccordionPanel borderTopWidth="1px" m={0} p={0}>
-                  {AccordionItems.map((data) => (
+                  {link.subLinkItems.map((data) => (
                     <Link href={data.link} key={data.name}>
                       <NavItem
-                        bg={routerPath === data.link ? "green.300" : ""}
+                        bg={routerPath === data.link ? "green.500" : "green.100"}
+                        color={routerPath === data.link ? "white" : "gray.600"}
+                        fontWeight={routerPath === data.link ? "medium" : "normal"}
                         w="100%"
                         m={0}
                         paddingLeft={10}
@@ -194,7 +251,9 @@ const SidebarContent = ({ onClose, routerPath, ...rest }: SidebarProps) => {
                 borderBottomWidth="1px"
                 m={0}
                 pl={8}
-                bg={routerPath === link.link ? "green.300" : ""}
+                bg={routerPath === link.link ? "green.500" : ""}
+                color={routerPath === link.link ? "white" : "black"}
+                fontWeight={routerPath === link.link ? "medium" : "normal"}
               >
                 {link.name}
               </NavItem>
