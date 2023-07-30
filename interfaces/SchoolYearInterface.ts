@@ -3,4 +3,7 @@ export default interface SchoolYearInterface{
     start?: number | null,
     enrollment_open: number,
     status: number,
+    date_started: string,
+    date_ended: string | null,
+    created_at: string
 }

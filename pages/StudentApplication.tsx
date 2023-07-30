@@ -31,6 +31,7 @@ import ApplicationInterface from "@/interfaces/ApplicationInterface";
 import { isFunctionTypeNode } from "typescript";
 import ReviewForm from "@/components/pages/ReviewForm";
 import { preventDefault } from "@fullcalendar/common";
+import NotAvailable from "@/components/pages/NotAvailable";
 
 
 function StudentApplication({
@@ -52,6 +53,10 @@ function StudentApplication({
 }) {
 
   const router = useRouter();
+
+  if(schoolYears.length === 0){
+    return <NotAvailable />
+  }
 
   return (
     

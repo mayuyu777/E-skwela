@@ -1,0 +1,1 @@
+export const sy_enrollment_stat = ["Close", "Open"];
